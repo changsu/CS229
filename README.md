@@ -8,7 +8,8 @@ hello
 Git comment you may find interesting:
 
 $ git pull https://github.com/changsu/CS229.git
-modify some file....
+
+If have confilictions, solve it, modify some file....
 
 $ git add .
 
