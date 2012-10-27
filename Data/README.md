@@ -7,9 +7,22 @@ myth alread has php installed.
 
 ###How to run the script?
 Usage:
-<pre> 
-  ~$: php mass_search_script.php -k 'keywords' (-s 'start_date' -e 'end_date')
+<pre>
+   ~$: php mass_search_script.php -k 'keywords' (-s 'start_date' -e 'end_date')
 </pre>
+
+Options:
+
+k: keywords (required) muliple keywords seperated by space, say "economy
+   finance"
+
+s: start date (optional) 2011.09.24 by default
+
+e: end date (optional) current time when you run the script
+
+o: offset (optional) max offset of fetching data from API, it controls
+   total number of articles fetched = o * 10, 5 by default
+
 Example Code:
 <pre>
   ~$: php mass_search_script.php -k 'economy' -s 20120829 -e 20120930
@@ -23,14 +36,10 @@ title or body from 08/29/2012 to 09/30/2012 to two files
 Above script will output first 50 articles that contains both keyword "economy" 
 and "finance" from 09/24/2011 to current time say 10/26/2012
 
-Options:
-
-k: keywords (required) muliple keywords seperated by space, say "economy
-   finance"
-
-s: start date (optional) 2011.09.24 by default
-
-e: end date (optional) current time when you run the script
+<pre>
+  ~$: php mass_search_script.php -k 'finance' -o 2
+</pre>
+Above script will output first 20 articles containing keyword finance
 
 ### Ouput File (all files stores json string, decodable in Java)
 "body_file_name.txt": store url and body

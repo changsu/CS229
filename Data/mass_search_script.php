@@ -10,7 +10,8 @@ function get_opts() {
 	$opts = "";
 	$opts .= "k:"; // keywords (required)
 	$opts .= "s:"; // startdate (optional)
-	$opts .= "e:"; // enddate(optional)
+	$opts .= "e:"; // enddate (optional)
+	$opts .= "o:"; // offset limit (optional)
 	$options = getopt($opts);
 	return $options;
 }
@@ -24,7 +25,8 @@ function propose_opts($options) {
 	$keywords = $options['k'];
 	$start_date = isset($options['s']) ? $options['s'] : DEFAULT_START_DATE;
 	$end_date = isset($options['e']) ? $options['e'] : date('Ymd');
-	run_mass_search($keywords, $start_date, $end_date, true);
+	$offset_limit = isset($options['o']) ? $options['o'] : OFFSET_LIMIT;
+	run_mass_search($keywords, $start_date, $end_date, $offset_limit, true);
 }
 
 function print_help() {
