@@ -8,7 +8,7 @@ myth alread has php installed.
 ###How to run the script?
 Usage:
 <pre> 
-   php mass_search_script.php -k 'keywords' (-s 'start_date' -e 'end_date')
+  ~$: php mass_search_script.php -k 'keywords' (-s 'start_date' -e 'end_date')
 </pre>
 
 Options:
