@@ -6,8 +6,10 @@ Or you can have php locally installed, but it may take time.
 myth alread has php installed.
 
 ###How to run the script?
-Usage: 
-       php mass_search_script.php -k 'keywords' (-s 'start_date' -e 'end_date')
+Usage:
+<pre> 
+   php mass_search_script.php -k 'keywords' (-s 'start_date' -e 'end_date')
+</pre>
 
 Options:
 
