@@ -98,6 +98,7 @@ function get_body($url) {
 	try {
 		$html = file_get_html($url);
 		$result = '';
+		// "articleBody" is the class name of body div
 		foreach ($html->find('div.articleBody') as $body) {
 			// remove html tags
 			$string = strip_tags($body->innertext); 
