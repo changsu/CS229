@@ -83,11 +83,17 @@ function write_to_file($raw_result) {
 function get_body($url) {
 	try {
 		$html = file_get_html($url);
+		$result = '';
 		foreach ($html->find('div.articleBody') as $body) {
-			// remove html tags and convert html entity to chars
+			// remove html tags
 			$string = strip_tags($body->innertext); 
-			var_dump($string);
+			// convert html entities to normal chars
+			$string = trim(html_entity_decode($string, ENT_QUOTES, 'UTF-8')); 
+			// remove whitespaces
+			$string = preg_replace( '/\s+/', ' ', $string);
+			$result .= $string;
 		}
+		var_dump($result);
 	} catch (Exception $e) {
 		echo "Error: Fail to extract body from " . $url . "\n";
 		var_dump($e->getMessage());
