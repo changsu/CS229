@@ -17,6 +17,7 @@ k: keywords (required) muliple keywords seperated by space, say "economy
    finance"
 
 s: start date (optional) 2011.09.24 by default
+
 e: end date (optional) current time when you run the script
 
 ### Ouput File (all files stores json string, decodable in Java)
