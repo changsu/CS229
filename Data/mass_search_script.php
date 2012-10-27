@@ -1,12 +1,17 @@
 <?php
+
+require_once("constants.php");
 require_once("mass_search.php");
+
+/*
+  This is the script for extracting seed data from NewYorkTimes API
+ */
 function get_opts() {
 	$opts = "";
 	$opts .= "k:"; // keywords (required)
 	$opts .= "s:"; // startdate (optional)
 	$opts .= "e:"; // enddate(optional)
 	$options = getopt($opts);
-	var_dump($options);
 	return $options;
 }
 
@@ -16,7 +21,10 @@ function propose_opts($options) {
 		print_help();
 		die();
 	}
-	
+	$keywords = $options['k'];
+	$start_date = isset($options['s']) ? $options['s'] : DEFAULT_START_DATE;
+	$end_date = isset($options['e']) ? $options['e'] : date('Ymd');
+	run_mass_search($keywords, $start_date, $end_date, true);
 }
 
 function print_help() {
