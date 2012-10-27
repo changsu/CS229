@@ -25,12 +25,14 @@ function run_mass_search($keywords, $start_date, $end_date,
 		// issue request to Times and get results in form of JSON
 		$response = file_get_contents($request);
 		// process response result
-		echo "Process chunk " . ($offset + 1) . "..........\n";
+		echo "Processing chunk " . ($offset + 1) . "..........\n";
 		process_result($response, $write_to_file, $meta_f, $body_f);
 	}
 	
 	// close io stream
 	if ($write_to_file) {
+		echo "Finish writing meta data to file" . META_FILE_NAME. "!\n";
+		echo "Finish writing body data to file" . BODY_FILE_NAME. "!\n";
 		fclose($meta_f);
 		fclose($body_f);
 	}
@@ -69,13 +71,9 @@ function process_result($response, $write_to_file, $meta_f, $body_f) {
 function write_to_file($raw_result, $meta_f, $body_f) {
 	try {
 		// write meta data to file in form of JSON string
-		echo "Writing meta data to file" . META_FILE_NAME.
-			"..........\n";
 		fwrite($meta_f, $raw_result);
 
 		// build hashmap with key=>value as "url=>body"
-		echo "Writing body to file " . BODY_FILE_NAME . 
-			"..........\n";
 		$response = json_decode($raw_result);
 		$hashmap = array();		
 		foreach ($response->results as $result) {
