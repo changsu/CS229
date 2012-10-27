@@ -1,3 +1,3 @@
 <?php
-	echo "php";
+   echo "TODO: Interface of the GUI.";
 ?>

@@ -14,4 +14,10 @@ define ("REQ_PREFIX",
 // control number of result pages = OFFSET_LIMIT * 10;
 define ("OFFSET_LIMIT", "5");
 
+// output file ID and body 
+define ("BODY_FILE_NAME", "body_file_name.txt");
+
+// output file ID and file meta data(title, author, etc) 
+define("META_FILE_NAME", "meta_file_name.txt");
+
 ?>
