@@ -20,7 +20,9 @@ s: start date (optional) 2011.09.24 by default
 e: end date (optional) current time when you run the script
 
 ### Ouput File (all files stores json string, decodable in Java)
-"body_file_name.txt": store 
+"body_file_name.txt": store url and body
 
+"meta_file_name.txt": store title, url, lead paragraph, can be enriched
 
-"meta_file_name.txt":
+Look into the file, you will understand what the data looks like.
+Json is an easy way of sharing data across different languages.
