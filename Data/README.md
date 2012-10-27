@@ -10,6 +10,18 @@ Usage:
 <pre> 
   ~$: php mass_search_script.php -k 'keywords' (-s 'start_date' -e 'end_date')
 </pre>
+Example Code:
+<pre>
+  ~$: php mass_search_script.php -k 'economy' -s 20120829 -e 20120930
+</pre>
+Above script will output first 50 articles that contains keyword "economy" in
+title or body from 08/29/2012 to 09/30/2012 to two files
+
+<pre>
+  ~$: php mass_search_script.php -k 'economy finance'
+</pre>
+Above script will output first 50 articles that contains both keyword "economy" 
+and "finance" from 09/24/2011 to current time say 10/26/2012
 
 Options:
 
