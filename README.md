@@ -55,6 +55,7 @@ Code related to UI
 
 ####  NLP/
 Natural Language Processing Code:
+
 1. Stanford Parser that transform sentence into tree structures 
 2. Code used for extracting features
 

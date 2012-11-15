@@ -5,6 +5,6 @@ In order to develop,
 
 1. Import the project through following steps:
    File->Import->General->Existing Projects into Workspace->Next->Select root directory->Browse and then select the java project where you save. Basically, just locate the NLP folder ( we have the java project) in your local git repo.
-2. Download the software [here] (http://nlp.stanford.edu/software/lex-parser.shtml#Download) if you have not done yet and add in four external jars in to java build path of your current project through following steps:
-   Right click on your project imported->Properties->Java Build Path->Libraries(in right panel)->Add External Jars->Locate where you save the downloaded software.
+2. Download the software [here] (http://nlp.stanford.edu/software/lex-parser.shtml#Download) if you have not done yet and add in four external jars in to java build path of your current project.
+
 
