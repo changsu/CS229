@@ -55,6 +55,8 @@ Natural Language Processing Code:
 1. Stanford Parser that transform sentence into tree structures
 2. Code used for extracting features
 
+### Environment Set Up
+Refer to README in each foler for details about setting up environment
 
 ### Database Information
 Added in the future
