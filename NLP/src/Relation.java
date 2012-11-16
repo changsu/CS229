@@ -11,11 +11,12 @@ import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 
 /**
- * Store relations object with two entities, spans of tokens between entities
+ * Store relation object with two entities, spans of tokens between entities
  * and label of the relation 
  */
 public class Relation {
 	
+	private String url;
 	private boolean label;
 	private Tree e1, e2;
 	/* spans of tokens between the two targeted entities */
@@ -26,7 +27,8 @@ public class Relation {
 	 * @param e2 target entity2
 	 * @param parse full parsed tree of the sentence
 	 */
-	public Relation(Tree e1, Tree e2, Tree parse) {
+	public Relation(String url, Tree e1, Tree e2, Tree parse) {
+		this.url = url;
 		this.e1 = e1;
 		this.e2 = e2;
 		tokens = new ArrayList<Tree>();
@@ -41,10 +43,24 @@ public class Relation {
 	}
 	
 	/**
+	 * Generate feature object for the relation
+	 */
+	public void generateFeatures() {
+		
+	}
+	
+	/**
 	 * @return label of the relation true or false
 	 */
 	public boolean getLabel() {
 		return label;
+	}
+	
+	/**
+	 * @return url of the article where the relation is extracted
+	 */
+	public String getURL() {
+		return url;
 	}
 	
 	public String toString() {

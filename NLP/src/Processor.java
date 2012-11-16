@@ -51,9 +51,9 @@ public class Processor {
 	
 	/**
 	 * Read and parse input file of JSON string and populate 
-	 * list of sentences, from where relations will be extracted
+	 * list of articles
 	 */
-	public void readFile() {
+	private void readFile() {
 		File inf = new File("files/" + this.inputFileName);
 		if(!inf.exists()) { 
 			System.err.println("ERROR: File: "+inf.getAbsolutePath()+" does not exist");
@@ -66,11 +66,18 @@ public class Processor {
 		
 		System.out.println("INFO: finish reading file" + inf.getAbsolutePath());
 		parseJSONFile(inf);
-		
+//		printArticles();
+	}
+	
+	/**
+	 * Extract relations for each article and populate current relations list
+	 */
+	private void extractRelations() {
 		LexicalizedParser lp = 
 				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
-		
-//		printArticles();
+		for (Article article : articles) {
+			relations.addAll(article.extractRelations(lp));
+		}
 	}
 	
 	/**
@@ -78,7 +85,7 @@ public class Processor {
 	 * object for further process and populate the sentence list
 	 * @param inf
 	 */
-	public void parseJSONFile(File inf) {
+	private void parseJSONFile(File inf) {
 		/* convert content of the file into string */
 		try {
 			BufferedReader reader;
@@ -113,33 +120,15 @@ public class Processor {
 	}
 	
 	public static void main(String[] args) {
-//		LexicalizedParser lp = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
 		if (args.length != 2) {
 			System.err.println("usage: Processor inputfilename outputfilename");
 			return;
 		} else {
 			Processor processor = new Processor(args[0], args[1]);
 			processor.readFile();
+			processor.extractRelations();
 		}
 	}
-
-//	public static void parseF(LexicalizedParser lp, String filename) {
-//		// This option shows loading and sentence-segment and tokenizing
-//		// a file using DocumentPreprocessor
-//		TreebankLanguagePack tlp = new PennTreebankLanguagePack();
-//		GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
-//		// You could also create a tokenizer here (as below) and pass it
-//		// to DocumentPreprocessor
-//		for (List<HasWord> sentence : new DocumentPreprocessor(filename)) {
-//			Tree parse = lp.apply(sentence);
-//			parse.pennPrint();
-//
-//			GrammaticalStructure gs = gsf.newGrammaticalStructure(parse);
-//			Collection tdl = gs.typedDependenciesCCprocessed(true);
-//			System.out.println(tdl);
-//		}
-//	}
-//
 	
 	/**
 	 * Set of utility print functions for debugging
@@ -147,6 +136,12 @@ public class Processor {
 	private void printArticles() {
 		for (Article article : articles) {
 			System.out.println(article.toString());
+		}
+	}
+	
+	private void printRelations() {
+		for (Relation relation : relations) {
+			System.out.println(relation.toString());
 		}
 	}
 }
