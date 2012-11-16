@@ -66,17 +66,12 @@ public class Feature {
 	 * Populate each feature
 	 */
 	private void buildFeatures() {
-		setNumStopWords();
+		setWords();
 		setNumPuncsBtw();
 		setNumPhraseBtw();
-		setWords();
 		setPOSSequence();
 		setPOSlefte1();
 		setPOSrighte2();
-	}
-	
-	private void setNumStopWords() {
-		
 	}
 	
 	private void setNumPuncsBtw() {
