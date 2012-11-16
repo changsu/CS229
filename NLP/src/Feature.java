@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import edu.stanford.nlp.trees.*;
 
@@ -22,7 +24,8 @@ public class Feature {
 	
 	private Tree e1;
 	private Tree e2;
-	private String sentence;
+	private String sentence;	
+	
 	
 	/* Feature1: number of words between two NP */
 	private int numWordsBtw;
@@ -55,6 +58,7 @@ public class Feature {
 		this.e1 = e1;
 		this.e2 = e2;
 		this.sentence = sentence;
+		words = new ArrayList<Integer>();
 		buildFeatures();
 	}
 
@@ -62,7 +66,6 @@ public class Feature {
 	 * Populate each feature
 	 */
 	private void buildFeatures() {
-		setNumWordsBtw();
 		setNumStopWords();
 		setNumPuncsBtw();
 		setNumPhraseBtw();
@@ -70,10 +73,6 @@ public class Feature {
 		setPOSSequence();
 		setPOSlefte1();
 		setPOSrighte2();
-	}
-	
-	private void setNumWordsBtw() {
-		
 	}
 	
 	private void setNumStopWords() {
@@ -89,7 +88,36 @@ public class Feature {
 	}
 	
 	private void setWords() {
+		Integer wordIndex;
+		int counter = 0;
+		boolean addFlag = false; // control whether to add flag to words
+		ArrayList<Tree> e1leaves = (ArrayList<Tree>) e1.getLeaves();
+		ArrayList<Tree> e2leaves = (ArrayList<Tree>) e2.getLeaves();
+		String startWord = e1leaves.get(e1leaves.size() - 1).label().value();
+		String endWord = e2leaves.get(0).label().value();
 		
+		BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
+		iterator.setText(sentence);
+		int start = iterator.first();
+		for (int end = iterator.next();
+				end != BreakIterator.DONE;
+				start = end, end = iterator.next()) {
+			String word = fromPlural(sentence.substring(start, end));
+			if (word.equals(startWord)) {
+				addFlag = true;
+			}
+			// eliminate empty word
+			if (word.isEmpty() || word.equals(" ") || word.equals("") || !addFlag) 
+				continue;
+			if (word.equals(endWord)){
+				addFlag = false;
+			}
+			if ((wordIndex = Processor.dictionary.get(word)) != null) {
+				words.add(wordIndex);
+				++counter;
+			}
+		}
+		numWordsBtw = counter;
 	}
 	
 	private void setPOSSequence() {
@@ -127,13 +155,40 @@ public class Feature {
 	public int POSSequence() {
 		return POSSequence;
 	}
-	
+
 	public int POSlefte1() {
 		return POSlefte1;
 	}
-	
+
 	public int POSrighte2() {
 		return POSrighte2;
 	}
-	
+
+	/* Helper functions */
+	/** 
+	 * Returns the non-plural form of a plural noun like: cars -> car, children -> child, people -> person, etc. 
+	 * @param str 
+	 * @return the non-plural form of a plural noun like: cars -> car, children -> child, people -> person, etc. 
+	 */  
+	private String fromPlural(String str)  
+	{  
+		if(str.toLowerCase().endsWith("es") && ! shouldEndWithE(str)) return str.substring(0, str.toLowerCase().lastIndexOf("es"));  
+		else if(str.toLowerCase().endsWith("s")) return str.substring(0, str.toLowerCase().lastIndexOf('s'));  
+		else if(str.toLowerCase().endsWith("children")) return str.substring(0, str.toLowerCase().lastIndexOf("ren"));  
+		else if(str.toLowerCase().endsWith("people")) return str.substring(0, str.toLowerCase().lastIndexOf("ople")) + "rson";  
+		else return str;  
+	}  
+
+	/** 
+	 * Determine whether it's plural noun
+	 * @param str 
+	 * @return true is the singular form of a word should end with the letter "e" 
+	 */  
+	private boolean shouldEndWithE(String str)  
+	{  
+		return str.toLowerCase().endsWith("iece")  
+				|| str.toLowerCase().endsWith("ice")  
+				|| str.toLowerCase().endsWith("ace")  
+				|| str.toLowerCase().endsWith("ise");  
+	}  
 }
