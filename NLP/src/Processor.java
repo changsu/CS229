@@ -75,9 +75,10 @@ public class Processor {
 	private void extractRelations() {
 		LexicalizedParser lp = 
 				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
-		for (Article article : articles) {
-			relations.addAll(article.extractRelations(lp));
-		}
+		relations.addAll(articles.get(0).extractRelations(lp));
+//		for (Article article : articles) {
+//			relations.addAll(article.extractRelations(lp));
+//		}
 	}
 	
 	/**

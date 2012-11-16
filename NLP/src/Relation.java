@@ -19,6 +19,7 @@ public class Relation {
 	private String url;
 	private boolean label;
 	private Tree e1, e2;
+	private boolean labelFlag;
 	/* spans of tokens between the two targeted entities */
 	private ArrayList<Tree> tokens;
 	
@@ -26,11 +27,13 @@ public class Relation {
 	 * @param e1 target entity1
 	 * @param e2 target entity2
 	 * @param parse full parsed tree of the sentence
+	 * @param labelFlage control whether to label the relation in construction
 	 */
-	public Relation(String url, Tree e1, Tree e2, Tree parse) {
+	public Relation(String url, Tree e1, Tree e2, Tree parse, boolean labelFlag) {
 		this.url = url;
 		this.e1 = e1;
 		this.e2 = e2;
+		this.labelFlag = labelFlag;
 		tokens = new ArrayList<Tree>();
 	}
 	
@@ -66,9 +69,9 @@ public class Relation {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("e1: ");
-		sb.append(e1.toStructureDebugString() + "\n");
+		sb.append(e1.toString() + "\n");
 		sb.append("e2: ");
-		sb.append(e2.toStructureDebugString() + "\n");
+		sb.append(e2.toString() + "\n");
 		sb.append("tokens: ");
 		sb.append(tokens.toString() + "\n");
 		sb.append("label: ");
