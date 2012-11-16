@@ -89,8 +89,10 @@ public class Feature {
 	
 	private void setWords() {
 		Integer wordIndex;
-		int counter = 0;
+		int counter = 0; // keep tracks of number of valid words in between
 		boolean addFlag = false; // control whether to add flag to words
+		
+		// set last word in e1 as start word, and first word in e2 as begin word
 		ArrayList<Tree> e1leaves = (ArrayList<Tree>) e1.getLeaves();
 		ArrayList<Tree> e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		String startWord = e1leaves.get(e1leaves.size() - 1).label().value();
@@ -102,6 +104,7 @@ public class Feature {
 		for (int end = iterator.next();
 				end != BreakIterator.DONE;
 				start = end, end = iterator.next()) {
+			// get word and convert from plural form if it is
 			String word = fromPlural(sentence.substring(start, end));
 			if (word.equals(startWord)) {
 				addFlag = true;
@@ -109,9 +112,13 @@ public class Feature {
 			// eliminate empty word
 			if (word.isEmpty() || word.equals(" ") || word.equals("") || !addFlag) 
 				continue;
+			
+			// if read end word, do not add words
 			if (word.equals(endWord)){
 				addFlag = false;
 			}
+			
+			// only add word if it's a valid word in dictionary
 			if ((wordIndex = Processor.dictionary.get(word)) != null) {
 				words.add(wordIndex);
 				++counter;
@@ -172,10 +179,14 @@ public class Feature {
 	 */  
 	private String fromPlural(String str)  
 	{  
-		if(str.toLowerCase().endsWith("es") && ! shouldEndWithE(str)) return str.substring(0, str.toLowerCase().lastIndexOf("es"));  
-		else if(str.toLowerCase().endsWith("s")) return str.substring(0, str.toLowerCase().lastIndexOf('s'));  
-		else if(str.toLowerCase().endsWith("children")) return str.substring(0, str.toLowerCase().lastIndexOf("ren"));  
-		else if(str.toLowerCase().endsWith("people")) return str.substring(0, str.toLowerCase().lastIndexOf("ople")) + "rson";  
+		if(str.toLowerCase().endsWith("es") && ! shouldEndWithE(str)) 
+			return str.substring(0, str.toLowerCase().lastIndexOf("es"));  
+		else if(str.toLowerCase().endsWith("s")) 
+			return str.substring(0, str.toLowerCase().lastIndexOf('s'));  
+		else if(str.toLowerCase().endsWith("children")) 
+			return str.substring(0, str.toLowerCase().lastIndexOf("ren"));  
+		else if(str.toLowerCase().endsWith("people")) 
+			return str.substring(0, str.toLowerCase().lastIndexOf("ople")) + "rson";  
 		else return str;  
 	}  
 
