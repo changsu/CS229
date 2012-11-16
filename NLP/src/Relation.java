@@ -10,6 +10,8 @@ public class Relation {
 	private String url;
 	private boolean label;
 	private Tree e1, e2;
+	/* original sentence */
+	private String sentence;
 	/* parsed sentence from where e1, e2 are selected */
 	private Tree parse;
 		
@@ -25,10 +27,12 @@ public class Relation {
 	 * @param parse full parsed tree of the sentence
 	 * @param labelFlage control whether to label the relation in construction
 	 */
-	public Relation(String url, Tree e1, Tree e2, Tree parse, boolean labelFlag) {
+	public Relation(String url, Tree e1, Tree e2, String sentence, 
+			Tree parse, boolean labelFlag) {
 		this.url = url;
 		this.e1 = e1;
 		this.e2 = e2;
+		this.sentence = sentence;
 		this.parse = parse;
 		tokens = new ArrayList<Tree>();
 		/* If caller want to label the relation, we will label it
@@ -55,7 +59,7 @@ public class Relation {
 	 * Generate feature object for the relation
 	 */
 	private void generateFeatures() {
-		features = new Feature(e1, e2, parse);
+		features = new Feature(e1, e2, sentence);
 	}
 	
 	/**

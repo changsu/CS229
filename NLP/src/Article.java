@@ -69,7 +69,7 @@ public class Article {
 			for (e1Index = 0; e1Index < NPList.size() - 1; ++e1Index) {
 				for (e2Index = e1Index + 1; e2Index < NPList.size(); ++e2Index) {
 					relations.add(new Relation(url, NPList.get(e1Index), 
-							NPList.get(e2Index), parse, true));
+							NPList.get(e2Index), sentence, parse, true));
 				}
 			}
 		}
