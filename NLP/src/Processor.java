@@ -37,7 +37,7 @@ public class Processor {
 	private String outputFileName;
 	
 	/* construct list of sentence object after parsing the JSON file */
-	private ArrayList<tSentence> sentences;
+	private ArrayList<Article> articles;
 	
 	/* construct list of relation object as samples */
 	private ArrayList<Relation> relations;
@@ -45,7 +45,7 @@ public class Processor {
 	public Processor(String inputFileName, String outputFileName){
 		this.inputFileName = inputFileName;
 		this.outputFileName = outputFileName;
-		sentences = new ArrayList<tSentence>();
+		articles = new ArrayList<Article>();
 		relations = new ArrayList<Relation>();
 	}
 	
@@ -66,7 +66,11 @@ public class Processor {
 		
 		System.out.println("INFO: finish reading file" + inf.getAbsolutePath());
 		parseJSONFile(inf);
-		printSentences();
+		
+		LexicalizedParser lp = 
+				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
+		
+//		printArticles();
 	}
 	
 	/**
@@ -90,12 +94,12 @@ public class Processor {
 			// Parse the JSON string to JSON array
 			JSONArray records = new JSONArray(stringBuilder.toString());
 			
-			// construct one sentence object for each JSON object in JSON array
+			// construct one article object for each JSON object in JSON array
 			for (int i = 0; i < records.length(); ++i) {
 				JSONObject record = records.getJSONObject(i);
-				tSentence sentence = new tSentence(record.getString("url"), 
+				Article article = new Article(record.getString("url"), 
 						record.getString("body"));
-				sentences.add(sentence);
+				articles.add(article);
 			}			
 			// close input stream
 			reader.close();
@@ -140,9 +144,9 @@ public class Processor {
 	/**
 	 * Set of utility print functions for debugging
 	 */
-	private void printSentences() {
-		for (tSentence sentence : sentences) {
-			System.out.println(sentence.toString());
+	private void printArticles() {
+		for (Article article : articles) {
+			System.out.println(article.toString());
 		}
 	}
 }
