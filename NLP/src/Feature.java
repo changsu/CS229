@@ -1,3 +1,6 @@
+ 
+import edu.stanford.nlp.trees.*;
+
 /**
  * Define feature object that describe
  * features of a relation, which will be further used 
@@ -6,7 +9,7 @@
 
 public class Feature {
 	
-	public Feature(String relationStr) {
+	public Feature(Tree e1, Tree e2, Tree parse) {
 		
 	}
 }

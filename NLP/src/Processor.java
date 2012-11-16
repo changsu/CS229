@@ -1,22 +1,11 @@
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringReader;
 
-import edu.stanford.nlp.objectbank.TokenizerFactory;
-import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.process.DocumentPreprocessor;
-import edu.stanford.nlp.process.PTBTokenizer;
-import edu.stanford.nlp.ling.CoreLabel;  
-import edu.stanford.nlp.ling.HasWord;  
-import edu.stanford.nlp.ling.Sentence;  
-import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 
 import org.json.JSONArray;
@@ -75,10 +64,10 @@ public class Processor {
 	private void extractRelations() {
 		LexicalizedParser lp = 
 				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
-//		relations.addAll(articles.get(0).extractRelations(lp));
-		for (Article article : articles) {
-			relations.addAll(article.extractRelations(lp));
-		}
+		relations.addAll(articles.get(0).extractRelations(lp));
+//		for (Article article : articles) {
+//			relations.addAll(article.extractRelations(lp));
+//		}
 	}
 	
 	/**

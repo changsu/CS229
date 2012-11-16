@@ -1,18 +1,10 @@
 
-import java.awt.List;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
-import edu.stanford.nlp.objectbank.TokenizerFactory;
-import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.process.DocumentPreprocessor;
-import edu.stanford.nlp.process.PTBTokenizer;
-import edu.stanford.nlp.ling.CoreLabel;  
-import edu.stanford.nlp.ling.HasWord;  
-import edu.stanford.nlp.ling.Sentence;  
 import edu.stanford.nlp.trees.*;
 
 /**
@@ -84,6 +76,11 @@ public class Article {
 		return relations;
 	}
 	
+	/**
+	 * Walk through parsed tree and populate list of NP
+	 * @param parse full parsed tree
+	 * @return list of noun phrases in the parsed tree
+	 */
 	private ArrayList<Tree> generateNPList(Tree parse) {
 		ArrayList<Tree> NPList = new ArrayList<Tree>();
 		Iterator<Tree> itr = parse.iterator();

@@ -1,14 +1,5 @@
 import java.util.ArrayList;
-
-import edu.stanford.nlp.objectbank.TokenizerFactory;
-import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.process.DocumentPreprocessor;
-import edu.stanford.nlp.process.PTBTokenizer;
-import edu.stanford.nlp.ling.CoreLabel;  
-import edu.stanford.nlp.ling.HasWord;  
-import edu.stanford.nlp.ling.Sentence;  
 import edu.stanford.nlp.trees.*;
-import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 
 /**
  * Store relation object with two entities, spans of tokens between entities
@@ -19,9 +10,14 @@ public class Relation {
 	private String url;
 	private boolean label;
 	private Tree e1, e2;
-	private boolean labelFlag;
+	/* parsed sentence from where e1, e2 are selected */
+	private Tree parse;
+		
 	/* spans of tokens between the two targeted entities */
 	private ArrayList<Tree> tokens;
+	
+	/* feature object of the relation */
+	private Feature features;
 	
 	/**
 	 * @param e1 target entity1
@@ -33,23 +29,40 @@ public class Relation {
 		this.url = url;
 		this.e1 = e1;
 		this.e2 = e2;
-		this.labelFlag = labelFlag;
+		this.parse = parse;
 		tokens = new ArrayList<Tree>();
+		/* If caller want to label the relation, we will label it
+		 * by calling applyRules() method
+		 */
+		if (labelFlag) {
+			applyRules();
+		}
+		// generate features of the relation
+		generateFeatures();
 	}
 	
 	/**
 	 * Apply set of heuristics on the relation based on the full
 	 * parse tree and generate label finally
+	 * @author Liangliang Zhang
 	 */
-	public void applyRules() {
-		
+	private void applyRules() {
+		// CODE GOES HERE
+		label = true; // or false based on above rules
 	}
 	
 	/**
 	 * Generate feature object for the relation
 	 */
-	public void generateFeatures() {
-		
+	private void generateFeatures() {
+		features = new Feature(e1, e2, parse);
+	}
+	
+	/**
+	 * @return feature object of the relation
+	 */
+	public Feature getFeatures() {
+		return features;
 	}
 	
 	/**
