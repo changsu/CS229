@@ -87,9 +87,13 @@ public class Feature {
 		
 	}
 	
+	/**
+	 * Set word list between two NPs e1 and e2, 
+	 * count number of words, stop words, punctuations in between
+	 * TODO: should not consider verb or nouns as in the thesis? currently, we include those
+	 */
 	private void setWords() {
 		Integer wordIndex;
-		int counter = 0; // keep tracks of number of valid words in between
 		boolean addFlag = false; // control whether to add flag to words
 		
 		// set last word in e1 as start word, and first word in e2 as begin word
@@ -97,7 +101,10 @@ public class Feature {
 		ArrayList<Tree> e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		String startWord = e1leaves.get(e1leaves.size() - 1).label().value();
 		String endWord = e2leaves.get(0).label().value();
-		
+//		
+//		sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.";
+//		startWord = "maker";
+//		endWord = "U.S.";
 		BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
 		iterator.setText(sentence);
 		int start = iterator.first();
@@ -106,6 +113,8 @@ public class Feature {
 				start = end, end = iterator.next()) {
 			// get word and convert from plural form if it is
 			String word = fromPlural(sentence.substring(start, end));
+			
+			// if encounter startWord, start adding words
 			if (word.equals(startWord)) {
 				addFlag = true;
 			}
@@ -113,18 +122,23 @@ public class Feature {
 			if (word.isEmpty() || word.equals(" ") || word.equals("") || !addFlag) 
 				continue;
 			
-			// if read end word, do not add words
+			// if read end word, end adding words
 			if (word.equals(endWord)){
 				addFlag = false;
 			}
 			
 			// only add word if it's a valid word in dictionary
 			if ((wordIndex = Processor.dictionary.get(word)) != null) {
+				if (Processor.stopWordDictionary.get(word) != null) {
+					this.numStopWords++;
+				}
 				words.add(wordIndex);
-				++counter;
+				this.numWordsBtw++;
 			}
 		}
-		numWordsBtw = counter;
+//		System.out.println(words.toString());
+//		System.out.println("num of words: " + this.numWordsBtw);
+//		System.out.println("num of stop words: " + this.numStopWords);
 	}
 	
 	private void setPOSSequence() {
@@ -202,4 +216,6 @@ public class Feature {
 				|| str.toLowerCase().endsWith("ace")  
 				|| str.toLowerCase().endsWith("ise");  
 	}  
+	
+	
 }

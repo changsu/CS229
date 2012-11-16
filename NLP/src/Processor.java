@@ -34,6 +34,8 @@ public class Processor {
 
 	/* store word dictionary */
 	public static HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
+	/* store stop word dictionary */
+	public static HashMap<String, Integer> stopWordDictionary = new HashMap<String, Integer>();
 	
 	public Processor(String inputFileName, String outputFileName){
 		this.inputFileName = inputFileName;
@@ -65,8 +67,8 @@ public class Processor {
 	/**
 	 * Build word dictionary for feature construction
 	 */
-	public void readDictionary() {
-		File inf = Processor.readFile("3esl.txt");
+	public void readDictionary(HashMap<String, Integer> dictionary, String fileName) {
+		File inf = Processor.readFile(fileName);
 		int wordIndex = 0;
 		try {
 			BufferedReader reader;
@@ -148,7 +150,8 @@ public class Processor {
 			Processor processor = new Processor(args[0], args[1]);
 			File inf = processor.readFile(processor.inputFileName);
 			processor.parseJSONFile(inf);
-			processor.readDictionary();
+			processor.readDictionary(dictionary, "3esl.txt");
+			processor.readDictionary(stopWordDictionary, "stopword.txt");
 			processor.extractRelations();
 		}
 	}
