@@ -94,7 +94,7 @@ public class Processor {
 			for (int i = 0; i < records.length(); ++i) {
 				JSONObject record = records.getJSONObject(i);
 				tSentence sentence = new tSentence(record.getString("url"), 
-												   record.getString("body"));
+						record.getString("body"));
 				sentences.add(sentence);
 			}			
 			// close input stream
