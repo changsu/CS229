@@ -1,5 +1,11 @@
  
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.stanford.nlp.trees.*;
 
@@ -42,13 +48,16 @@ public class Feature {
 	/* POS to the right of e2 */
 	private int POSrighte2;
 	
+	/* store word dictionary */
+	private HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
+	
 	public Feature(Tree e1, Tree e2, String sentence) {
 		this.e1 = e1;
 		this.e2 = e2;
 		this.sentence = sentence;
 		buildFeatures();
 	}
-	
+
 	/**
 	 * Populate each feature
 	 */
@@ -66,6 +75,7 @@ public class Feature {
 	private void setNumWordsBtw() {
 		
 	}
+	
 	private void setNumStopWords() {
 		
 	}

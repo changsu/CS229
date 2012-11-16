@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +31,9 @@ public class Processor {
 	
 	/* construct list of relation object as samples */
 	private ArrayList<Relation> relations;
+
+	/* store word dictionary */
+	public static HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
 	
 	public Processor(String inputFileName, String outputFileName){
 		this.inputFileName = inputFileName;
@@ -39,35 +43,50 @@ public class Processor {
 	}
 	
 	/**
-	 * Read and parse input file of JSON string and populate 
-	 * list of articles
+	 * Read input file and return File object 
+	 * @param inputFileName String input file name
+	 * @return File object
 	 */
-	private void readFile() {
-		File inf = new File("files/" + this.inputFileName);
+	public static File readFile(String inputFileName) {
+		File inf = new File("files/" + inputFileName);
 		if(!inf.exists()) { 
 			System.err.println("ERROR: File: "+inf.getAbsolutePath()+" does not exist");
-			return;
+			return null;
 		}
 		if(!inf.canRead()) { 
 			System.err.println("ERROR: File: "+inf.getAbsolutePath()+" cannot be read");
-			return;
+			return null;
 		}
 		
 		System.out.println("INFO: finish reading file" + inf.getAbsolutePath());
-		parseJSONFile(inf);
-//		printArticles();
+		return inf;
 	}
 	
 	/**
-	 * Extract relations for each article and populate current relations list
+	 * Build word dictionary for feature construction
 	 */
-	private void extractRelations() {
-		LexicalizedParser lp = 
-				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
-		relations.addAll(articles.get(0).extractRelations(lp));
-//		for (Article article : articles) {
-//			relations.addAll(article.extractRelations(lp));
-//		}
+	public void readDictionary() {
+		File inf = Processor.readFile("3esl.txt");
+		int wordIndex = 0;
+		try {
+			BufferedReader reader;
+			reader = new BufferedReader(new FileReader(inf));
+
+			String line = null;
+			while((line = reader.readLine()) != null ) {
+				if (dictionary.containsKey(line)) {
+					continue;
+				} else {
+					dictionary.put(line, ++wordIndex);
+				}
+			}
+			reader.close();
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	/**
@@ -109,13 +128,27 @@ public class Processor {
 		}
 	}
 	
+	/**
+	 * Extract relations for each article and populate current relations list
+	 */
+	private void extractRelations() {
+		LexicalizedParser lp = 
+				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
+		relations.addAll(articles.get(0).extractRelations(lp));
+//		for (Article article : articles) {
+//			relations.addAll(article.extractRelations(lp));
+//		}
+	}
+	
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.err.println("usage: Processor inputfilename outputfilename");
 			return;
 		} else {
 			Processor processor = new Processor(args[0], args[1]);
-			processor.readFile();
+			File inf = processor.readFile(processor.inputFileName);
+			processor.parseJSONFile(inf);
+			processor.readDictionary();
 			processor.extractRelations();
 		}
 	}
