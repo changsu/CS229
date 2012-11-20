@@ -33,15 +33,24 @@ public class Processor {
 	private ArrayList<Relation> relations;
 
 	/* store word dictionary */
-	public static HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> dictionary;
 	/* store stop word dictionary */
-	public static HashMap<String, Integer> stopWordDictionary = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> stopWordDictionary;
+	/* stor part-of-speach dictionary */
+	public static HashMap<String, Integer> POSDictionary;
+	/* store POS tagger for feature extraction */
+	public static Tagger tagger;
+
 	
 	public Processor(String inputFileName, String outputFileName){
 		this.inputFileName = inputFileName;
 		this.outputFileName = outputFileName;
 		articles = new ArrayList<Article>();
 		relations = new ArrayList<Relation>();
+		dictionary = new HashMap<String, Integer>();
+		stopWordDictionary = new HashMap<String, Integer>();
+		POSDictionary = new HashMap<String, Integer>();
+		tagger = new Tagger();
 	}
 	
 	/**
@@ -152,6 +161,7 @@ public class Processor {
 			processor.parseJSONFile(inf);
 			processor.readDictionary(dictionary, "3esl.txt");
 			processor.readDictionary(stopWordDictionary, "stopword.txt");
+			processor.readDictionary(POSDictionary, "pos.txt");
 			processor.extractRelations();
 		}
 	}

@@ -24,7 +24,7 @@ public class Feature {
 	
 	private Tree e1;
 	private Tree e2;
-	private String sentence;	
+	private String sentence;
 	
 	/* words between(include) two NP */
 	private ArrayList<Integer> words;
@@ -55,15 +55,21 @@ public class Feature {
 	/* POS to the right of e2 */
 	private int POSrighte2;
 	
-	/* store word dictionary */
-	private HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
+	/* entity type of e1 */
+	private int entityType1;
+	
+	/* entity type of e2 */
+	private int entityType2;
 	
 	public Feature(Tree e1, Tree e2, String sentence) {
 		this.e1 = e1;
 		this.e2 = e2;
 		this.sentence = sentence;
 		words = new ArrayList<Integer>();
+		// TODO: delete
+		this.sentence = "Jaguar, the luxury auto maker Sold, 1,214 cars: in the U.S.";
 		buildFeatures();
+		
 	}
 
 	/**
@@ -71,24 +77,16 @@ public class Feature {
 	 */
 	private void buildFeatures() {
 		setWords();
-		setNumPuncsBtw();
 		setNumPhraseBtw();
 		setPOSSequence();
 		setPOSlefte1();
 		setPOSrighte2();
-	}
-	
-	private void setNumPuncsBtw() {
-		
+		setEntityTypes();
 	}
 
-	private void setNumPhraseBtw() {
-		
-	}
-	
 	/**
 	 * Set word list between two NPs e1 and e2, 
-	 * count number of words, stop words, punctuations in between
+	 * count number of words, stop words, punctuation in between
 	 * TODO: should not consider verb or nouns as in the thesis? currently, we include those
 	 */
 	private void setWords() {
@@ -102,7 +100,6 @@ public class Feature {
 		String endWord = e2leaves.get(0).label().value();
 		
 		// debug usage
-		sentence = "Jaguar, the luxury auto maker Sold, 1,214 cars: in the U.S.";
 		startWord = "maker";
 		endWord = "U.S.";
 		
@@ -157,6 +154,10 @@ public class Feature {
 		System.out.println(this);
 	}
 	
+	private void setNumPhraseBtw() {
+		
+	}
+	
 	private void setPOSSequence() {
 		
 	}
@@ -169,40 +170,52 @@ public class Feature {
 		
 	}
 	
-	public int numWordsBtw() {
-		return numWordsBtw;
-	}
-	
-	public int numStopWords() {
-		return numStopWords;
-	}
-	
-	public int numPuncsBtw() {
-		return numPuncsBtw;
-	}
-	
-	public int numCapBtw() {
-		return numCapWords;
-	}
-	
-	public int numPhrasesBtw() {
-		return numPhrasesBts;
+	private void setEntityTypes() {
+		
 	}
 	
 	public ArrayList<Integer> getWords() {
 		return words;
 	}
 	
-	public int POSSequence() {
+	public int getNumWordsBtw() {
+		return numWordsBtw;
+	}
+	
+	public int getNumStopWords() {
+		return numStopWords;
+	}
+	
+	public int getNumPuncsBtw() {
+		return numPuncsBtw;
+	}
+	
+	public int getNumCapBtw() {
+		return numCapWords;
+	}
+	
+	public int getNumPhrasesBtw() {
+		return numPhrasesBts;
+	}
+	
+	public int getPOSSequence() {
 		return POSSequence;
 	}
 
-	public int POSlefte1() {
+	public int getPOSlefte1() {
 		return POSlefte1;
 	}
 
-	public int POSrighte2() {
+	public int getPOSrighte2() {
 		return POSrighte2;
+	}
+	
+	public int getEntityType1() {
+		return entityType1;
+	}
+	
+	public int getEntityType2() {
+		return entityType2;
 	}
 	
 	public String toString() {
