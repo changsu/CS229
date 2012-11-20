@@ -26,25 +26,29 @@ public class Feature {
 	private Tree e2;
 	private String sentence;	
 	
-	
-	/* Feature1: number of words between two NP */
-	private int numWordsBtw;
-	
-	/* Feature2: words between(include) two NP */
+	/* words between(include) two NP */
 	private ArrayList<Integer> words;
 	
-	/* Feature3: presence of POS sequence */
-	private int POSSequence;
+	/* number of words between two NP, including
+	 * last word of e1 and first word of e2 */
+	private int numWordsBtw;
 	
-	/* Featue4: number of phrases in between */
-	private int numPhrasesBts;
-	
-	/* Feature5: number of stop words in between */
+	/* number of stop words in between */
 	private int numStopWords;
 	
-	/* Feature 6: number of punctuations in between */
-	private int numPuncsBtw;
+	/* number of Capitalization words in between 
+	 * here, capitalization means the first char is capitalized*/
+	private int numCapWords;
 	
+	/* number of punctuations in between */
+	private int numPuncsBtw;
+		
+	/* presence of POS sequence */
+	private int POSSequence;
+	
+	/* number of phrases in between */
+	private int numPhrasesBts;
+
 	/* POS to the left of e1 */
 	private int POSlefte1;
 	
@@ -96,18 +100,23 @@ public class Feature {
 		ArrayList<Tree> e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		String startWord = e1leaves.get(e1leaves.size() - 1).label().value();
 		String endWord = e2leaves.get(0).label().value();
-//		
-//		sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.";
-//		startWord = "maker";
-//		endWord = "U.S.";
+		
+		// debug usage
+		sentence = "Jaguar, the luxury auto maker Sold, 1,214 cars: in the U.S.";
+		startWord = "maker";
+		endWord = "U.S.";
+		
 		BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
 		iterator.setText(sentence);
 		int start = iterator.first();
 		for (int end = iterator.next();
 				end != BreakIterator.DONE;
 				start = end, end = iterator.next()) {
+			
 			// get word and convert from plural form if it is
+			// TODO: after getting POS, this should only apply for nouns
 			String word = fromPlural(sentence.substring(start, end));
+			String canonicalWord = word.toLowerCase();
 			
 			// if encounter startWord, start adding words
 			if (word.equals(startWord)) {
@@ -117,23 +126,35 @@ public class Feature {
 			if (word.isEmpty() || word.equals(" ") || word.equals("") || !addFlag) 
 				continue;
 			
+			// detect whether current word is punctuation
+			if (word.matches("[^A-Za-z0-9]")) {
+				this.numPuncsBtw++;
+				continue;
+			}
+			
+			// detect whether it's stop word
+			if (Processor.stopWordDictionary.get(canonicalWord) != null) {
+				this.numStopWords++;
+			}
+			
+			// only add word if it's a valid word in dictionary
+			// we also consider stop words here
+			if ((wordIndex = Processor.dictionary.get(canonicalWord)) != null) {
+				// if it's valid word, detect whether it's capitalized word
+				if (Character.isUpperCase(word.charAt(0))) {
+					this.numCapWords++;
+				}
+				words.add(wordIndex);
+				this.numWordsBtw++;
+			}
+			
 			// if read end word, end adding words
 			if (word.equals(endWord)){
 				addFlag = false;
 			}
 			
-			// only add word if it's a valid word in dictionary
-			if ((wordIndex = Processor.dictionary.get(word)) != null) {
-				if (Processor.stopWordDictionary.get(word) != null) {
-					this.numStopWords++;
-				}
-				words.add(wordIndex);
-				this.numWordsBtw++;
-			}
 		}
-//		System.out.println(words.toString());
-//		System.out.println("num of words: " + this.numWordsBtw);
-//		System.out.println("num of stop words: " + this.numStopWords);
+		System.out.println(this);
 	}
 	
 	private void setPOSSequence() {
@@ -160,6 +181,10 @@ public class Feature {
 		return numPuncsBtw;
 	}
 	
+	public int numCapBtw() {
+		return numCapWords;
+	}
+	
 	public int numPhrasesBtw() {
 		return numPhrasesBts;
 	}
@@ -179,7 +204,20 @@ public class Feature {
 	public int POSrighte2() {
 		return POSrighte2;
 	}
-
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("original sentence: " + sentence + "\n");
+		sb.append("words between: " + words.toString() + "\n");
+		sb.append("number of words: " + numWordsBtw + "\n");
+		sb.append("number of stop words: " + numStopWords + "\n");
+		sb.append("number of punctuations: " + numPuncsBtw + "\n");
+		sb.append("number of cap words: " + numCapWords + "\n");
+		return sb.toString();
+	}
+	
+	
+	
 	/* Helper functions */
 	/** 
 	 * Returns the non-plural form of a plural noun like: cars -> car, children -> child, people -> person, etc. 

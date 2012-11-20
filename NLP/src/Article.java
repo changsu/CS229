@@ -26,7 +26,7 @@ public class Article {
 	}
 
 	/**
-	 * @return source url of the sentence
+	 * @return source url of the article
 	 */
 	public String getURL() {
 		return url;
