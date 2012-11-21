@@ -24,6 +24,12 @@ public class Feature {
 	private ArrayList<Tree> e1leaves;
 	private ArrayList<Tree> e2leaves;
 	
+	/* edge words */
+	private String leftWordE1;
+	private String rightWordE1;
+	private String leftWordE2;
+	private String rightWordE2;
+	
 	/* words and its frequency between(include) two NP */
 	private HashMap<Integer, Integer> words;
 	
@@ -51,10 +57,10 @@ public class Feature {
 	private int numPhrasesBts;
 
 	/* POS to the left of e1 */
-	private int POSlefte1;
+	private Integer POSlefte1;
 	
 	/* POS to the right of e2 */
-	private int POSrighte2;
+	private Integer POSrighte2;
 	
 	/* entity type of e1 */
 	private int entityType1;
@@ -79,10 +85,23 @@ public class Feature {
 	 * Populate each feature
 	 */
 	private void buildFeatures() {
-		setPOSSequence();
+		setEdgeWords();
+		setPOSFeatures();
 		setWords();
 		setNumPhraseBtw();
 		setEntityTypes();
+	}
+	
+	/**
+	 * Set edge words of E1 and E2
+	 * namely, leftWordE1, rightWordE1
+	 * and leftWordE2, rightWordE2
+	 */
+	private void setEdgeWords() {
+		leftWordE1 = e1leaves.get(0).label().value();
+		rightWordE1 = e1leaves.get(e1leaves.size() - 1).label().value();
+		leftWordE2 = e2leaves.get(0).label().value();
+		rightWordE2 = e2leaves.get(e2leaves.size() - 1).label().value();
 	}
 	
 	/**
@@ -93,18 +112,32 @@ public class Feature {
 	 * While for the feature of POS sequence, we will build the dictionary along with each
 	 * new sequence we have encountered
 	 */
-	private void setPOSSequence() {
+	private void setPOSFeatures() {
 		// build POS arrayList during which process generate POS features
 		String taggedSentence = Processor.tagger.tagSentence(sentence);
-		
+
 		// get the left word of e1 and right word of e2
-		String leftWord = e1leaves.get(0).label().value();
-		String rightWord = e2leaves.get(e2leaves.size() - 1).label().value();
+		leftWordE1 = e1leaves.get(0).label().value();
+		rightWordE2 = e2leaves.get(e2leaves.size() - 1).label().value();
 		
 		// debug use
-		leftWord = "the";
-		rightWord = "U.S.A.";
+		leftWordE1 = "the";
+		rightWordE2 = "U.S.A.";
+		rightWordE1 = "maker";
+		leftWordE2 = "the";
 		
+		/* Though we can get the pos features in one pass of the tagged sentence,
+		 * we avoid doing that for simplicity and readability of the code 
+		 */
+		setPOSEdgeWords(taggedSentence);
+		setPOSSequence(taggedSentence);
+	}
+
+	/**
+	 * Set the POS of word to left of E1 and POS of word to the right of E2
+	 * @param taggedSentence
+	 */
+	private void setPOSEdgeWords(String taggedSentence) {
 		// store left word of e1 and right word of e2 
 		String leftToE1 = "", rightToE2 = "";
 		// flags avoid repeated assignment to lefttoe1 or righttoe2
@@ -123,26 +156,73 @@ public class Feature {
 			// we do not store punctuation in the posDic
 			if (word.matches("[^A-Za-z0-9]")) 
 				continue;
+			
 			// if current words is leftword of e1, then lefttoe1 is previousWord
-			if (word.equals(leftWord) && !flagLeftToE1) { 
+			if (word.equals(leftWordE1) && !flagLeftToE1) { 
 				leftToE1 = previouWord;
 				flagLeftToE1 = true;
 			}
 			// if previousWord is rightword of e2, then righttoe2 is word
-			if (previouWord.equals(rightWord) && !flagRightToE2) { 
+			if (previouWord.equals(rightWordE2) && !flagRightToE2) { 
 				rightToE2 = word;
 				flagRightToE2 = true;
 			}
 			previouWord = word;
 			posDic.put(word, tag);
 		}
+		
+		// set POS of lefttoE1 and righttoE2
+		if ((POSlefte1 = Processor.POSDictionary.get(posDic.get(leftToE1))) == null) 
+			POSlefte1 = 0;
+		if ((POSrighte2 = Processor.POSDictionary.get(posDic.get(rightToE2))) == null) 
+			POSrighte2 = 0;
+	}
+	
+	/**
+	 * Set pos sequene between e1 and e2
+	 * we build pos sequence along the way of constructing the feature
+	 * this is different from other features where we have dictionary in advance
+	 * because there're too much permutations of pos sequence and we do not want to
+	 * generate them all at once. The tradeoff is that we may loose the effect of features
+	 * to some extend
+	 * @param taggedSentence
+	 */
+	private void setPOSSequence(String taggedSentence) {
+		System.out.println(taggedSentence);
+		StringTokenizer st = new StringTokenizer(taggedSentence);
+		// control whether to start/stop generating the sequence
+		boolean recordFlag = false;
+		String tempSequence = "";
+		while (st.hasMoreTokens()) {
+			String currWord = st.nextToken();
+			StringTokenizer subSt = new StringTokenizer(currWord, "_");
+			String word = subSt.nextToken();
+			
+			if (word.equals(leftWordE2))
+				recordFlag = false;
+			
+			if (recordFlag) {
+				String tag = posDic.get(word);
+				if (tag != null) {
+					tempSequence += tag + "-";
+				}
+			}
+			
+			if (word.equals(rightWordE1)) 
+				recordFlag = true;
+		}
+		// we build POS sequence dictionary
+		Integer lastIndex = Processor.POSSequenceDictonary.size();
+		if (!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
+			Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
+		}
+		System.out.println(Processor.POSSequenceDictonary);
 	}
 
 	/**
 	 * Set word list between two NPs e1 and e2, 
 	 * count number of words, stop words, punctuation, capital words in between
 	 * TODO: should not consider verb or nouns as in the thesis? currently, we include those
-	 * TODO: there is also a potential bug here that US will be broke into two words
 	 * using the Java default breakIterator
 	 */
 	private void setWords() {
@@ -150,14 +230,12 @@ public class Feature {
 		boolean addFlag = false; // control whether to add flag to words
 		
 		// set last word in e1 as start word, and first word in e2 as begin word
-		String startWord = 
-				removeLastPoint(e1leaves.get(e1leaves.size() - 1).label().value());
-		String endWord = 
-				removeLastPoint(e2leaves.get(0).label().value());
+		rightWordE1 = removeLastPoint(rightWordE1);
+		leftWordE2 = removeLastPoint(leftWordE2);
 		
 		// debug usage
-		startWord = "maker";
-		endWord = "U.S.A";
+		rightWordE1 = "maker";
+		leftWordE2 = "U.S.A";
 		
 		BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
 		iterator.setText(sentence);
@@ -174,7 +252,7 @@ public class Feature {
 			
 			String canonicalWord = word.toLowerCase();
 			// if encounter startWord, start adding words
-			if (word.equals(startWord)) {
+			if (word.equals(rightWordE1)) {
 				addFlag = true;
 			}
 			// eliminate empty word
@@ -208,7 +286,7 @@ public class Feature {
 			}
 			
 			// if read end word, end adding words
-			if (word.equals(endWord)){
+			if (word.equals(leftWordE2)){
 				addFlag = false;
 			}
 			
@@ -252,11 +330,11 @@ public class Feature {
 		return POSSequence;
 	}
 
-	public int getPOSlefte1() {
+	public Integer getPOSlefte1() {
 		return POSlefte1;
 	}
 
-	public int getPOSrighte2() {
+	public Integer getPOSrighte2() {
 		return POSrighte2;
 	}
 	
@@ -271,6 +349,8 @@ public class Feature {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("original sentence: " + sentence + "\n");
+		sb.append("e1: " + e1.toString() + "\n");
+		sb.append("e2: " + e2.toString() + "\n");
 		sb.append("words between: " + words.toString() + "\n");
 		sb.append("number of words: " + numWordsBtw + "\n");
 		sb.append("number of stop words: " + numStopWords + "\n");
