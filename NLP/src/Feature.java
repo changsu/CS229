@@ -76,7 +76,7 @@ public class Feature {
 		e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		words = new HashMap<Integer, Integer>();
 		posDic = new HashMap<String, String>();
-		// TODO: delete
+		// TODO: debug use
 		this.sentence = "Jaguar, the luxury auto maker Sold 1,214 cars in the U.S.A.";
 		buildFeatures();
 	}
@@ -120,7 +120,7 @@ public class Feature {
 		leftWordE1 = e1leaves.get(0).label().value();
 		rightWordE2 = e2leaves.get(e2leaves.size() - 1).label().value();
 		
-		// debug use
+		// TODO: debug use
 		leftWordE1 = "the";
 		rightWordE2 = "U.S.A.";
 		rightWordE1 = "maker";
@@ -216,7 +216,7 @@ public class Feature {
 		if (!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
 			Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
 		}
-		System.out.println(Processor.POSSequenceDictonary);
+		POSSequence  = Processor.POSSequenceDictonary.get(tempSequence);
 	}
 
 	/**
