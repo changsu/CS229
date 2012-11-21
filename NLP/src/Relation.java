@@ -35,6 +35,7 @@ public class Relation {
 		this.sentence = sentence;
 		this.parse = parse;
 		tokens = new ArrayList<Tree>();
+		
 		/* If caller want to label the relation, we will label it
 		 * by calling applyRules() method
 		 */

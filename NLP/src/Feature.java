@@ -1,9 +1,4 @@
  
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +20,11 @@ public class Feature {
 	private Tree e1;
 	private Tree e2;
 	private String sentence;
+	private ArrayList<Tree> e1leaves;
+	private ArrayList<Tree> e2leaves;
 	
-	/* words between(include) two NP */
-	private ArrayList<Integer> words;
+	/* words and its frequency between(include) two NP */
+	private HashMap<Integer, Integer> words;
 	
 	/* number of words between two NP, including
 	 * last word of e1 and first word of e2 */
@@ -65,11 +62,10 @@ public class Feature {
 		this.e1 = e1;
 		this.e2 = e2;
 		this.sentence = sentence;
-		words = new ArrayList<Integer>();
+		words = new HashMap<Integer, Integer>();
 		// TODO: delete
-		this.sentence = "Jaguar, the luxury auto maker Sold, 1,214 cars: in the U.S.";
+		this.sentence = "Jaguar, the luxury auto maker Sold 1,214 cars in the U.S.A., which is really a break news";
 		buildFeatures();
-		
 	}
 
 	/**
@@ -86,22 +82,26 @@ public class Feature {
 
 	/**
 	 * Set word list between two NPs e1 and e2, 
-	 * count number of words, stop words, punctuation in between
+	 * count number of words, stop words, punctuation, capital words in between
 	 * TODO: should not consider verb or nouns as in the thesis? currently, we include those
+	 * TODO: there is also a potential bug here that US will be broke into two words
+	 * using the Java default breakIterator
 	 */
 	private void setWords() {
 		Integer wordIndex;
 		boolean addFlag = false; // control whether to add flag to words
 		
 		// set last word in e1 as start word, and first word in e2 as begin word
-		ArrayList<Tree> e1leaves = (ArrayList<Tree>) e1.getLeaves();
-		ArrayList<Tree> e2leaves = (ArrayList<Tree>) e2.getLeaves();
-		String startWord = e1leaves.get(e1leaves.size() - 1).label().value();
-		String endWord = e2leaves.get(0).label().value();
+		e1leaves = (ArrayList<Tree>) e1.getLeaves();
+		e2leaves = (ArrayList<Tree>) e2.getLeaves();
+		String startWord = 
+				removeLastPoint(e1leaves.get(e1leaves.size() - 1).label().value());
+		String endWord = 
+				removeLastPoint(e2leaves.get(0).label().value());
 		
 		// debug usage
 		startWord = "maker";
-		endWord = "U.S.";
+		endWord = "U.S.A";
 		
 		BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
 		iterator.setText(sentence);
@@ -114,7 +114,6 @@ public class Feature {
 			// TODO: after getting POS, this should only apply for nouns
 			String word = fromPlural(sentence.substring(start, end));
 			String canonicalWord = word.toLowerCase();
-			
 			// if encounter startWord, start adding words
 			if (word.equals(startWord)) {
 				addFlag = true;
@@ -141,7 +140,11 @@ public class Feature {
 				if (Character.isUpperCase(word.charAt(0))) {
 					this.numCapWords++;
 				}
-				words.add(wordIndex);
+				if (words.get(wordIndex) != null) {
+					words.put(wordIndex, words.get(wordIndex) + 1);
+				} else {
+					words.put(wordIndex, 1);
+				}
 				this.numWordsBtw++;
 			}
 			
@@ -163,7 +166,16 @@ public class Feature {
 	}
 	
 	private void setPOSlefte1() {
+		// build POS map
 		
+		
+		// you need to make sure it's not a punctuation POS left
+		String leftWord = e1leaves.get(0).label().value();
+		String rightWord = e2leaves.get(e2leaves.size() - 1).label().value();
+		
+		// debug usage
+		leftWord = "the";
+		rightWord = "S.";
 	}
 	
 	private void setPOSrighte2() {
@@ -174,7 +186,7 @@ public class Feature {
 		
 	}
 	
-	public ArrayList<Integer> getWords() {
+	public HashMap<Integer, Integer> getWords() {
 		return words;
 	}
 	
@@ -246,9 +258,23 @@ public class Feature {
 		else if(str.toLowerCase().endsWith("children")) 
 			return str.substring(0, str.toLowerCase().lastIndexOf("ren"));  
 		else if(str.toLowerCase().endsWith("people")) 
-			return str.substring(0, str.toLowerCase().lastIndexOf("ople")) + "rson";  
+			return str.substring(0, str.toLowerCase().lastIndexOf("ople")) + "rson"; 
 		else return str;  
 	}  
+	
+	/**
+	 * This function is used to remove last point of the words in case 
+	 * Java built in BreakIterator can match with the parser
+	 * Say, in BreakIterator, it will return the word "U.S.A"
+	 * while in parse, it will return the word "U.S.A". We need to close the gap.
+	 * @param str
+	 * @return string after eliminating last point if it contains
+	 */
+	private String removeLastPoint(String str) {
+		if(str.toLowerCase().endsWith(".")) 
+			return str.substring(0, str.toLowerCase().lastIndexOf("."));
+		else return str;
+	}
 
 	/** 
 	 * Determine whether it's plural noun

@@ -58,10 +58,11 @@ public class Article {
 			int e1Index, e2Index;
 			
 			// parse sentence
-//			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.";
-			String sentence = body.substring(start,end);
+			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.," +
+					"which is really a break news";
+//			String sentence = body.substring(start,end);
 			Tree parse = lp.apply(sentence);
-			
+						
 			// generateNPList
 			NPList = generateNPList(parse);
 			

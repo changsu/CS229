@@ -47,10 +47,10 @@ public class Processor {
 		this.outputFileName = outputFileName;
 		articles = new ArrayList<Article>();
 		relations = new ArrayList<Relation>();
+		tagger = new Tagger();
 		dictionary = new HashMap<String, Integer>();
 		stopWordDictionary = new HashMap<String, Integer>();
 		POSDictionary = new HashMap<String, Integer>();
-		tagger = new Tagger();
 	}
 	
 	/**
