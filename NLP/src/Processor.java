@@ -36,8 +36,10 @@ public class Processor {
 	public static HashMap<String, Integer> dictionary;
 	/* store stop word dictionary */
 	public static HashMap<String, Integer> stopWordDictionary;
-	/* stor part-of-speach dictionary */
+	/* store part-of-speech dictionary */
 	public static HashMap<String, Integer> POSDictionary;
+	/* store part-of-speech sequence dictionary */
+	public static HashMap<String, Integer> POSSequenceDictonary;
 	/* store POS tagger for feature extraction */
 	public static Tagger tagger;
 
@@ -51,6 +53,7 @@ public class Processor {
 		dictionary = new HashMap<String, Integer>();
 		stopWordDictionary = new HashMap<String, Integer>();
 		POSDictionary = new HashMap<String, Integer>();
+		POSSequenceDictonary = new HashMap<String, Integer>();
 	}
 	
 	/**

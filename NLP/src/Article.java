@@ -58,21 +58,24 @@ public class Article {
 			int e1Index, e2Index;
 			
 			// parse sentence
-			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.," +
-					"which is really a break news";
+			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A.";
 //			String sentence = body.substring(start,end);
 			Tree parse = lp.apply(sentence);
 						
 			// generateNPList
 			NPList = generateNPList(parse);
-			
+
 			// walk through NP list, select all e1 & e2 paris and construct relations
 			if (NPList.size() < 2) 
 				continue;
 			for (e1Index = 0; e1Index < NPList.size() - 1; ++e1Index) {
 				for (e2Index = e1Index + 1; e2Index < NPList.size(); ++e2Index) {
-					relations.add(new Relation(url, NPList.get(e1Index), 
-							NPList.get(e2Index), sentence, parse, true));
+					Tree NP1 = NPList.get(e1Index);
+					Tree NP2 = NPList.get(e2Index);
+					// we only compare NPs that have same depth
+					if (NP1.depth() != NP2.depth()) 
+						continue;
+					relations.add(new Relation(url, NP1, NP2, sentence, parse, true));
 				}
 			}
 		}

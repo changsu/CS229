@@ -3,6 +3,7 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 import edu.stanford.nlp.trees.*;
 
@@ -25,6 +26,9 @@ public class Feature {
 	
 	/* words and its frequency between(include) two NP */
 	private HashMap<Integer, Integer> words;
+	
+	/* pos dictionary, key: word value: POS tag */
+	private HashMap<String, String> posDic;
 	
 	/* number of words between two NP, including
 	 * last word of e1 and first word of e2 */
@@ -62,9 +66,12 @@ public class Feature {
 		this.e1 = e1;
 		this.e2 = e2;
 		this.sentence = sentence;
+		e1leaves = (ArrayList<Tree>) e1.getLeaves();
+		e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		words = new HashMap<Integer, Integer>();
+		posDic = new HashMap<String, String>();
 		// TODO: delete
-		this.sentence = "Jaguar, the luxury auto maker Sold 1,214 cars in the U.S.A., which is really a break news";
+		this.sentence = "Jaguar, the luxury auto maker Sold 1,214 cars in the U.S.A.";
 		buildFeatures();
 	}
 
@@ -72,12 +79,63 @@ public class Feature {
 	 * Populate each feature
 	 */
 	private void buildFeatures() {
+		setPOSSequence();
 		setWords();
 		setNumPhraseBtw();
-		setPOSSequence();
-		setPOSlefte1();
-		setPOSrighte2();
 		setEntityTypes();
+	}
+	
+	/**
+	 * This function tag the POS of each word in the sentence
+	 * and generate feature of POS sequence between e1 and e2
+	 * and also POS of the word before e1 and POS of the word after e2
+	 * We have normal POS tags pre-stored in the dictionary. 
+	 * While for the feature of POS sequence, we will build the dictionary along with each
+	 * new sequence we have encountered
+	 */
+	private void setPOSSequence() {
+		// build POS arrayList during which process generate POS features
+		String taggedSentence = Processor.tagger.tagSentence(sentence);
+		
+		// get the left word of e1 and right word of e2
+		String leftWord = e1leaves.get(0).label().value();
+		String rightWord = e2leaves.get(e2leaves.size() - 1).label().value();
+		
+		// debug use
+		leftWord = "the";
+		rightWord = "U.S.A.";
+		
+		// store left word of e1 and right word of e2 
+		String leftToE1 = "", rightToE2 = "";
+		// flags avoid repeated assignment to lefttoe1 or righttoe2
+		boolean flagLeftToE1 = false, flagRightToE2 = false;
+		String previouWord = "";
+		
+		// walk through taggedSentence, build posDic and also find leftToE1 and rightToE2
+		StringTokenizer st = new StringTokenizer(taggedSentence);
+		while (st.hasMoreTokens()) {
+			String currWord = st.nextToken();
+			// further tokenize each tagged words into original word and its tag
+			StringTokenizer subSt = new StringTokenizer(currWord, "_");
+			String word = subSt.nextToken();
+			String tag = subSt.nextToken();
+			
+			// we do not store punctuation in the posDic
+			if (word.matches("[^A-Za-z0-9]")) 
+				continue;
+			// if current words is leftword of e1, then lefttoe1 is previousWord
+			if (word.equals(leftWord) && !flagLeftToE1) { 
+				leftToE1 = previouWord;
+				flagLeftToE1 = true;
+			}
+			// if previousWord is rightword of e2, then righttoe2 is word
+			if (previouWord.equals(rightWord) && !flagRightToE2) { 
+				rightToE2 = word;
+				flagRightToE2 = true;
+			}
+			previouWord = word;
+			posDic.put(word, tag);
+		}
 	}
 
 	/**
@@ -92,8 +150,6 @@ public class Feature {
 		boolean addFlag = false; // control whether to add flag to words
 		
 		// set last word in e1 as start word, and first word in e2 as begin word
-		e1leaves = (ArrayList<Tree>) e1.getLeaves();
-		e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		String startWord = 
 				removeLastPoint(e1leaves.get(e1leaves.size() - 1).label().value());
 		String endWord = 
@@ -111,8 +167,11 @@ public class Feature {
 				start = end, end = iterator.next()) {
 			
 			// get word and convert from plural form if it is
-			// TODO: after getting POS, this should only apply for nouns
-			String word = fromPlural(sentence.substring(start, end));
+			String word = sentence.substring(start, end);
+			String tag = posDic.get(word);
+			if (tag != null && tag.matches("NN.*"))
+				word = fromPlural(word);
+			
 			String canonicalWord = word.toLowerCase();
 			// if encounter startWord, start adding words
 			if (word.equals(startWord)) {
@@ -158,27 +217,6 @@ public class Feature {
 	}
 	
 	private void setNumPhraseBtw() {
-		
-	}
-	
-	private void setPOSSequence() {
-		
-	}
-	
-	private void setPOSlefte1() {
-		// build POS map
-		
-		
-		// you need to make sure it's not a punctuation POS left
-		String leftWord = e1leaves.get(0).label().value();
-		String rightWord = e2leaves.get(e2leaves.size() - 1).label().value();
-		
-		// debug usage
-		leftWord = "the";
-		rightWord = "S.";
-	}
-	
-	private void setPOSrighte2() {
 		
 	}
 	
