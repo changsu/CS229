@@ -10,14 +10,14 @@ In order to develop,
 
 Jar Files needed to be added into Referenced Libraries:
 <ul>
-<li>[Parser JAR files](http://nlp.stanford.edu/software/lex-parser.shtml#Download)
+<li> [Parser JAR files] (http://nlp.stanford.edu/software/lex-parser.shtml#Download)
 used to parse the sentence, get penn Treebank structure and also dependencies, and finally 
 used for labelling each relation based on several rules depending on the parsed result
 </li>
-<li>[POS JAR files](http://nlp.stanford.edu/software/tagger.shtml#Download)
+<li> [POS JAR files] (http://nlp.stanford.edu/software/tagger.shtml#Download)
 used to extract part-of-speech tag for each word in a sentence, and finally used in pos feature
 extraction of a relation</li>
-<li>[NER JAR files](http://nlp.stanford.edu/software/CRF-NER.shtml#Download)
+<li> [NER JAR files] (http://nlp.stanford.edu/software/CRF-NER.shtml#Download)
 used to generate the entity of each word in a sentence if applicable, and finally used in entity
 type feature extraction of a relation</li>
 </ul>
