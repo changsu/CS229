@@ -24,7 +24,7 @@ type feature extraction of a relation
 
 ### How to Run
 After setting up the environment, we're ready to go!
-The main functionality of the Java application is to read and parse input file with articles and generate listed of relations(samples), which are labelled and also transformed into feature vector for training use.
+The main functionality of the Java application reads and parses input file with articles and generate listed of relations(samples), which are labelled and also transformed into feature vector for training use.
 
 To start the program, right click on "Processor.java"->Run as->Run configurations
 In the pop up dialog and right panel, click the Arguments tab, under "Program arguments:" enter
