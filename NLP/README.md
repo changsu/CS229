@@ -100,7 +100,7 @@ Partial Illustration:
 </ul>
 ### FAQ
 <ul>
-<li>What if Eclipse through "Java Out of Memory" Error</li>
+<li>What if Eclipse throws "Java Out of Memory" Execption</li>
 Since the parse, pos taggers or ner will take a large space of JVM memory, we need to improve
 that. Right click on "Processor.java"->Run as->Run configurations
 In the pop up dialog and right panel, click the "Arguments" tab, under "VM arguments:" 
