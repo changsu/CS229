@@ -57,8 +57,8 @@ public class Article {
 			int e1Index, e2Index;
 			
 			// parse sentence
-//			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A.";
-			String sentence = body.substring(start,end);
+			String sentence = "Jaguar, the A luxury auto maker sold 1,214 cars in the U.S.A.";
+//			String sentence = body.substring(start,end);
 			Tree parse = lp.apply(sentence);
 						
 			// generateNPList
@@ -79,6 +79,7 @@ public class Article {
 				}
 			}
 		}
+
 		return relations;
 	}
 	

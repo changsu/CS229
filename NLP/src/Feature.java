@@ -2,7 +2,9 @@
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import edu.stanford.nlp.trees.*;
@@ -17,6 +19,23 @@ import edu.stanford.nlp.trees.*;
  */
 
 public class Feature {
+	
+	/* constants for the start index of each feature */
+	private final static int WORD_INDEX = 1;
+	private final static int SIZE_WORD_DIC = Processor.dictionary.size();
+	private final static int NUM_WORDS_INDEX = WORD_INDEX + SIZE_WORD_DIC;
+	private final static int NUM_STOP_WORDS_INDEX = NUM_WORDS_INDEX + 1;
+	private final static int NUM_CAP_WORDS_INDEX = NUM_STOP_WORDS_INDEX + 1;
+	private final static int NUM_PUNC_INDEX = NUM_CAP_WORDS_INDEX + 1;
+	private final static int NUM_NPS_BTW = NUM_PUNC_INDEX + 1;
+	private final static int ENTITY_E1_INDEX = NUM_NPS_BTW + 1;
+	private final static int SIZE_NER_DIC = Processor.nerDictionary.size();
+	private final static int ENTITY_E2_INDEX = ENTITY_E1_INDEX + SIZE_NER_DIC;
+	private final static int POS_LEFT_E1_INDEX = ENTITY_E2_INDEX + SIZE_NER_DIC;
+	private final static int SIZE_POS_DIC = Processor.POSDictionary.size();
+	private final static int POS_RIGHT_E2_INDEX = POS_LEFT_E1_INDEX + SIZE_POS_DIC;
+	private final static int POS_SEQUENCE_INDEX = POS_RIGHT_E2_INDEX + SIZE_POS_DIC;
+	
 	
 	private Tree e1;
 	private Tree e2;
@@ -85,6 +104,8 @@ public class Feature {
 		words = new HashMap<Integer, Integer>();
 		posDic = new HashMap<String, String>();
 		buildFeatures();
+		// debug use
+		getFeatureVector();
 	}
 
 	/**
@@ -212,7 +233,6 @@ public class Feature {
 				recordFlag = true;
 		}
 		// we build POS sequence dictionary
-		System.out.println("tempsequence: "+ tempSequence);
 		Integer lastIndex = Processor.POSSequenceDictonary.size() - 1;
 		if (!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
 			Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
@@ -268,7 +288,15 @@ public class Feature {
 			
 			// only add word if it's a valid word in dictionary
 			// we also consider stop words here
-			if ((wordIndex = Processor.dictionary.get(canonicalWord)) != null) {
+			if (Processor.dictionary.containsKey(word)) {
+				wordIndex = Processor.dictionary.get(word);
+			} else if (Processor.dictionary.containsKey(canonicalWord)) {
+				wordIndex = Processor.dictionary.get(canonicalWord);
+			} else {
+				wordIndex = null;
+			}
+			
+			if (wordIndex != null) {
 				// if it's valid word, detect whether it's capitalized word
 				if (Character.isUpperCase(word.charAt(0))) {
 					this.numCapWords++;
@@ -315,48 +343,68 @@ public class Feature {
 		}
 	}
 	
-	public HashMap<Integer, Integer> getWords() {
-		return words;
-	}
-	
-	public int getNumWordsBtw() {
-		return numWordsBtw;
-	}
-	
-	public int getNumStopWords() {
-		return numStopWords;
-	}
-	
-	public int getNumPuncsBtw() {
-		return numPuncsBtw;
-	}
-	
-	public int getNumCapBtw() {
-		return numCapWords;
-	}
-	
-	public int getNumPhrasesBtw() {
-		return numPhrasesBts;
-	}
-	
-	public int getPOSSequence() {
-		return POSSequence;
-	}
-
-	public Integer getPOSlefte1() {
-		return POSlefte1;
-	}
-
-	public Integer getPOSrighte2() {
-		return POSrighte2;
-	}
-	
-	public int getEntityType1() {
-		return entityType1;
-	}
-	
-	public int getEntityType2() {
-		return entityType2;
+	/**
+	 * return feature vector of current relation
+	 * the total feature vector consists of
+	 * words | num. of words | num. of stop words | num. of cap words | num. of punc. |
+	 * num. of NPs btw. | entity type of e1 | entity type of e2 | 
+	 * pos of left to e1 | pos of right to e2 | pos sequence
+	 * among these, words, POS sequence, pos of left to e1 and pos of right to e2 and also 
+	 * entity type features consists of multiple columns (high dimension) 
+	 * For sake of saving space, we store the features in format of position->value (where 
+	 * value != 0). For instance, for words features, according to our word dictionary, 
+	 * we may have word "economy" and "at" in format of {1151:1 5875:1}, where key corresponds to
+	 * the line where the word set in dictionary, and value represents frequency of the word
+	 * in the feature vector, we save this feature as "1151 1 5875 1".
+	 * For convenience of matlab processing 
+	 * same logic will apply for pos sequence, pos of left/right and also entity type
+	 * @return String string format of the feature vector
+	 */
+	public String getFeatureVector() {
+		StringBuffer featureVector = new StringBuffer();
+		// declare set of start point of each feature in feature vector
+		// compose words feature
+	    Iterator it = words.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        Integer key = (Integer) pair.getKey();
+	        Integer value = (Integer) pair.getValue();
+	        featureVector.append(key + ":" + value + " ");
+	    }
+	    
+	    // compose num. of words feature
+	    featureVector.append(NUM_WORDS_INDEX + ":" + numWordsBtw + " ");
+	    
+	    // compose num. of stop words feature
+	    featureVector.append(NUM_STOP_WORDS_INDEX + ":" + numStopWords + " ");
+	    
+	    // compose num. of cap words
+	    featureVector.append(NUM_CAP_WORDS_INDEX + ":" + numCapWords + " ");
+	    
+	    // compose num. of punctuation
+	    featureVector.append(NUM_PUNC_INDEX + ":" + numPuncsBtw + " ");
+	    
+	    // compose num. of nps btw
+	    featureVector.append(NUM_NPS_BTW + ":" + numPhrasesBts + " ");
+	    
+	    // compose entity types
+	    if (entityType1 != 0)
+	    	featureVector.append((ENTITY_E1_INDEX + entityType1 - 1) + ":1 ");
+	    if (entityType2 != 0)
+	    	featureVector.append((ENTITY_E2_INDEX + entityType2 - 1) + ":1 ");
+	    
+	    // compose pos tags
+	    if (POSlefte1 != 0)
+	    	featureVector.append((POS_LEFT_E1_INDEX + POSlefte1 - 1) + ":1 ");
+	    if (POSrighte2 != 0)
+	    	featureVector.append((POS_RIGHT_E2_INDEX + POSrighte2 - 1) + ":1 ");
+	    
+	    // compose pos sequence
+	    if (POSSequence != 0)
+	    	featureVector.append((POS_SEQUENCE_INDEX + POSSequence - 1) + ":1\n");
+	    
+	    System.out.println(featureVector);
+		return featureVector.toString();
 	}
 	
 	public String toString() {
@@ -367,14 +415,14 @@ public class Feature {
 		sb.append("words between: " + words.toString() + "\n");
 		sb.append("number of words: " + numWordsBtw + "\n");
 		sb.append("number of stop words: " + numStopWords + "\n");
-		sb.append("number of punctuations: " + numPuncsBtw + "\n");
 		sb.append("number of cap words: " + numCapWords + "\n");
+		sb.append("number of punctuations: " + numPuncsBtw + "\n");
 		sb.append("number of phrases: " + numPhrasesBts + "\n");
+		sb.append("Entity type e1: " + entityType1 + "\n");
+		sb.append("Entity type e2: " + entityType2 + "\n");
 		sb.append("POS left e1: " + POSlefte1 + "\n");
 		sb.append("POS right e2: " + POSrighte2 + "\n");
 		sb.append("POS sequence: " + POSSequence + "\n");
-		sb.append("Entity type e1: " + entityType1 + "\n");
-		sb.append("Entity type e2: " + entityType2 + "\n");
 		return sb.toString();
 	}
 	
