@@ -31,50 +31,10 @@ In the pop up dialog and right panel, click the Arguments tab, under "Program ar
 input file name and output file name respectively seperated by space. For instance
 <pre>body_file_name.txt output.txt</pre>
 in above case, we read in "body_file_name.txt" file and output the result to "output.txt" file.
-
 <b>It should be noted that both the input file and outputfile are in "files" folder</b>
 
 ### Output File Format
-You can open the "output.txt" in files folder to have a glipse of the format
-Basically, it's quite similar to the file format required by [libsvm](http://www.csie.ntu.edu.tw/~cjlin/libsvm/) (at least in my mind)
 
-Each line represents one samples with format:
-<pre>label f1:v1 f2:v2 f3:v3, ...</pre>
-where label represents whether its positive or negative relation(-1/+1) and fi:vi represents
-the ith feature and its corresponding value.
-
-Concrete example:
-<pre>-1 10471:1 420:1 12362:1 21878:3 21879:1 21880:0 21881:1 21882:0 21960:1 21969:1</pre>
-
-### Program Log
-In order for debugging, we also output some log in Java console.
-For each relation being processed, it will log some key info like this:
-<pre>
-Europe_NNP was_VBD mentioned_VBN once_RB ,_, but_CC the_DT reference_NN had_VBD nothing_NN to_TO do_VB with_IN economics_NNS ._. 
-Europe/LOCATION was/O mentioned/O once/O,/O but/O the/O reference/O had/O nothing/O to/O do/O with/O economics/O./O 
-original sentence: Europe was mentioned once, but the reference had nothing to do with economics. 
-e1: (NP (DT the) (NN reference))
-e2: (NP (NNS economics))
-words between: {5455=1, 21594=1, 5872=1, 19800=1, 12996=1, 15873=1, 8568=1}
-number of words: 7
-number of stop words: 5
-number of cap words: 0
-number of punctuations: 0
-number of phrases: 1
-Entity type e1: 0
-Entity type e2: 0
-POS left e1: 1
-POS right e2: 0
-POS sequence: 17
-</pre>
-
-Partial Illustration:
-<ul>
-<li>line 1: tagged sentence</li>
-<li>line 2: sentence after name entity recognition, for above, Europe is entity "LOCATION"</li>
-<li>line 4 & 5: e1 and e2 we are using to build the relation</li>
-<li>Remaining lines: features (explained above)</li>
-</ul>
 ### FAQ
 <ul>
 <li>What if Eclipse through "Java Out of Memory" Error</li>
@@ -82,7 +42,6 @@ Since the parse, pos taggers or ner will take a large space of JVM memory, we ne
 that. Right click on "Processor.java"->Run as->Run configurations
 In the pop up dialog and right panel, click the "Arguments" tab, under "VM arguments:" 
 set the maximum JVM memory, for instance
-<pre>-Xmx1024M</pre> 
-then JVM will be allocated 1024M memory to run the "Processor" application.
+<pre>-Xmx1024M<pre>, then JVM will be allocated 1024M memory to run the "Processor" application.
 You can set any number you want, but be efficient.
 </ul>
