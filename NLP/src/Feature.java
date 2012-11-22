@@ -94,6 +94,7 @@ public class Feature {
 		setWords();
 		setNumPhraseBtw();
 		setEntityTypes();
+		System.out.println(this);
 	}
 	
 	/**
@@ -125,10 +126,10 @@ public class Feature {
 		rightWordE2 = e2leaves.get(e2leaves.size() - 1).label().value();
 		
 		// TODO: debug use
-		leftWordE1 = "the";
-		rightWordE2 = "U.S.A.";
-		rightWordE1 = "maker";
-		leftWordE2 = "the";
+//		leftWordE1 = "the";
+//		rightWordE2 = "U.S.A.";
+//		rightWordE1 = "maker";
+//		leftWordE2 = "the";
 		
 		/* Though we can get the pos features in one pass of the tagged sentence,
 		 * we avoid doing that for simplicity and readability of the code 
@@ -235,12 +236,8 @@ public class Feature {
 		boolean addFlag = false; // control whether to add flag to words
 		
 		// set last word in e1 as start word, and first word in e2 as begin word
-		rightWordE1 = removeLastPoint(rightWordE1);
-		leftWordE2 = removeLastPoint(leftWordE2);
-		
-		// debug usage
-		rightWordE1 = "maker";
-		leftWordE2 = "U.S.A";
+		rightWordE1 = removeLastPunc(rightWordE1);
+		leftWordE2 = removeLastPunc(leftWordE2);
 		
 		BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
 		iterator.setText(sentence);
@@ -296,7 +293,6 @@ public class Feature {
 			}
 			
 		}
-		System.out.println(this);
 	}
 	
 	private void setNumPhraseBtw() {
@@ -312,7 +308,7 @@ public class Feature {
 			StringTokenizer subSt = new StringTokenizer(currWord, "/");
 			String word = subSt.nextToken();
 			// remove last ","
-			String ner = removeLastPoint(subSt.nextToken());
+			String ner = removeLastPunc(subSt.nextToken());
 			
 			if (word.equals(headE1.label().value())) {
 				if (Processor.nerDictionary.containsKey(ner))
@@ -324,9 +320,6 @@ public class Feature {
 					entityType2 = Processor.nerDictionary.get(ner);
 			}
 		}
-		System.out.println(Processor.nerDictionary);
-		System.out.println("head e1:" + headE1.label().value() + "| head e2:" + headE2.label().value());
-		System.out.println("entity1: "+ entityType1 + ":::entity2: "+ entityType2);
 	}
 	
 	public HashMap<Integer, Integer> getWords() {
@@ -383,6 +376,11 @@ public class Feature {
 		sb.append("number of stop words: " + numStopWords + "\n");
 		sb.append("number of punctuations: " + numPuncsBtw + "\n");
 		sb.append("number of cap words: " + numCapWords + "\n");
+		sb.append("POS left e1: " + POSlefte1 + "\n");
+		sb.append("POS right e2: " + POSrighte2 + "\n");
+		sb.append("POS sequence: " + POSSequence + "\n");
+		sb.append("Entity type e1: " + entityType1 + "\n");
+		sb.append("Entity type e2: " + entityType2 + "\n");
 		return sb.toString();
 	}
 	
@@ -415,7 +413,7 @@ public class Feature {
 	 * @param str
 	 * @return string after eliminating last point if it contains
 	 */
-	private String removeLastPoint(String str) {
+	private String removeLastPunc(String str) {
 		String lastChar = str.substring(str.length() - 1, str.length());
 		if (lastChar.matches("[^A-Za-z0-9]")) 
 			return str.substring(0, str.toLowerCase().lastIndexOf(lastChar));
