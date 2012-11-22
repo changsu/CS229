@@ -14,5 +14,9 @@
 	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-postagger-2012-11-11/stanford-postagger-3.1.4.jar"/>
 	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-postagger-2012-11-11/stanford-postagger.jar"/>
 	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-postagger-2012-11-11/stanford-postagger-3.1.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-ner-2012-11-11/stanford-ner-1.2.7-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-ner-2012-11-11/stanford-ner-1.2.7-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-ner-2012-11-11/stanford-ner-2012-11-11.jar"/>
+	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-ner-2012-11-11/stanford-ner.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

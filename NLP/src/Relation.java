@@ -10,6 +10,7 @@ public class Relation {
 	private String url;
 	private boolean label;
 	private Tree e1, e2;
+	private Tree headE1, headE2;
 	/* original sentence */
 	private String sentence;
 	/* parsed sentence from where e1, e2 are selected */
@@ -32,6 +33,9 @@ public class Relation {
 		this.url = url;
 		this.e1 = e1;
 		this.e2 = e2;
+		HeadFinder hf = new SemanticHeadFinder();
+		headE1 = e1.headTerminal(hf);
+		headE2 = e2.headTerminal(hf);
 		this.sentence = sentence;
 		this.parse = parse;
 		tokens = new ArrayList<Tree>();
@@ -60,7 +64,7 @@ public class Relation {
 	 * Generate feature object for the relation
 	 */
 	private void generateFeatures() {
-		features = new Feature(e1, e2, sentence);
+		features = new Feature(e1, e2, headE1, headE2, sentence);
 	}
 	
 	/**

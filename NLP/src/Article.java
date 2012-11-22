@@ -1,5 +1,4 @@
 
-import java.awt.List;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Iterator;

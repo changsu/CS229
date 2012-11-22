@@ -20,6 +20,8 @@ public class Feature {
 	
 	private Tree e1;
 	private Tree e2;
+	private Tree headE1;
+	private Tree headE2;
 	private String sentence;
 	private ArrayList<Tree> e1leaves;
 	private ArrayList<Tree> e2leaves;
@@ -52,9 +54,6 @@ public class Feature {
 		
 	/* presence of POS sequence */
 	private int POSSequence;
-	
-	/* number of phrases in between */
-	private int numPhrasesBts;
 
 	/* POS to the left of e1 */
 	private Integer POSlefte1;
@@ -62,22 +61,27 @@ public class Feature {
 	/* POS to the right of e2 */
 	private Integer POSrighte2;
 	
+	/* number of phrases in between */
+	private int numPhrasesBts;
+	
 	/* entity type of e1 */
 	private int entityType1;
 	
 	/* entity type of e2 */
 	private int entityType2;
 	
-	public Feature(Tree e1, Tree e2, String sentence) {
+	public Feature(Tree e1, Tree e2, Tree headE1, Tree headE2, String sentence) {
 		this.e1 = e1;
 		this.e2 = e2;
+		this.headE1 = headE1;
+		this.headE2 = headE2;
 		this.sentence = sentence;
 		e1leaves = (ArrayList<Tree>) e1.getLeaves();
 		e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		words = new HashMap<Integer, Integer>();
 		posDic = new HashMap<String, String>();
 		// TODO: debug use
-		this.sentence = "Jaguar, the luxury auto maker Sold 1,214 cars in the U.S.A.";
+		this.sentence = "Jaguar- the luxury auto maker Sold 1,214 cars in the U.S.A.";
 		buildFeatures();
 	}
 
@@ -188,7 +192,6 @@ public class Feature {
 	 * @param taggedSentence
 	 */
 	private void setPOSSequence(String taggedSentence) {
-		System.out.println(taggedSentence);
 		StringTokenizer st = new StringTokenizer(taggedSentence);
 		// control whether to start/stop generating the sequence
 		boolean recordFlag = false;
@@ -216,6 +219,8 @@ public class Feature {
 		if (!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
 			Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
 		}
+		
+		// set POS sequence feature
 		POSSequence  = Processor.POSSequenceDictonary.get(tempSequence);
 	}
 
@@ -299,7 +304,30 @@ public class Feature {
 	}
 	
 	private void setEntityTypes() {
-		
+		String nerSentence = Processor.ner.runNER(sentence);
+		System.out.println(nerSentence);
+		StringTokenizer st = new StringTokenizer(nerSentence);
+		// walk through each token(words with ner), and find the name entity of heade1 and heade2
+		while (st.hasMoreTokens()) {
+			String currWord = st.nextToken();
+			StringTokenizer subSt = new StringTokenizer(currWord, "/");
+			String word = subSt.nextToken();
+			// remove last ","
+			String ner = removeLastPoint(subSt.nextToken());
+			
+			if (word.equals(headE1.label().value())) {
+				if (Processor.nerDictionary.containsKey(ner))
+					entityType1 = Processor.nerDictionary.get(ner);
+			}
+			
+			if (word.equals(headE2.label().value())) {
+				if (Processor.nerDictionary.containsKey(ner)) 
+					entityType2 = Processor.nerDictionary.get(ner);
+			}
+		}
+		System.out.println(Processor.nerDictionary);
+		System.out.println("head e1:" + headE1.label().value() + "| head e2:" + headE2.label().value());
+		System.out.println("entity1: "+ entityType1 + ":::entity2: "+ entityType2);
 	}
 	
 	public HashMap<Integer, Integer> getWords() {
@@ -389,8 +417,9 @@ public class Feature {
 	 * @return string after eliminating last point if it contains
 	 */
 	private String removeLastPoint(String str) {
-		if(str.toLowerCase().endsWith(".")) 
-			return str.substring(0, str.toLowerCase().lastIndexOf("."));
+		String lastChar = str.substring(str.length() - 1, str.length());
+		if (lastChar.matches("[^A-Za-z0-9]")) 
+			return str.substring(0, str.toLowerCase().lastIndexOf(lastChar));
 		else return str;
 	}
 
