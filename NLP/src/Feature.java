@@ -94,7 +94,6 @@ public class Feature {
 		setEdgeWords();
 		setPOSFeatures();
 		setWords();
-		setNumPhraseBtw();
 		setEntityTypes();
 		System.out.println(this);
 	}
@@ -126,12 +125,6 @@ public class Feature {
 		// get the left word of e1 and right word of e2
 		leftWordE1 = e1leaves.get(0).label().value();
 		rightWordE2 = e2leaves.get(e2leaves.size() - 1).label().value();
-		
-		// TODO: debug use
-//		leftWordE1 = "the";
-//		rightWordE2 = "U.S.A.";
-//		rightWordE1 = "maker";
-//		leftWordE2 = "the";
 		
 		/* Though we can get the pos features in one pass of the tagged sentence,
 		 * we avoid doing that for simplicity and readability of the code 
@@ -298,12 +291,8 @@ public class Feature {
 	}
 	
 	/**
-	 * TODO: 
+	 * Set entity type features of head of e1 and e2
 	 */
-	private void setNumPhraseBtw() {
-		
-	}
-	
 	private void setEntityTypes() {
 		String nerSentence = Processor.ner.runNER(sentence);
 		StringTokenizer st = new StringTokenizer(nerSentence);
