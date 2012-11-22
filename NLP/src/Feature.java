@@ -305,7 +305,6 @@ public class Feature {
 	
 	private void setEntityTypes() {
 		String nerSentence = Processor.ner.runNER(sentence);
-		System.out.println(nerSentence);
 		StringTokenizer st = new StringTokenizer(nerSentence);
 		// walk through each token(words with ner), and find the name entity of heade1 and heade2
 		while (st.hasMoreTokens()) {
