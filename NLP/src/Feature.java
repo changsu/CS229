@@ -24,8 +24,10 @@ public class Feature {
 	private Tree headE2;
 	private Integer interval;
 	private String sentence;
+	private String taggedSentence;
 	private ArrayList<Tree> e1leaves;
 	private ArrayList<Tree> e2leaves;
+	
 	
 	/* edge words */
 	private String leftWordE1;
@@ -118,7 +120,7 @@ public class Feature {
 	 */
 	private void setPOSFeatures() {
 		// build POS arrayList during which process generate POS features
-		String taggedSentence = Processor.tagger.tagSentence(sentence);
+		taggedSentence = Processor.tagger.tagSentence(sentence);
 		System.out.println(taggedSentence);
 		
 		/* Though we can get the pos features in one pass of the tagged sentence,
@@ -227,25 +229,20 @@ public class Feature {
 	 * using the Java default breakIterator
 	 */
 	private void setWords() {
+			
 		Integer wordIndex;
 		boolean addFlag = false; // control whether to add flag to words
-		
-		// set last word in e1 as start word, and first word in e2 as begin word
-		rightWordE1 = removeLastPunc(rightWordE1);
-		leftWordE2 = removeLastPunc(leftWordE2);
-		
-		BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
-		iterator.setText(sentence);
-		int start = iterator.first();
+
 		int startIndex = 0, counter = 0;
-		for (int end = iterator.next();
-				end != BreakIterator.DONE;
-				start = end, end = iterator.next()) {
+		StringTokenizer st = new StringTokenizer(taggedSentence);
+		while (st.hasMoreTokens()) {
 			counter++;
-			// get word and convert from plural form if it is
-			String word = sentence.substring(start, end);
+			String currWord = st.nextToken();
+			StringTokenizer subSt = new StringTokenizer(currWord, "_");
+			String word = subSt.nextToken();
+
 			String tag = posDic.get(word);
-			String canonicalWord = "";
+			String canonicalWord = word;
 			if (tag != null && tag.matches("NN.*"))
 				canonicalWord = fromPlural(word).toLowerCase();
 			
