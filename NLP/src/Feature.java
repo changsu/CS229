@@ -1,9 +1,6 @@
- 
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -233,13 +230,13 @@ public class Feature {
 				recordFlag = true;
 		}
 		// we build POS sequence dictionary
-		Integer lastIndex = Processor.POSSequenceDictonary.size() - 1;
-		if (!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
+		Integer lastIndex = Processor.POSSequenceDictonary.size();
+		if (!tempSequence.equals("") && 
+				!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
 			Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
+			POSSequence  = Processor.POSSequenceDictonary.get(tempSequence);
 		}
-		
-		// set POS sequence feature
-		POSSequence  = Processor.POSSequenceDictonary.get(tempSequence);
+		System.out.println("temp sequence: " + tempSequence);
 	}
 
 	/**
@@ -404,7 +401,7 @@ public class Feature {
 	    	featureVector.append((POS_SEQUENCE_INDEX + POSSequence - 1) + ":1\n");
 	    
 	    System.out.println(featureVector);
-		return featureVector.toString();
+	    return featureVector.toString();
 	}
 	
 	public String toString() {
