@@ -34,6 +34,23 @@ in above case, we read in "body_file_name.txt" file and output the result to "ou
 
 <b>It should be noted that both the input file and outputfile are in "files" folder</b>
 
+### Features
+In order to realize relation-independent model, we extracte features that does not depend on semantic or syntactic roles, namely, we do not depend on <b>parse</b> to genearte feature. 
+Currently, we generate features as below given e1 and e2 (Tree node)
+<ul>
+<li>words between last word of e1 and first word of e2 (including)</li>
+<li>number of words between last word of e1 and first word of e2</li>
+<li>number of stop words between last word of e1 and first word of e2</li>
+<li>number of captalized(first char) words between last word of e1 and first word of e2</li>
+<li>number of punctuation between last word of e1 and first word of e2</li>
+<li>number of noun-phrases between last word of e1 and first word of e2</li>
+<li>entity type of head of e1</li>
+<li>entity type of head of e2</li>
+<li>pos of the word left to leftmost word of e1</li>
+<li>pos of the word right to rightmost word of e2</li>
+<li>pos sequence between last word of e1 and first word of e2</li>
+</ul>
+
 ### Output File Format
 You can open the "output.txt" in files folder to have a glipse of the format
 Basically, it's quite similar to the file format required by [libsvm](http://www.csie.ntu.edu.tw/~cjlin/libsvm/) (at least in my mind)
@@ -46,7 +63,7 @@ the ith feature and its corresponding value.
 Concrete example:
 <pre>-1 10471:1 420:1 12362:1 21878:3 21879:1 21880:0 21881:1 21882:0 21960:1 21969:1</pre>
 
-### Program Log
+### Logging
 In order for debugging, we also output some log in Java console.
 For each relation being processed, it will log some key info like this:
 <pre>
