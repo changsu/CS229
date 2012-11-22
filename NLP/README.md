@@ -66,6 +66,7 @@ Concrete example:
 In files folder:
 <ul>
 <li>3esl.txt Common English words dictionary</li>
+<li>stopword.txt Common English stop words dictionary</li>
 <li>pos.txt Common part-of-speech tags</li>
 <li>ner.txt Common Name Entities</li>
 </ul>
