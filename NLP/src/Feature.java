@@ -76,14 +76,12 @@ public class Feature {
 		this.e2 = e2;
 		this.headE1 = headE1;
 		this.headE2 = headE2;
-		this.numPhrasesBts = interval;
+		this.numPhrasesBts = interval - 1;
 		this.sentence = sentence;
 		e1leaves = (ArrayList<Tree>) e1.getLeaves();
 		e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		words = new HashMap<Integer, Integer>();
 		posDic = new HashMap<String, String>();
-		// TODO: debug use
-		this.sentence = "Jaguar- the luxury auto maker Sold 1,214 cars in the U.S.A.";
 		buildFeatures();
 	}
 
@@ -121,10 +119,7 @@ public class Feature {
 	private void setPOSFeatures() {
 		// build POS arrayList during which process generate POS features
 		String taggedSentence = Processor.tagger.tagSentence(sentence);
-
-		// get the left word of e1 and right word of e2
-		leftWordE1 = e1leaves.get(0).label().value();
-		rightWordE2 = e2leaves.get(e2leaves.size() - 1).label().value();
+		System.out.println(taggedSentence);
 		
 		/* Though we can get the pos features in one pass of the tagged sentence,
 		 * we avoid doing that for simplicity and readability of the code 
@@ -192,13 +187,17 @@ public class Feature {
 		// control whether to start/stop generating the sequence
 		boolean recordFlag = false;
 		String tempSequence = "";
+		int startIndex = 0, counter = 0;
 		while (st.hasMoreTokens()) {
+			counter++;
 			String currWord = st.nextToken();
 			StringTokenizer subSt = new StringTokenizer(currWord, "_");
 			String word = subSt.nextToken();
 			
-			if (word.equals(leftWordE2))
+			if (word.equals(leftWordE2) && (counter - startIndex) >= 2 * numPhrasesBts) {
 				recordFlag = false;
+				startIndex = counter;
+			}
 			
 			if (recordFlag) {
 				String tag = posDic.get(word);
@@ -211,7 +210,8 @@ public class Feature {
 				recordFlag = true;
 		}
 		// we build POS sequence dictionary
-		Integer lastIndex = Processor.POSSequenceDictonary.size();
+		System.out.println("tempsequence: "+ tempSequence);
+		Integer lastIndex = Processor.POSSequenceDictonary.size() - 1;
 		if (!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
 			Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
 		}
@@ -237,20 +237,22 @@ public class Feature {
 		BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
 		iterator.setText(sentence);
 		int start = iterator.first();
+		int startIndex = 0, counter = 0;
 		for (int end = iterator.next();
 				end != BreakIterator.DONE;
 				start = end, end = iterator.next()) {
-			
+			counter++;
 			// get word and convert from plural form if it is
 			String word = sentence.substring(start, end);
 			String tag = posDic.get(word);
+			String canonicalWord = "";
 			if (tag != null && tag.matches("NN.*"))
-				word = fromPlural(word);
+				canonicalWord = fromPlural(word).toLowerCase();
 			
-			String canonicalWord = word.toLowerCase();
 			// if encounter startWord, start adding words
 			if (word.equals(rightWordE1)) {
 				addFlag = true;
+				startIndex =counter;
 			}
 			// eliminate empty word
 			if (word.isEmpty() || word.equals(" ") || word.equals("") || !addFlag) 
@@ -283,10 +285,9 @@ public class Feature {
 			}
 			
 			// if read end word, end adding words
-			if (word.equals(leftWordE2)){
+			if (word.equals(leftWordE2) && (counter - startIndex) > 2 * numPhrasesBts) {
 				addFlag = false;
-			}
-			
+			}			
 		}
 	}
 	
@@ -295,6 +296,7 @@ public class Feature {
 	 */
 	private void setEntityTypes() {
 		String nerSentence = Processor.ner.runNER(sentence);
+		System.out.println(nerSentence);
 		StringTokenizer st = new StringTokenizer(nerSentence);
 		// walk through each token(words with ner), and find the name entity of heade1 and heade2
 		while (st.hasMoreTokens()) {
