@@ -41,6 +41,7 @@ public class Relation {
 		this.sentence = sentence;
 		this.parse = parse;
 		this.interval = interval;
+		label = false; // by default, label as negative sample
 		tokens = new ArrayList<Tree>();
 		
 		/* If caller want to label the relation, we will label it
@@ -60,7 +61,6 @@ public class Relation {
 	 */
 	private void applyRules() {
 		// CODE GOES HERE
-		label = true; // or false based on above rules
 	}
 	
 	/**
@@ -75,6 +75,13 @@ public class Relation {
 	 */
 	public Feature getFeatures() {
 		return features;
+	}
+	
+	/**
+	 * @return feature vector of the relation
+	 */
+	public String getFeaturesVector() {
+		return features.getFeatureVector();
 	}
 	
 	/**

@@ -101,8 +101,6 @@ public class Feature {
 		words = new HashMap<Integer, Integer>();
 		posDic = new HashMap<String, String>();
 		buildFeatures();
-		// debug use
-		getFeatureVector();
 	}
 
 	/**
@@ -236,7 +234,7 @@ public class Feature {
 			Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
 			POSSequence  = Processor.POSSequenceDictonary.get(tempSequence);
 		}
-		System.out.println("temp sequence: " + tempSequence);
+//		System.out.println("temp sequence: " + tempSequence);
 	}
 
 	/**

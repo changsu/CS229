@@ -2,10 +2,15 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 
@@ -171,6 +176,33 @@ public class Processor {
 //		}
 	}
 	
+	/**
+	 * Output samples, output each relation extracted from all articles as a sample
+	 * in format of into output file 
+	 * label f1:v1 f2:v2 f3:v3, ... (same format used in libsvm)
+	 */
+	private void outputSamples(){
+		File outf = new File("files/" + outputFileName);
+		try {
+			Writer writer = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(outf), "UTF-8"));
+			for (Relation relation : relations) {
+				StringBuffer sb = new StringBuffer();
+				// append label
+				if (relation.getLabel()) {
+					sb.append("1 ");
+				} else {
+					sb.append("-1 ");
+				}
+				// append features
+				sb.append(relation.getFeaturesVector());
+				writer.write(sb.toString());
+			}
+		} catch (IOException e1) {
+				e1.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.err.println("usage: Processor inputfilename outputfilename");
@@ -181,6 +213,7 @@ public class Processor {
 			processor.parseJSONFile(inf);
 			processor.readDictionaries();
 			processor.extractRelations();
+			processor.outputSamples();
 		}
 	}
 	
