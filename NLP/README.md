@@ -55,7 +55,7 @@ Currently, we generate features as below given e1 and e2 (Tree node)
 You can open the "output.txt" in files folder to have a glipse of the format. Basically, it's quite similar to the file format required by [libsvm](http://www.csie.ntu.edu.tw/~cjlin/libsvm/) (at least in my mind)
 
 Each line represents one samples with format:
-<pre>label f1:v1 f2:v2 f3:v3, ...</pre>
+<pre>label f1:v1 f2:v2 f3:v3 ...</pre>
 where label represents whether its positive or negative relation(-1/+1) and fi:vi represents
 the ith feature and its corresponding value.
 
