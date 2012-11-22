@@ -22,6 +22,7 @@ public class Feature {
 	private Tree e2;
 	private Tree headE1;
 	private Tree headE2;
+	private Integer interval;
 	private String sentence;
 	private ArrayList<Tree> e1leaves;
 	private ArrayList<Tree> e2leaves;
@@ -70,11 +71,12 @@ public class Feature {
 	/* entity type of e2 */
 	private int entityType2;
 	
-	public Feature(Tree e1, Tree e2, Tree headE1, Tree headE2, String sentence) {
+	public Feature(Tree e1, Tree e2, Tree headE1, Tree headE2, Integer interval, String sentence) {
 		this.e1 = e1;
 		this.e2 = e2;
 		this.headE1 = headE1;
 		this.headE2 = headE2;
+		this.numPhrasesBts = interval;
 		this.sentence = sentence;
 		e1leaves = (ArrayList<Tree>) e1.getLeaves();
 		e2leaves = (ArrayList<Tree>) e2.getLeaves();
@@ -295,6 +297,9 @@ public class Feature {
 		}
 	}
 	
+	/**
+	 * TODO: 
+	 */
 	private void setNumPhraseBtw() {
 		
 	}
@@ -376,6 +381,7 @@ public class Feature {
 		sb.append("number of stop words: " + numStopWords + "\n");
 		sb.append("number of punctuations: " + numPuncsBtw + "\n");
 		sb.append("number of cap words: " + numCapWords + "\n");
+		sb.append("number of phrases: " + numPhrasesBts + "\n");
 		sb.append("POS left e1: " + POSlefte1 + "\n");
 		sb.append("POS right e2: " + POSrighte2 + "\n");
 		sb.append("POS sequence: " + POSSequence + "\n");
@@ -388,9 +394,10 @@ public class Feature {
 	
 	/* Helper functions */
 	/** 
-	 * Returns the non-plural form of a plural noun like: cars -> car, children -> child, people -> person, etc. 
+	 * Returns the non-plural form of a plural noun like: cars -> car, 
+	 * children -> child, people -> person, etc. 
 	 * @param str 
-	 * @return the non-plural form of a plural noun like: cars -> car, children -> child, people -> person, etc. 
+	 * @return the non-plural form of a plural noun
 	 */  
 	private String fromPlural(String str)  
 	{  

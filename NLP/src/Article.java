@@ -74,7 +74,8 @@ public class Article {
 					// we only compare NPs that have same depth
 					if (NP1.depth() != NP2.depth()) 
 						continue;
-					relations.add(new Relation(url, NP1, NP2, sentence, parse, true));
+					relations.add(new Relation(url, NP1, NP2, sentence, parse, 
+							(e2Index - e1Index), true));
 				}
 			}
 		}

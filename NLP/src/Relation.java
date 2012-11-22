@@ -11,6 +11,8 @@ public class Relation {
 	private boolean label;
 	private Tree e1, e2;
 	private Tree headE1, headE2;
+	/* number of NPs between e1 and e2 */
+	private Integer interval;
 	/* original sentence */
 	private String sentence;
 	/* parsed sentence from where e1, e2 are selected */
@@ -29,7 +31,7 @@ public class Relation {
 	 * @param labelFlage control whether to label the relation in construction
 	 */
 	public Relation(String url, Tree e1, Tree e2, String sentence, 
-			Tree parse, boolean labelFlag) {
+			Tree parse, Integer interval, boolean labelFlag) {
 		this.url = url;
 		this.e1 = e1;
 		this.e2 = e2;
@@ -38,6 +40,7 @@ public class Relation {
 		headE2 = e2.headTerminal(hf);
 		this.sentence = sentence;
 		this.parse = parse;
+		this.interval = interval;
 		tokens = new ArrayList<Tree>();
 		
 		/* If caller want to label the relation, we will label it
@@ -64,7 +67,7 @@ public class Relation {
 	 * Generate feature object for the relation
 	 */
 	private void generateFeatures() {
-		features = new Feature(e1, e2, headE1, headE2, sentence);
+		features = new Feature(e1, e2, headE1, headE2, interval, sentence);
 	}
 	
 	/**
