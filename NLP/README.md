@@ -9,6 +9,7 @@ In order to develop,
    Right click on your project imported->Properties->Java Build Path->Libraries(in right panel)->Add External Jars->Locate where you save the downloaded software.
 
 Jar Files needed to be added into Referenced Libraries:
+
 1) [Parser JAR files] (http://nlp.stanford.edu/software/lex-parser.shtml#Download)
 used to parse the sentence, get penn Treebank structure and also dependencies, and finally 
 used for labelling each relation based on several rules depending on the parsed result
