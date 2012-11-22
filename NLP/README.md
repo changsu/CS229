@@ -35,7 +35,7 @@ in above case, we read in "body_file_name.txt" file and output the result to "ou
 <b>It should be noted that both the input file and outputfile are in "files" folder</b>
 
 ### Features
-In order to realize relation-independent model, we extracte features that does not depend on semantic or syntactic roles, namely, we do not depend on <b>parse</b> to genearte feature. 
+In order to realize relation-independent model, we extracte features that do not depend on semantic or syntactic roles, namely, we do not depend on <b>parser</b> to genearte feature. 
 Currently, we generate features as below given e1 and e2 (Tree node)
 <ul>
 <li>words between last word of e1 and first word of e2 (including)</li>
@@ -52,8 +52,7 @@ Currently, we generate features as below given e1 and e2 (Tree node)
 </ul>
 
 ### Output File Format
-You can open the "output.txt" in files folder to have a glipse of the format
-Basically, it's quite similar to the file format required by [libsvm](http://www.csie.ntu.edu.tw/~cjlin/libsvm/) (at least in my mind)
+You can open the "output.txt" in files folder to have a glipse of the format. Basically, it's quite similar to the file format required by [libsvm](http://www.csie.ntu.edu.tw/~cjlin/libsvm/) (at least in my mind)
 
 Each line represents one samples with format:
 <pre>label f1:v1 f2:v2 f3:v3, ...</pre>
@@ -64,8 +63,7 @@ Concrete example:
 <pre>-1 10471:1 420:1 12362:1 21878:3 21879:1 21880:0 21881:1 21882:0 21960:1 21969:1</pre>
 
 ### Logging
-In order for debugging, we also output some log in Java console.
-For each relation being processed, it will log some key info like this:
+For debugging, I also output some log in Java console so that we can manually test the correctness of the feature extraction. For each relation being processed, it will log some key info like this:
 <pre>
 Europe_NNP was_VBD mentioned_VBN once_RB ,_, but_CC the_DT reference_NN had_VBD nothing_NN to_TO do_VB with_IN economics_NNS ._. 
 Europe/LOCATION was/O mentioned/O once/O,/O but/O the/O reference/O had/O nothing/O to/O do/O with/O economics/O./O 
