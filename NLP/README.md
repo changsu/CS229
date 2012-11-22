@@ -9,9 +9,9 @@ In order to develop,
    Right click on your project imported->Properties->Java Build Path->Libraries(in right panel)->Add External Jars->Locate where you save the downloaded software.
 
 Jar Files needed to be added into Referenced Libraries:
-<ui>
+<ul>
 <li>Parser JAR files</li>
 <li>POS JAR files</li>
 <li>NER JAR files</li>
-</ui>
+</ul>
 
