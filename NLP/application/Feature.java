@@ -144,15 +144,15 @@ public class Feature {
 		/* Though we can get the pos features in one pass of the tagged sentence,
 		 * we avoid doing that for simplicity and readability of the code 
 		 */
-		setPOSEdgeWords(taggedSentence);
-		setPOSSequence(taggedSentence);
+		setPOSEdgeWords();
+		setPOSSequence();
 	}
 
 	/**
 	 * Set the POS of word to left of E1 and POS of word to the right of E2
 	 * @param taggedSentence
 	 */
-	private void setPOSEdgeWords(String taggedSentence) {
+	private void setPOSEdgeWords() {
 		// store left word of e1 and right word of e2 
 		String leftToE1 = "", rightToE2 = "";
 		// flags avoid repeated assignment to lefttoe1 or righttoe2
@@ -202,7 +202,7 @@ public class Feature {
 	 * to some extend
 	 * @param taggedSentence
 	 */
-	private void setPOSSequence(String taggedSentence) {
+	private void setPOSSequence() {
 		StringTokenizer st = new StringTokenizer(taggedSentence);
 		// control whether to start/stop generating the sequence
 		boolean recordFlag = false;
