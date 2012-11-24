@@ -114,7 +114,8 @@ public class Feature {
 		setPOSFeatures();
 		setWords();
 		setEntityTypes();
-		System.out.println(this);
+		// control whether to print feature log
+//		System.out.println(this);
 	}
 	
 	/**
