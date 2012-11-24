@@ -2,10 +2,15 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 
@@ -33,64 +38,35 @@ public class Processor {
 	private ArrayList<Relation> relations;
 
 	/* store word dictionary */
-	public static HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> dictionary;
 	/* store stop word dictionary */
-	public static HashMap<String, Integer> stopWordDictionary = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> stopWordDictionary;
+	/* store part-of-speech dictionary */
+	public static HashMap<String, Integer> POSDictionary;
+	/* store part-of-speech sequence dictionary */
+	public static HashMap<String, Integer> POSSequenceDictonary;
+	/* store ner dictionary */
+	public static HashMap<String, Integer> nerDictionary;
+	/* store POS tagger for feature extraction */
+	public static Tagger tagger;
+	/* store NER for name entity extraction */
+	public static NER ner;
+
 	
 	public Processor(String inputFileName, String outputFileName){
 		this.inputFileName = inputFileName;
 		this.outputFileName = outputFileName;
 		articles = new ArrayList<Article>();
 		relations = new ArrayList<Relation>();
+		dictionary = new HashMap<String, Integer>();
+		stopWordDictionary = new HashMap<String, Integer>();
+		POSDictionary = new HashMap<String, Integer>();
+		POSSequenceDictonary = new HashMap<String, Integer>();
+		nerDictionary = new HashMap<String, Integer>();
+		tagger = new Tagger();
+		ner = new NER();
 	}
-	
-	/**
-	 * Read input file and return File object 
-	 * @param inputFileName String input file name
-	 * @return File object
-	 */
-	public static File readFile(String inputFileName) {
-		File inf = new File("files/" + inputFileName);
-		if(!inf.exists()) { 
-			System.err.println("ERROR: File: "+inf.getAbsolutePath()+" does not exist");
-			return null;
-		}
-		if(!inf.canRead()) { 
-			System.err.println("ERROR: File: "+inf.getAbsolutePath()+" cannot be read");
-			return null;
-		}
-		
-		System.out.println("INFO: finish reading file" + inf.getAbsolutePath());
-		return inf;
-	}
-	
-	/**
-	 * Build word dictionary for feature construction
-	 */
-	public void readDictionary(HashMap<String, Integer> dictionary, String fileName) {
-		File inf = Processor.readFile(fileName);
-		int wordIndex = 0;
-		try {
-			BufferedReader reader;
-			reader = new BufferedReader(new FileReader(inf));
 
-			String line = null;
-			while((line = reader.readLine()) != null ) {
-				if (dictionary.containsKey(line)) {
-					continue;
-				} else {
-					dictionary.put(line, ++wordIndex);
-				}
-			}
-			reader.close();
-		}
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}
-	
 	/**
 	 * Parse the input JSON file, construct sentence object from each JSON
 	 * object for further process and populate the sentence list
@@ -131,6 +107,64 @@ public class Processor {
 	}
 	
 	/**
+	 * Read in necessary dictionary for feature construction
+	 * say, words dic., stop word dic., pos dic., ner dic.
+	 */
+	private void readDictionaries() {
+		this.readDictionary(dictionary, "3esl.txt");
+		this.readDictionary(stopWordDictionary, "stopword.txt");
+		this.readDictionary(POSDictionary, "pos.txt");
+		this.readDictionary(nerDictionary, "ner.txt");
+	}
+	
+	/**
+	 * Build word dictionary for feature construction for a particular file
+	 */
+	public void readDictionary(HashMap<String, Integer> dictionary, String fileName) {
+		File inf = Processor.readFile(fileName);
+		int wordIndex = 0;
+		try {
+			BufferedReader reader;
+			reader = new BufferedReader(new FileReader(inf));
+
+			String line = null;
+			while((line = reader.readLine()) != null ) {
+				if (dictionary.containsKey(line)) {
+					continue;
+				} else {
+					dictionary.put(line, ++wordIndex);
+				}
+			}
+			reader.close();
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Read input file and return File object 
+	 * @param inputFileName String input file name
+	 * @return File object
+	 */
+	public static File readFile(String inputFileName) {
+		File inf = new File("files/" + inputFileName);
+		if(!inf.exists()) { 
+			System.err.println("ERROR: File: "+inf.getAbsolutePath()+" does not exist");
+			return null;
+		}
+		if(!inf.canRead()) { 
+			System.err.println("ERROR: File: "+inf.getAbsolutePath()+" cannot be read");
+			return null;
+		}
+		
+		System.out.println("INFO: finish reading file" + inf.getAbsolutePath());
+		return inf;
+	}
+	
+	/**
 	 * Extract relations for each article and populate current relations list
 	 */
 	private void extractRelations() {
@@ -142,6 +176,33 @@ public class Processor {
 //		}
 	}
 	
+	/**
+	 * Output samples, output each relation extracted from all articles as a sample
+	 * in format of into output file 
+	 * label f1:v1 f2:v2 f3:v3, ... (same format used in libsvm)
+	 */
+	private void outputSamples(){
+		File outf = new File("files/" + outputFileName);
+		try {
+			Writer writer = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(outf), "UTF-8"));
+			for (Relation relation : relations) {
+				StringBuffer sb = new StringBuffer();
+				// append label
+				if (relation.getLabel()) {
+					sb.append("1 ");
+				} else {
+					sb.append("-1 ");
+				}
+				// append features
+				sb.append(relation.getFeaturesVector());
+				writer.write(sb.toString());
+			}
+		} catch (IOException e1) {
+				e1.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.err.println("usage: Processor inputfilename outputfilename");
@@ -150,9 +211,9 @@ public class Processor {
 			Processor processor = new Processor(args[0], args[1]);
 			File inf = processor.readFile(processor.inputFileName);
 			processor.parseJSONFile(inf);
-			processor.readDictionary(dictionary, "3esl.txt");
-			processor.readDictionary(stopWordDictionary, "stopword.txt");
+			processor.readDictionaries();
 			processor.extractRelations();
+			processor.outputSamples();
 		}
 	}
 	

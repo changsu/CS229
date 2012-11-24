@@ -20,6 +20,9 @@ public class Relation {
 	private boolean label;
 	private Tree e1, e2;
 	private ArrayList<Tree> RList;
+	private Tree headE1, headE2;
+	/* number of NPs between e1 and e2 */
+	private Integer interval;
 	/* original sentence */
 	private String sentence;
 	
@@ -44,10 +47,13 @@ public class Relation {
 	 * @param labelFlage control whether to label the relation in construction
 	 */
 	public Relation(String url, Tree e1, Tree e2, String sentence, 
-			Tree parse, boolean labelFlag) {
+			Tree parse, Integer interval, boolean labelFlag) {
 		this.url = url;
 		this.e1 = e1;
 		this.e2 = e2;
+		HeadFinder hf = new SemanticHeadFinder();
+		headE1 = e1.headTerminal(hf);
+		headE2 = e2.headTerminal(hf);
 		this.sentence = sentence;
 		this.parse = parse;
 		
@@ -66,7 +72,10 @@ public class Relation {
 		 */
 		InitLeafNodes();
 		
+		this.interval = interval;
+		label = false; // by default, label as negative sample
 		tokens = new ArrayList<Tree>();
+		
 		/* If caller want to label the relation, we will label it
 		 * by calling applyRules() method
 		 */
@@ -286,6 +295,7 @@ public class Relation {
 	
 	private void applyRules() {
 		// CODE GOES HERE
+<<<<<<< HEAD
 		label = true; // or false based on above rules
 		return;
 		/*
@@ -316,7 +326,7 @@ public class Relation {
 	 * Generate feature object for the relation
 	 */
 	private void generateFeatures() {
-		features = new Feature(e1, e2, sentence);
+		features = new Feature(e1, e2, headE1, headE2, interval, sentence);
 	}
 	
 	/**
@@ -324,6 +334,13 @@ public class Relation {
 	 */
 	public Feature getFeatures() {
 		return features;
+	}
+	
+	/**
+	 * @return feature vector of the relation
+	 */
+	public String getFeaturesVector() {
+		return features.getFeatureVector();
 	}
 	
 	/**
