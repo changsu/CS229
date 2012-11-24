@@ -1,3 +1,4 @@
+package src;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -295,7 +296,6 @@ public class Relation {
 	
 	private void applyRules() {
 		// CODE GOES HERE
-<<<<<<< HEAD
 		label = true; // or false based on above rules
 		return;
 		/*
@@ -370,6 +370,4 @@ public class Relation {
 		return sb.toString();
 	}
 	
-	Tree foo;
-	Tree head =foo.headTerminal(new SemanticHeadFinder());
 }
