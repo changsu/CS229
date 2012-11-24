@@ -41,7 +41,9 @@ public class Feature {
 	private Tree headE2;
 	private Integer interval;
 	private String sentence;
+	private String nerSentence;
 	private String taggedSentence;
+	private String posSequenceContent;
 	private ArrayList<Tree> e1leaves;
 	private ArrayList<Tree> e2leaves;
 	
@@ -138,7 +140,6 @@ public class Feature {
 	private void setPOSFeatures() {
 		// build POS arrayList during which process generate POS features
 		taggedSentence = Processor.tagger.tagSentence(sentence);
-		System.out.println(taggedSentence);
 		
 		/* Though we can get the pos features in one pass of the tagged sentence,
 		 * we avoid doing that for simplicity and readability of the code 
@@ -205,7 +206,7 @@ public class Feature {
 		StringTokenizer st = new StringTokenizer(taggedSentence);
 		// control whether to start/stop generating the sequence
 		boolean recordFlag = false;
-		String tempSequence = "";
+		posSequenceContent = "";
 		int startIndex = 0, counter = 0;
 		while (st.hasMoreTokens()) {
 			counter++;
@@ -221,7 +222,7 @@ public class Feature {
 			if (recordFlag) {
 				String tag = posDic.get(word);
 				if (tag != null) {
-					tempSequence += tag + "-";
+					posSequenceContent += tag + "-";
 				}
 			}
 			
@@ -231,13 +232,12 @@ public class Feature {
 		
 		// we build POS sequence dictionary
 		Integer lastIndex = Processor.POSSequenceDictonary.size();
-		if (!tempSequence.equals("")) {
-			if (!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
-				Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
+		if (!posSequenceContent.equals("")) {
+			if (!Processor.POSSequenceDictonary.containsKey(posSequenceContent)) {
+				Processor.POSSequenceDictonary.put(posSequenceContent, lastIndex + 1);
 			}
-			POSSequence  = Processor.POSSequenceDictonary.get(tempSequence);
+			POSSequence  = Processor.POSSequenceDictonary.get(posSequenceContent);
 		}
-		System.out.println("temp sequence: " + tempSequence);
 	}
 
 	/**
@@ -318,8 +318,7 @@ public class Feature {
 	 * Set entity type features of head of e1 and e2
 	 */
 	private void setEntityTypes() {
-		String nerSentence = Processor.ner.runNER(sentence);
-		System.out.println(nerSentence);
+		nerSentence = Processor.ner.runNER(sentence);
 		StringTokenizer st = new StringTokenizer(nerSentence);
 		// walk through each token(words with ner), and find the name entity of heade1 and heade2
 		while (st.hasMoreTokens()) {
@@ -403,8 +402,6 @@ public class Feature {
 	    else
 	    	featureVector.append("\n");
 	    
-	    
-	    
 //	    System.out.println(featureVector);
 	    return featureVector.toString();
 	}
@@ -412,6 +409,8 @@ public class Feature {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("original sentence: " + sentence + "\n");
+		sb.append("tagged sentence: " + taggedSentence + "\n");
+		sb.append("ner sentence: " + nerSentence + "\n");
 		sb.append("e1: " + e1.toString() + "\n");
 		sb.append("e2: " + e2.toString() + "\n");
 		sb.append("words between: " + words.toString() + "\n");
@@ -424,6 +423,7 @@ public class Feature {
 		sb.append("Entity type e2: " + entityType2 + "\n");
 		sb.append("POS left e1: " + POSlefte1 + "\n");
 		sb.append("POS right e2: " + POSrighte2 + "\n");
+		sb.append("POS sequence content: " + posSequenceContent + "\n");
 		sb.append("POS sequence: " + POSSequence + "\n");
 		return sb.toString();
 	}
