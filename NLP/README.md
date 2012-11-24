@@ -68,10 +68,10 @@ Concrete example:
 ### Dictionary Used in Building Features
 In files folder:
 <ul>
-<li>`3esl.txt` Common English words dictionary</li>
-<li>`stopword.txt` Common English stop words dictionary</li>
-<li>`pos.txt` Common part-of-speech tags</li>
-<li>`ner.txt` Common Name Entities</li>
+<li>3esl.txt: Common English words dictionary</li>
+<li>stopword.txt: Common English stop words dictionary</li>
+<li>pos.txt: Common part-of-speech tags</li>
+<li>ner.tx: Coommon Name Entities</li>
 </ul>
 <b>It should also be noted that, we do not build "pos sequence dictionary" as above three in ahead. Instead, we build the dictionary along with each time we see a new pos sequence while extracting features for each relation</b>
 ### Logging
