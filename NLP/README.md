@@ -77,9 +77,9 @@ In files folder:
 ### Logging
 For debugging, I also output some log in Java console so that we can manually test the correctness of the feature extraction. For each relation being processed, it will log some key info like this:
 <pre>
-Europe_NNP was_VBD mentioned_VBN once_RB ,_, but_CC the_DT reference_NN had_VBD nothing_NN to_TO do_VB with_IN economics_NNS ._. 
-Europe/LOCATION was/O mentioned/O once/O,/O but/O the/O reference/O had/O nothing/O to/O do/O with/O economics/O./O 
 original sentence: Europe was mentioned once, but the reference had nothing to do with economics. 
+tagged sentence: Europe_NNP was_VBD mentioned_VBN once_RB ,_, but_CC the_DT reference_NN had_VBD nothing_NN to_TO do_VB with_IN economics_NNS ._. 
+ner sentence: Europe/LOCATION was/O mentioned/O once/O,/O but/O the/O reference/O had/O nothing/O to/O do/O with/O economics/O./O 
 e1: (NP (DT the) (NN reference))
 e2: (NP (NNS economics))
 words between: {5455=1, 21594=1, 5872=1, 19800=1, 12996=1, 15873=1, 8568=1}
@@ -92,16 +92,10 @@ Entity type e1: 0
 Entity type e2: 0
 POS left e1: 1
 POS right e2: 0
+POS sequence content: VBD-NN-TO-VB-IN-
 POS sequence: 17
 </pre>
 
-Partial Illustration:
-<ul>
-<li>line 1: tagged sentence</li>
-<li>line 2: sentence after name entity recognition, for above, Europe is entity "LOCATION"</li>
-<li>line 4 & 5: e1 and e2 we are using to build the relation</li>
-<li>Remaining lines: features (explained above)</li>
-</ul>
 ### FAQ
 <ul>
 <li>What if Eclipse throws "Java Out of Memory" Execption</li>

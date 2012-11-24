@@ -20,7 +20,6 @@ public class Relation {
 	private String url;
 	private boolean label;
 	private Tree e1, e2;
-	private ArrayList<Tree> RList;
 	private Tree headE1, headE2;
 	/* number of NPs between e1 and e2 */
 	private Integer interval;
@@ -31,10 +30,11 @@ public class Relation {
 	private Tree parse;
 		
 	/* spans of tokens between the two targeted entities */
-	private ArrayList<Tree> tokens;
+	private ArrayList<Tree> RList;
 	
 	/* feature object of the relation */
 	private Feature features;
+	
 	
 	private List<TypedDependency> tdl;
 	
@@ -44,7 +44,9 @@ public class Relation {
 	/**
 	 * @param e1 target entity1
 	 * @param e2 target entity2
+	 * @param sentence original sentence
 	 * @param parse full parsed tree of the sentence
+	 * @param interval interval of two phrases
 	 * @param labelFlage control whether to label the relation in construction
 	 */
 	public Relation(String url, Tree e1, Tree e2, String sentence, 
@@ -75,7 +77,6 @@ public class Relation {
 		
 		this.interval = interval;
 		label = false; // by default, label as negative sample
-		tokens = new ArrayList<Tree>();
 		
 		/* If caller want to label the relation, we will label it
 		 * by calling applyRules() method
@@ -354,7 +355,7 @@ public class Relation {
 		sb.append("e2: ");
 		sb.append(e2.toString() + "\n");
 		sb.append("tokens: ");
-		sb.append(tokens.toString() + "\n");
+		sb.append(RList.toString() + "\n");
 		sb.append("label: ");
 		sb.append(label + "\n");
 		return sb.toString();
