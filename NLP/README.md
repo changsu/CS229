@@ -13,14 +13,17 @@ Jar Files needed to be added into Referenced Libraries:
 1) [Parser JAR files] (http://nlp.stanford.edu/software/lex-parser.shtml#Download)
 used to parse the sentence, get penn Treebank structure and also dependencies, and finally 
 used for labelling each relation based on several rules depending on the parsed result
+You need to add external JAR files `stanford-parser.jar` and `stanford-parser-2012-07-09-models.jar` here
 
 2)  [POS JAR files] (http://nlp.stanford.edu/software/tagger.shtml#Download)
 used to extract part-of-speech tag for each word in a sentence, and finally used in pos feature
 extraction of a relation
+You need to add external JAR file `stanford-postagger.jar`
 
 3) [NER JAR files] (http://nlp.stanford.edu/software/CRF-NER.shtml#Download)
 used to generate the entity of each word in a sentence if applicable, and finally used in entity
 type feature extraction of a relation
+You need to add external JAR file `stanford-ner-2012-11-11`
 
 ### How to Run
 After setting up the environment, we're ready to go!

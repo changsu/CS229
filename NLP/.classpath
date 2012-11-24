@@ -1,37 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-<<<<<<< HEAD
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/CS229_Sparser/stanford-parser.jar" sourcepath="D:/Dropbox/course_fall_2012/CS 229/Project/CS229_Sparser/stanford-parser-2012-07-09-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/CS229_Sparser/stanford-parser-2012-07-09-javadoc.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/CS229_Sparser/stanford-parser-2012-07-09-models.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/CS229_Sparser/stanford-parser-2012-07-09-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/stanford-ner-2012-11-11/stanford-ner.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/stanford-ner-2012-11-11/stanford-ner-1.2.7-javadoc.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/stanford-ner-2012-11-11/stanford-ner-1.2.7-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/stanford-ner-2012-11-11/stanford-ner-2012-11-11.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/stanford-postagger-2012-11-11/stanford-postagger.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/stanford-postagger-2012-11-11/stanford-postagger-3.1.4.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/stanford-postagger-2012-11-11/stanford-postagger-3.1.4-javadoc.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/course_fall_2012/CS 229/Project/stanford-postagger-2012-11-11/stanford-postagger-3.1.4-src.jar"/>
-=======
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-parser-2012-07-09/stanford-parser-2012-07-09-javadoc.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-parser-2012-07-09/stanford-parser-2012-07-09-models.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-parser-2012-07-09/stanford-parser-2012-07-09-sources.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-parser-2012-07-09/stanford-parser.jar" sourcepath="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-parser-2012-07-09/stanford-parser-2012-07-09-sources.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-postagger-2012-11-11/stanford-postagger-3.1.4-src.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-postagger-2012-11-11/stanford-postagger-3.1.4.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-postagger-2012-11-11/stanford-postagger.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-postagger-2012-11-11/stanford-postagger-3.1.4-javadoc.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-ner-2012-11-11/stanford-ner-1.2.7-javadoc.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-ner-2012-11-11/stanford-ner-1.2.7-sources.jar"/>
+	<classpathentry kind="src" path=""/>
 	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-ner-2012-11-11/stanford-ner-2012-11-11.jar"/>
-	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-ner-2012-11-11/stanford-ner.jar"/>
->>>>>>> 1c366f82bd697df0529ddb5bc3d41950c5ed8edb
+	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-parser-2012-07-09/stanford-parser-2012-07-09-models.jar"/>
+	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-parser-2012-07-09/stanford-parser.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/changsu/Documents/Class/Autumn2012-2013/CS229/Project/Stanford NLP/stanford-postagger-2012-11-11/stanford-postagger-3.1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
