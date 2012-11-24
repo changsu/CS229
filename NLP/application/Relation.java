@@ -285,17 +285,7 @@ public class Relation {
 		return reVal;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private void applyRules() {
-		// CODE GOES HERE
 		label = true; // or false based on above rules
 		return;
 		/*

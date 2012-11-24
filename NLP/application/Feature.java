@@ -228,14 +228,16 @@ public class Feature {
 			if (word.equals(rightWordE1)) 
 				recordFlag = true;
 		}
+		
 		// we build POS sequence dictionary
 		Integer lastIndex = Processor.POSSequenceDictonary.size();
-		if (!tempSequence.equals("") && 
-				!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
-			Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
+		if (!tempSequence.equals("")) {
+			if (!Processor.POSSequenceDictonary.containsKey(tempSequence)) {
+				Processor.POSSequenceDictonary.put(tempSequence, lastIndex + 1);
+			}
 			POSSequence  = Processor.POSSequenceDictonary.get(tempSequence);
 		}
-//		System.out.println("temp sequence: " + tempSequence);
+		System.out.println("temp sequence: " + tempSequence);
 	}
 
 	/**
@@ -399,7 +401,7 @@ public class Feature {
 	    if (POSSequence != 0)
 	    	featureVector.append((POS_SEQUENCE_INDEX + POSSequence - 1) + ":1\n");
 	    
-	    System.out.println(featureVector);
+//	    System.out.println(featureVector);
 	    return featureVector.toString();
 	}
 	
