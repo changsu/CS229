@@ -23,7 +23,7 @@ You need to add external JAR file `stanford-postagger.jar`
 3) [NER JAR files] (http://nlp.stanford.edu/software/CRF-NER.shtml#Download)
 used to generate the entity of each word in a sentence if applicable, and finally used in entity
 type feature extraction of a relation
-You need to add external JAR file `stanford-ner-2012-11-11`
+You need to add external JAR file `stanford-ner-2012-11-11.jar`
 
 ### How to Run
 After setting up the environment, we're ready to go!

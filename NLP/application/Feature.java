@@ -398,8 +398,12 @@ public class Feature {
 	    	featureVector.append((POS_RIGHT_E2_INDEX + POSrighte2 - 1) + ":1 ");
 	    
 	    // compose pos sequence
-	    if (POSSequence != 0)
+	    if (POSSequence != 0) 
 	    	featureVector.append((POS_SEQUENCE_INDEX + POSSequence - 1) + ":1\n");
+	    else
+	    	featureVector.append("\n");
+	    
+	    
 	    
 //	    System.out.println(featureVector);
 	    return featureVector.toString();
