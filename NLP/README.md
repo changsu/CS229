@@ -101,7 +101,7 @@ A is labelled as a sentence or clause false
 label: false
 </pre>
 <b>It should also be noted that in log above, if you find certain rule has determined true/false 
-of the relation, there is no need continuing examing rules below, because they are also set false
+of the relation, there is no need continuing examing rules below, because they are all set false
 by default</b>
 
 #### Feature Logging

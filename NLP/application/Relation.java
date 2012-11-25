@@ -24,6 +24,8 @@ public class Relation {
 	// adjust this parameter to change the propotion of true/false saamples
 	private static final int M = 15;
 	
+	private static int counter= 0;
+	
 	/* list of result for each rule used for logging and debugging */
 	private boolean tooLongFlag;
 	private boolean containVerbFlag;
@@ -170,6 +172,14 @@ public class Relation {
 	 * @param parse
 	 */
 	private void generateRList() {
+		System.out.println("e1: " + e1.toString());
+		System.out.println("e2: " + e2.toString());
+		counter++;
+		if (counter == 10) {
+			int test = 0;
+			test++;
+		}
+		boolean reachE2Flag = false;
 		RList = new ArrayList<Tree>();
 		Iterator<Tree> itr = parse.iterator();
 		while(itr.hasNext()) {
@@ -181,7 +191,9 @@ public class Relation {
 					}
 					currNode = itr.next();
 				}
+				reachE2Flag = true;
 			}
+			if (reachE2Flag) break;
 		}
 	}
 	
