@@ -75,6 +75,28 @@ In files folder:
 </ul>
 <b>It should also be noted that, we do not build "pos sequence dictionary" as above three in ahead. Instead, we build the dictionary along with each time we see a new pos sequence while extracting features for each relation</b>
 ### Logging
+1. Labeling Logging
+In label logging, we output e1, e2, token list in betweem, common ancestor and result of each rule that
+determines final label. Example log:
+<pre>
+original sentence: Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair
+e1: (NP (NNP Jaguar))
+e2: (NP (DT the) (NN luxury) (NN auto) (NN maker))
+Rlist: [Jaguar, ,]
+Common Ancestor: (NP (NP (NNP Jaguar)) (, ,) (NP (DT the) (NN luxury) (NN auto) (NN maker)))
+Too much tokens in between: false
+Tokens btw e1 and e2 contains Verb: false
+e1 is parent of e2: false
+A is labelled as a sentence or clause false
+     e1 is subject of A: false
+     e1 is head of A: not applicable now 
+     e1 and e2 cross sentence boundary: false
+     e2 is object of PP: false
+     	  e2 is valid semantic role: not applicable now 
+label: false
+</pre>
+
+2. Feature Logging
 For debugging, I also output some log in Java console so that we can manually test the correctness of the feature extraction. For each relation being processed, it will log some key info like this:
 <pre>
 original sentence: Europe was mentioned once, but the reference had nothing to do with economics. 
