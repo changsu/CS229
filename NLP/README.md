@@ -100,8 +100,8 @@ A is labelled as a sentence or clause false
      	  e2 is valid semantic role: not applicable now 
 label: false
 </pre>
-<b>It should be also noted that in log above, if you find certains rule has determined true/false 
-of the relation, there is no need to continue examing rules below, because they are also set false
+<b>It should also be noted that in log above, if you find certain rule has determined true/false 
+of the relation, there is no need continuing examing rules below, because they are also set false
 by default</b>
 
 #### Feature Logging
