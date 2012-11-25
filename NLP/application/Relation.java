@@ -21,7 +21,8 @@ public class Relation {
 	private static final List<String> clauseType = 
 			Arrays.asList("S", "SINV", "SBAR", "RRC", "SBARQ", "SQ", "S-CLF", "FRAG");
 	// max number of tokens between e1 and e2
-	private static final int M = 10;
+	// adjust this parameter to change the propotion of true/false saamples
+	private static final int M = 15;
 	
 	/* list of result for each rule used for logging and debugging */
 	private boolean tooLongFlag;
@@ -105,7 +106,7 @@ public class Relation {
 		/* initialize tdl;  */
 		GetTypedDependencyLst();
 		/* set lowest common ancestor */
-		A = LowestCommonAncestor(parse);
+		A = LowestCommonAncestor();
 		/*apply rules on the relation and label it */
 		label = returnLabelC();
 		System.out.println(this);
@@ -233,14 +234,14 @@ public class Relation {
 	 * by Liangliang
 	 * find the lowest common ancestor of e1 and e2, given root node T
 	 */
-	private Tree LowestCommonAncestor(Tree T) {
+	private Tree LowestCommonAncestor() {
 		Tree curr = e1;
-		while (!curr.equals(T)) {
+		while (!curr.equals(parse)) {
 			if (IsAncestorOf(curr, e2))
 				return curr;
-			curr = curr.parent(T);
+			curr = curr.parent(parse);
 		}
-		return T;
+		return parse;
 	}
 
 	/*
@@ -381,7 +382,7 @@ public class Relation {
 		sb.append("Too much tokens in between: " + tooLongFlag + "\n");
 		sb.append("Tokens btw e1 and e2 contains Verb: " + containVerbFlag + "\n");
 		sb.append("e1 is parent of e2: " + isParentOfFlag + "\n");
-		sb.append("A is labelled as a sentence or clause " + AisSenOrClauseFlag + "\n");
+		sb.append("A is labelled as a sentence or clause: " + AisSenOrClauseFlag + "\n");
 		sb.append("\t e1 is subject of A: " + isSubjectOfFlag + "\n");
 		sb.append("\t e1 is head of A: not applicable now " + "\n");
 		sb.append("\t e1 and e2 cross sentence boundary: " + crossSenBoundaryFlag + "\n");
