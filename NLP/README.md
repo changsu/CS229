@@ -94,10 +94,10 @@ Too much tokens in between: false
 Tokens btw e1 and e2 contains Verb: true
 e1 is parent of e2: false
 A is labelled as a sentence or clause: true
-   e1 is subject of A: true
-    e1 is head of A: not applicable now 
+     e1 is subject of A: true
+     e1 is head of A: not applicable now 
      e1 and e2 cross sentence boundary: false
-      e2 is object of PP: false
+     e2 is object of PP: false
       	  e2 is valid semantic role: not applicable now 
 label: true
 </pre>
