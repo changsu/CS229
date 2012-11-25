@@ -287,10 +287,8 @@ public class Relation {
 	private boolean SubjectOf() {
 		String reln = GetRelnOfNode(e1);
 		if (reln != null && reln.equals("nsubj")) {
-			System.out.println(headE1.label().value() + " is subject of " + A.toString());
 			return true;
 		} else {
-			System.out.println(headE1.label().value() + " is not subject of" + A.toString());
 			return false;
 		}
 	}
@@ -306,10 +304,8 @@ public class Relation {
 	private boolean IsObjectOfPP(Tree e) {
 		String reln = GetRelnOfNode(e2);
 		if (reln != null && reln.matches("prep.*")) {
-			System.out.println(headE2 + "is obj of PP ");
 			return true;
 		} else {
-			System.out.println(headE2 + "is not obj of PP ");
 			return false;
 		}
 	}
@@ -385,16 +381,12 @@ public class Relation {
 		sb.append("Too much tokens in between: " + tooLongFlag + "\n");
 		sb.append("Tokens btw e1 and e2 contains Verb: " + containVerbFlag + "\n");
 		sb.append("e1 is parent of e2: " + isParentOfFlag + "\n");
-		if (AisSenOrClauseFlag = true) {
-			sb.append("A is labelled as a sentence or clause \n");
-			sb.append("\t e1 is subject of A: " + isSubjectOfFlag + "\n");
-			sb.append("\t e1 is head of A: not applicable now " + "\n");
-			sb.append("\t e1 and e2 cross sentence boundary: " + crossSenBoundaryFlag + "\n");
-			sb.append("\t e2 is object of PP: " + isObjectOfPPFlag + "\n");
-			sb.append("\t\t e2 is valid semantic role: " + "not applicable now " + "\n");
-		} else {
-			sb.append("A is not labelled as a sentence or clause \n");
-		}
+		sb.append("A is labelled as a sentence or clause " + AisSenOrClauseFlag + "\n");
+		sb.append("\t e1 is subject of A: " + isSubjectOfFlag + "\n");
+		sb.append("\t e1 is head of A: not applicable now " + "\n");
+		sb.append("\t e1 and e2 cross sentence boundary: " + crossSenBoundaryFlag + "\n");
+		sb.append("\t e2 is object of PP: " + isObjectOfPPFlag + "\n");
+		sb.append("\t\t e2 is valid semantic role: " + "not applicable now " + "\n");
 		sb.append("label: " + label + "\n");
 		return sb.toString();
 	}

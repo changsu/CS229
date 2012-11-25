@@ -469,7 +469,7 @@ public class Feature {
 	 * @param str
 	 * @return string after eliminating last point if it contains
 	 */
-	private String removeLastPunc(String str) {
+	public static String removeLastPunc(String str) {
 		String lastChar = str.substring(str.length() - 1, str.length());
 		if (lastChar.matches("[^A-Za-z0-9]")) 
 			return str.substring(0, str.toLowerCase().lastIndexOf(lastChar));
