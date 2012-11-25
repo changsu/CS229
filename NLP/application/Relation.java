@@ -172,13 +172,6 @@ public class Relation {
 	 * @param parse
 	 */
 	private void generateRList() {
-		System.out.println("e1: " + e1.toString());
-		System.out.println("e2: " + e2.toString());
-		counter++;
-		if (counter == 10) {
-			int test = 0;
-			test++;
-		}
 		boolean reachE2Flag = false;
 		RList = new ArrayList<Tree>();
 		Iterator<Tree> itr = parse.iterator();
@@ -391,6 +384,7 @@ public class Relation {
 		sb.append("e2: " + e2.toString() + "\n");
 		sb.append("Rlist: " + RList.toString() + "\n");
 		sb.append("Common Ancestor: " + A.toString() + "\n");
+		sb.append("List of typed dependencies: " + tdl.toString() + "\n"); 
 		sb.append("Too much tokens in between: " + tooLongFlag + "\n");
 		sb.append("Tokens btw e1 and e2 contains Verb: " + containVerbFlag + "\n");
 		sb.append("e1 is parent of e2: " + isParentOfFlag + "\n");

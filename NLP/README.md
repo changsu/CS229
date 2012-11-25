@@ -84,22 +84,24 @@ in class `Relation.java`</b>
 In label logging, we output e1, e2, token list in betweem, common ancestor and result of each rule that
 determines final label. Example log:
 <pre>
-original sentence: Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair
-e1: (NP (NNP Jaguar))
-e2: (NP (DT the) (NN luxury) (NN auto) (NN maker))
-Rlist: [Jaguar, ,]
-Common Ancestor: (NP (NP (NNP Jaguar)) (, ,) (NP (DT the) (NN luxury) (NN auto) (NN maker)))
+original sentence: Only a few months ago, it was front-page news. 
+e1: (NP (PRP it))
+e2: (NP (JJ front-page) (NN news))
+Rlist: [it, was]
+Common Ancestor: (S (ADVP (NP (RB Only) (DT a) (JJ few) (NNS months)) (RB ago)) (, ,) (NP (PRP it)) (VP (VBD was) (NP (JJ front-page) (NN news))) (. .))
+List of typed dependencies: [advmod(months-4, Only-1), det(months-4, a-2), amod(months-4, few-3), npadvmod(ago-5, months-4), advmod(news-10, ago-5), nsubj(news-10, it-7), cop(news-10, was-8), amod(news-10, front-page-9), root(ROOT-0, news-10)]
 Too much tokens in between: false
-Tokens btw e1 and e2 contains Verb: false
+Tokens btw e1 and e2 contains Verb: true
 e1 is parent of e2: false
-A is labelled as a sentence or clause false
-     e1 is subject of A: false
-     e1 is head of A: not applicable now 
+A is labelled as a sentence or clause: true
+   e1 is subject of A: true
+    e1 is head of A: not applicable now 
      e1 and e2 cross sentence boundary: false
-     e2 is object of PP: false
-     	  e2 is valid semantic role: not applicable now 
-label: false
+      e2 is object of PP: false
+      	  e2 is valid semantic role: not applicable now 
+label: true
 </pre>
+
 <b>It should also be noted that in log above, if you find certain rule has determined true/false 
 of the relation, there is no need continuing examing rules below, because they are all set false
 by default</b>
