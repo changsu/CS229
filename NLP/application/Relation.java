@@ -16,6 +16,7 @@ public class Relation {
 	private boolean label;
 	private Tree e1, e2, A;
 	private Tree headE1, headE2, headParse;
+	private HeadFinder hf;
 	private static final List<String> clauseType = 
 			Arrays.asList("S", "SINV", "SBAR", "RRC", "SBARQ", "SQ", "S-CLF", "FRAG");
 	
@@ -50,7 +51,7 @@ public class Relation {
 		this.e1 = e1;
 		this.e2 = e2;
 		RList = new ArrayList<Tree>();
-		HeadFinder hf = new SemanticHeadFinder();
+		hf = new SemanticHeadFinder();
 		headE1 = e1.headTerminal(hf);
 		headE2 = e2.headTerminal(hf);
 		headParse = parse.headTerminal(hf);
@@ -94,9 +95,9 @@ public class Relation {
 		
 		if (!ContainsVerb()) return false;
 		if (IsParentOf(e1, e2)) return false;
-		if (clauseType.contains(A.label().value())) {
+		if (clauseType.contains(A.label().value().toString())) {
 			if (!SubjectOf()) return false;
-			if (!IsHeadOf()) return false;
+//			if (!IsHeadOf()) return false; // TODO: to be discussed, confusing
 			if (CrossSentenceBoundary()) 
 				return false; 
 			if (IsObjectOfPP(e2)) {
@@ -226,16 +227,33 @@ public class Relation {
 		List<Tree> leafNodes = parse.getLeaves();
 		return leafNodes.indexOf(e);
 	}
+	
+	/*
+	 * Given a tree node, return its reln in typed dependency
+	 */
+	private String GetRelnOfNode(Tree node) {
+		Tree head = node.headTerminal(hf);
+		Iterator<TypedDependency> itr = tdl.iterator();
+		while (itr.hasNext()) {
+			TypedDependency td = itr.next();
+			if (td.dep().label().value().equals(head.label().value())) {
+				return td.reln().toString();  
+			}
+		}
+		return null;
+	}
 		
 	/*
 	 * by Liangliang
 	 * determine if e1 is the subject of A (sentence/clause).
 	 */
 	private boolean SubjectOf() {
-		int index = GetIndexLeafNodes(headE1);
-		if (tdl.get(index) != null && tdl.get(index).reln().toString().equals("nsubj")) {
+		String reln = GetRelnOfNode(e1);
+		if (reln != null && reln.equals("nsubj")) {
+			System.out.println(headE1.label().value() + " is subject of " + A.toString());
 			return true;
 		} else {
+			System.out.println(headE1.label().value() + " is not subject of" + A.toString());
 			return false;
 		}
 	}
@@ -249,11 +267,14 @@ public class Relation {
 	}
 	
 	private boolean IsObjectOfPP(Tree e) {
-		int index = GetIndexLeafNodes(e);
-		if (tdl.get(index).reln().equals("dobj") || tdl.get(index).reln().equals("iobj") )
+		String reln = GetRelnOfNode(e2);
+		if (reln != null && reln.matches("prep.*")) {
+			System.out.println(headE2 + "is obj of PP ");
 			return true;
-		else
+		} else {
+			System.out.println(headE2 + "is not obj of PP ");
 			return false;
+		}
 	}
 	
 	/*
@@ -263,14 +284,17 @@ public class Relation {
 	private boolean CrossSentenceBoundary() {
 		Tree t = e1.parent(A);
 		while (!t.equals(A)) {
-			if (t.label().equals("S")) 
+			String label = t.label().value().toString();
+			if (label.equals("S")) continue;
+			if (clauseType.contains(label)) {
 				return true;
+			}
 			t = t.parent(parse);
 		}
 		
 		t = e2.parent(A);
 		while (!t.equals(A)) {
-			if (t.label().equals("S")) 
+			if (clauseType.contains(t.label().value().toString())) 
 				return true;
 			t = t.parent(parse);
 		}
