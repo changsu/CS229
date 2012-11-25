@@ -1,7 +1,9 @@
 package application;
 import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
@@ -60,7 +62,11 @@ public class Article {
 			String sentence = "Jaguar, the A luxury auto maker sold 1,214 cars in the U.S.A.";
 //			String sentence = body.substring(start,end);
 			Tree parse = lp.apply(sentence);
-
+//			TreebankLanguagePack tlp = new PennTreebankLanguagePack();
+//			GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
+//			GrammaticalStructure gs = gsf.newGrammaticalStructure(parse);
+//			List<TypedDependency> tdl = gs.typedDependenciesCCprocessed();
+//			System.out.println(tdl);
 			// generateNPList
 			NPList = generateNPList(parse);
 

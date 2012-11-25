@@ -72,7 +72,7 @@ public class Relation {
 		/* generate list of leaf node between e1 and e2 */
 		generateRList();
 		/* initialize tdl;  */
-		GetTokenizedFactory();
+		GetTypedDependencyLst();
 		/* set lowest common ancestor */
 		A = LowestCommonAncestor(parse);
 		/*apply rules on the relation for labeling */
@@ -92,11 +92,10 @@ public class Relation {
 	 */
 	public boolean returnLabelC(){
 		
-		//boolean reVal = false;
 		if (!ContainsVerb()) return false;
 		if (IsParentOf(e1, e2)) return false;
-		if (clauseType.contains(A.label().toString())) {
-			if (!SubjectOf(e1)) return false;
+		if (clauseType.contains(A.label().value())) {
+			if (!SubjectOf()) return false;
 			if (!IsHeadOf()) return false;
 			if (CrossSentenceBoundary()) 
 				return false; 
@@ -109,7 +108,7 @@ public class Relation {
 				//R = normalize(R) ?? not implemented.	
 			}
 		} else {
-			return false;
+			return true;
 		}
 	}
 
@@ -211,7 +210,7 @@ public class Relation {
 	 * this function tends to return a tdl, which contains the information such as "nsuj", etc.
 	 * but may not implemented correctly....
 	 */
-	private void GetTokenizedFactory() {
+	private void GetTypedDependencyLst() {
 		TreebankLanguagePack tlp = new PennTreebankLanguagePack();
 		GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
 		GrammaticalStructure gs = gsf.newGrammaticalStructure(parse);
@@ -225,28 +224,20 @@ public class Relation {
 	private int GetIndexLeafNodes(Tree e) {
 		/* List<Tree> leafTreeNodes contains all the leaf nodes of the tree parse */
 		List<Tree> leafNodes = parse.getLeaves();
-		int val = -1;
-		for (int i = 0; i < leafNodes.size(); i++) {
-			if (leafNodes.get(i).equals(e)) {
-				val = i;
-				return val;
-			}
-		}
-		return val;
+		return leafNodes.indexOf(e);
 	}
-	
-	
+		
 	/*
 	 * by Liangliang
-	 * determine if e1 is the subject.
-	 * the SubjectOf, IsHeadOf, IsObjectOfPP are not implemented.
+	 * determine if e1 is the subject of A (sentence/clause).
 	 */
-	private boolean SubjectOf(Tree e) {
-		int index = GetIndexLeafNodes(e);
-		if (tdl.get(index).reln().equals("nsubj"))
+	private boolean SubjectOf() {
+		int index = GetIndexLeafNodes(headE1);
+		if (tdl.get(index) != null && tdl.get(index).reln().toString().equals("nsubj")) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 	
 	/*
