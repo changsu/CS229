@@ -76,7 +76,7 @@ In files folder:
 <b>It should also be noted that, we do not build "pos sequence dictionary" as above three in ahead. Instead, we build the dictionary along with each time we see a new pos sequence while extracting features for each relation</b>
 ### Logging
 
-1. Labeling Logging
+#### Labeling Logging
 
 <b>You can enable this logging by uncomment `System.out.println(this)` in `generateLable()` function
 in class `Relation.java`</b>
@@ -101,7 +101,7 @@ A is labelled as a sentence or clause false
 label: false
 </pre>
 
-2. Feature Logging
+#### Feature Logging
 
 <b>You can enable this logging by uncomment `System.out.println(this)` in `buildFeatures()` function
 in class `Feature.java`</b>
