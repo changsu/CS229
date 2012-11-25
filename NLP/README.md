@@ -77,8 +77,10 @@ In files folder:
 ### Logging
 
 1. Labeling Logging
+
 <b>You can enable this logging by uncomment `System.out.println(this)` in `generateLable()` function
 in class `Relation.java`</b>
+
 In label logging, we output e1, e2, token list in betweem, common ancestor and result of each rule that
 determines final label. Example log:
 <pre>
@@ -100,8 +102,10 @@ label: false
 </pre>
 
 2. Feature Logging
+
 <b>You can enable this logging by uncomment `System.out.println(this)` in `buildFeatures()` function
 in class `Feature.java`</b>
+
 For debugging, I also output some log in Java console so that we can manually test the correctness of the feature extraction. For each relation being processed, it will log some key info like this:
 <pre>
 original sentence: Europe was mentioned once, but the reference had nothing to do with economics. 
