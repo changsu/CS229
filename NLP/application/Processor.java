@@ -35,7 +35,10 @@ public class Processor {
 	
 	/* construct list of relation object as samples */
 	private ArrayList<Relation> relations;
-
+	
+	/* statistic used, get number of pos and neg samples seperately */
+	private int numPositive, numNegative;
+	
 	/* store word dictionary */
 	public static HashMap<String, Integer> dictionary;
 	/* store stop word dictionary */
@@ -57,6 +60,8 @@ public class Processor {
 		this.outputFileName = outputFileName;
 		articles = new ArrayList<Article>();
 		relations = new ArrayList<Relation>();
+		numNegative = 0;
+		numPositive = 0;
 		dictionary = new HashMap<String, Integer>();
 		stopWordDictionary = new HashMap<String, Integer>();
 		POSDictionary = new HashMap<String, Integer>();
@@ -189,14 +194,18 @@ public class Processor {
 				StringBuffer sb = new StringBuffer();
 				// append label
 				if (relation.getLabel()) {
+					numPositive++;
 					sb.append("1 ");
 				} else {
+					numNegative++;
 					sb.append("-1 ");
 				}
 				// append features
 				sb.append(relation.getFeaturesVector());
 				writer.write(sb.toString());
 			}
+			System.out.println("num of positive relations: " + numPositive);
+			System.out.println("num of negative relations: " + numNegative);
 		} catch (IOException e1) {
 				e1.printStackTrace();
 		}
