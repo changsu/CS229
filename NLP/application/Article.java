@@ -59,14 +59,12 @@ public class Article {
 			int e1Index, e2Index;
 			
 			// parse sentence
-			String sentence = "The place Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A.";
+			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair";
 //			String sentence = body.substring(start,end);
+			String nerSentence = Processor.ner.runNER(sentence);
+			String taggedSentence = Processor.tagger.tagSentence(sentence);
 			Tree parse = lp.apply(sentence);
-//			TreebankLanguagePack tlp = new PennTreebankLanguagePack();
-//			GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
-//			GrammaticalStructure gs = gsf.newGrammaticalStructure(parse);
-//			List<TypedDependency> tdl = gs.typedDependenciesCCprocessed();
-//			System.out.println(tdl);
+			
 			// generateNPList
 			NPList = generateNPList(parse);
 
@@ -80,8 +78,8 @@ public class Article {
 					// we only compare NPs that have same depth
 					if (NP1.depth() != NP2.depth()) 
 						continue;
-					relations.add(new Relation(url, NP1, NP2, sentence, parse, 
-							(e2Index - e1Index), true));
+					relations.add(new Relation(url, NP1, NP2, sentence, taggedSentence,  
+							nerSentence, parse, (e2Index - e1Index), true));
 				}
 			}
 		}

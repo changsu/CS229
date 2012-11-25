@@ -46,6 +46,7 @@ public class Feature {
 	private String posSequenceContent;
 	private ArrayList<Tree> e1leaves;
 	private ArrayList<Tree> e2leaves;
+	private HashMap<String, String> nerLocalDic;
 	
 	
 	/* edge words */
@@ -92,17 +93,21 @@ public class Feature {
 	/* entity type of e2 */
 	private int entityType2;
 	
-	public Feature(Tree e1, Tree e2, Tree headE1, Tree headE2, Integer interval, String sentence) {
+	public Feature(Tree e1, Tree e2, Tree headE1, Tree headE2, Integer interval, String sentence,
+			String taggedSentence, String nerSentence) {
 		this.e1 = e1;
 		this.e2 = e2;
 		this.headE1 = headE1;
 		this.headE2 = headE2;
 		this.numPhrasesBts = interval - 1;
 		this.sentence = sentence;
+		this.taggedSentence = taggedSentence;
+		this.nerSentence = nerSentence;
 		e1leaves = (ArrayList<Tree>) e1.getLeaves();
 		e2leaves = (ArrayList<Tree>) e2.getLeaves();
 		words = new HashMap<Integer, Integer>();
 		posDic = new HashMap<String, String>();
+		nerLocalDic = new HashMap<String, String>();
 		buildFeatures();
 	}
 
@@ -139,9 +144,6 @@ public class Feature {
 	 * new sequence we have encountered
 	 */
 	private void setPOSFeatures() {
-		// build POS arrayList during which process generate POS features
-		taggedSentence = Processor.tagger.tagSentence(sentence);
-		
 		/* Though we can get the pos features in one pass of the tagged sentence,
 		 * we avoid doing that for simplicity and readability of the code 
 		 */
@@ -151,7 +153,6 @@ public class Feature {
 
 	/**
 	 * Set the POS of word to left of E1 and POS of word to the right of E2
-	 * @param taggedSentence
 	 */
 	private void setPOSEdgeWords() {
 		// store left word of e1 and right word of e2 
@@ -319,7 +320,6 @@ public class Feature {
 	 * Set entity type features of head of e1 and e2
 	 */
 	private void setEntityTypes() {
-		nerSentence = Processor.ner.runNER(sentence);
 		StringTokenizer st = new StringTokenizer(nerSentence);
 		// walk through each token(words with ner), and find the name entity of heade1 and heade2
 		while (st.hasMoreTokens()) {
@@ -328,6 +328,8 @@ public class Feature {
 			String word = subSt.nextToken();
 			// remove last ","
 			String ner = removeLastPunc(subSt.nextToken());
+			// construct ner local dic
+			nerLocalDic.put(word, ner);
 			
 			if (word.equals(headE1.label().value())) {
 				if (Processor.nerDictionary.containsKey(ner))
@@ -339,6 +341,14 @@ public class Feature {
 					entityType2 = Processor.nerDictionary.get(ner);
 			}
 		}
+	}
+	
+	/**
+	 * return ner local dictionary of the sentence
+	 * @return
+	 */
+	public HashMap<String, String> getNerLocalDic() {
+		return nerLocalDic;
 	}
 	
 	/**

@@ -16,9 +16,23 @@ public class Relation {
 	private boolean label;
 	private Tree e1, e2, A;
 	private Tree headE1, headE2, headParse;
+	private String taggedSentence, nerSentence;
 	private HeadFinder hf;
 	private static final List<String> clauseType = 
 			Arrays.asList("S", "SINV", "SBAR", "RRC", "SBARQ", "SQ", "S-CLF", "FRAG");
+	// max number of tokens between e1 and e2
+	private static final int M = 10;
+	
+	/* list of result for each rule used for logging and debugging */
+	private boolean tooLongFlag;
+	private boolean containVerbFlag;
+	private boolean isParentOfFlag;
+	private boolean AisSenOrClauseFlag;
+	private boolean isSubjectOfFlag;
+	private boolean isHeadOfFlag;
+	private boolean crossSenBoundaryFlag;
+	private boolean isObjectOfPPFlag;
+	private boolean isValidSemanticFlag;
 	
 	/* number of NPs between e1 and e2 */
 	private Integer interval;
@@ -41,12 +55,14 @@ public class Relation {
 	 * @param e1 target entity1
 	 * @param e2 target entity2
 	 * @param sentence original sentence
+	 * @param taggedSentence sentence after pos tagging
+	 * @param nerSentence sentence after name entity recognition
 	 * @param parse full parsed tree of the sentence
 	 * @param interval interval of two phrases
 	 * @param labelFlage control whether to label the relation in construction
 	 */
-	public Relation(String url, Tree e1, Tree e2, String sentence, 
-			Tree parse, Integer interval, boolean labelFlag) {
+	public Relation(String url, Tree e1, Tree e2, String sentence, String taggedSentence, 
+			String nerSentence, Tree parse, Integer interval, boolean labelFlag) {
 		this.url = url;
 		this.e1 = e1;
 		this.e2 = e2;
@@ -56,17 +72,31 @@ public class Relation {
 		headE2 = e2.headTerminal(hf);
 		headParse = parse.headTerminal(hf);
 		this.sentence = sentence;
+		this.taggedSentence = taggedSentence;
+		this.nerSentence = nerSentence;
 		this.parse = parse;
 		this.interval = interval;
+		
+		// set all rule flag false by default
+		tooLongFlag = false;
+		containVerbFlag = false;
+		isParentOfFlag = false;
+		AisSenOrClauseFlag = false;
+		isSubjectOfFlag = false;
+		isHeadOfFlag = false;
+		crossSenBoundaryFlag = false;
+		isObjectOfPPFlag = false;
+		isValidSemanticFlag = false;
 						
+		// generate features of the relation
+		generateFeatures();
+		
 		/* If caller want to label the relation, we will label it
 		 * by calling generateLabel() method
 		 */
 		if (labelFlag) {
 			generateLabel();
 		}
-		// generate features of the relation
-		generateFeatures();
 	}
 
 	private void generateLabel() {
@@ -76,11 +106,7 @@ public class Relation {
 		GetTypedDependencyLst();
 		/* set lowest common ancestor */
 		A = LowestCommonAncestor(parse);
-		/*apply rules on the relation for labeling */
-		applyRules();
-	}
-	
-	private void applyRules() {
+		/*apply rules on the relation and label it */
 		label = returnLabelC();
 		System.out.println(this);
 	}
@@ -93,23 +119,44 @@ public class Relation {
 	 */
 	public boolean returnLabelC(){
 		
+		if (RList.size() > M) {
+			tooLongFlag = true;
+			return false;
+		}
+		
 		if (!ContainsVerb()) return false;
-		if (IsParentOf(e1, e2)) return false;
+		containVerbFlag = true;
+		
+		if (IsParentOf(e1, e2)) {
+			isParentOfFlag = true;
+			return false;
+		}
+		
 		if (clauseType.contains(A.label().value().toString())) {
+			AisSenOrClauseFlag = true;
+			
 			if (!SubjectOf()) return false;
+			isSubjectOfFlag = true;
+			
 //			if (!IsHeadOf()) return false; // TODO: to be discussed, confusing
-			if (CrossSentenceBoundary()) 
-				return false; 
+//			isHeadOfFlag = true;
+			
+			if (CrossSentenceBoundary()) {
+				crossSenBoundaryFlag = true;
+				return false;
+			}
+			
 			if (IsObjectOfPP(e2)) {
-				//if (IsValidSemanticRole(e2)) 
-					return true;
+				isObjectOfPPFlag = true;
+				//if (IsValidSemanticRole(e2))
+				return true;
 				//else reVal = false;
 			} else {
 				return true;
-				//R = normalize(R) ?? not implemented.	
+				//R = normalize(R) ?? not implemented.
 			}
 		} else {
-			return true;
+			return false;
 		}
 	}
 
@@ -219,16 +266,6 @@ public class Relation {
 	}
 	
 	/*
-	 * by Liangliang
-	 * return the index number of the tree e in leafNodes;
-	 */
-	private int GetIndexLeafNodes(Tree e) {
-		/* List<Tree> leafTreeNodes contains all the leaf nodes of the tree parse */
-		List<Tree> leafNodes = parse.getLeaves();
-		return leafNodes.indexOf(e);
-	}
-	
-	/*
 	 * Given a tree node, return its reln in typed dependency
 	 */
 	private String GetRelnOfNode(Tree node) {
@@ -278,23 +315,23 @@ public class Relation {
 	}
 	
 	/*
-	 * if one of e1's and e2's ancestor node equals S before reaching their lowest common ancestor
+	 * if one of e1's and e2's ancestor node equals sentence or clause 
+	 * before reaching their lowest common ancestor
 	 * then they cross the boundary
 	 */
 	private boolean CrossSentenceBoundary() {
-		Tree t = e1.parent(A);
+		Tree t = e1.parent(parse);
 		while (!t.equals(A)) {
 			String label = t.label().value().toString();
-			if (label.equals("S")) continue;
-			if (clauseType.contains(label)) {
+			if (clauseType.contains( t.label().value().toString())) {
 				return true;
 			}
 			t = t.parent(parse);
 		}
 		
-		t = e2.parent(A);
+		t = e2.parent(parse);
 		while (!t.equals(A)) {
-			if (clauseType.contains(t.label().value().toString())) 
+			if (clauseType.contains(t.label().value().toString()))
 				return true;
 			t = t.parent(parse);
 		}
@@ -306,7 +343,8 @@ public class Relation {
 	 * Generate feature object for the relation
 	 */
 	private void generateFeatures() {
-		features = new Feature(e1, e2, headE1, headE2, interval, sentence);
+		features = new Feature(e1, e2, headE1, headE2, interval, sentence,
+				taggedSentence, nerSentence);
 	}
 	
 	/**
@@ -343,6 +381,20 @@ public class Relation {
 		sb.append("e1: " + e1.toString() + "\n");
 		sb.append("e2: " + e2.toString() + "\n");
 		sb.append("Rlist: " + RList.toString() + "\n");
+		sb.append("Common Ancestor: " + A.toString() + "\n");
+		sb.append("Too much tokens in between: " + tooLongFlag + "\n");
+		sb.append("Tokens btw e1 and e2 contains Verb: " + containVerbFlag + "\n");
+		sb.append("e1 is parent of e2: " + isParentOfFlag + "\n");
+		if (AisSenOrClauseFlag = true) {
+			sb.append("A is labelled as a sentence or clause \n");
+			sb.append("\t e1 is subject of A: " + isSubjectOfFlag + "\n");
+			sb.append("\t e1 is head of A: not applicable now " + "\n");
+			sb.append("\t e1 and e2 cross sentence boundary: " + crossSenBoundaryFlag + "\n");
+			sb.append("\t e2 is object of PP: " + isObjectOfPPFlag + "\n");
+			sb.append("\t\t e2 is valid semantic role: " + "not applicable now " + "\n");
+		} else {
+			sb.append("A is not labelled as a sentence or clause \n");
+		}
 		sb.append("label: " + label + "\n");
 		return sb.toString();
 	}
