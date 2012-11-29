@@ -75,9 +75,6 @@ public class Article {
 				for (e2Index = e1Index + 1; e2Index < NPList.size(); ++e2Index) {
 					Tree NP1 = NPList.get(e1Index);
 					Tree NP2 = NPList.get(e2Index);
-					// we only compare NPs that have same depth
-					if (NP1.depth() != NP2.depth()) 
-						continue;
 					relations.add(new Relation(url, NP1, NP2, sentence, taggedSentence, nerSentence, 
 							parse, (e2Index - e1Index), true));
 				}

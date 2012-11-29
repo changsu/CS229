@@ -330,6 +330,7 @@ public class Feature {
 			// remove last ","
 			String ner = removeLastPunc(subSt.nextToken());
 			// construct ner local dic
+			// test
 			nerLocalDic.put(word, ner);
 			
 			if (word.equals(headE1.label().value())) {
