@@ -49,9 +49,11 @@ public class Article {
 		BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
 		iterator.setText(body);
 		int start = iterator.first();
+		int sentenceCounter = 0;
 		for (int end = iterator.next();
 				end != BreakIterator.DONE;
 				start = end, end = iterator.next()) {
+			sentenceCounter++;
 			/* list of NP in the sentence */
 			ArrayList<Tree> NPList;
 			/* two NP will be used to extract relations */
@@ -59,8 +61,8 @@ public class Article {
 			int e1Index, e2Index;
 			
 			// parse sentence
-			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair";
-//			String sentence = body.substring(start,end);
+//			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair";
+			String sentence = body.substring(start,end);
 			String nerSentence = Processor.ner.runNER(sentence);
 			String taggedSentence = Processor.tagger.tagSentence(sentence);
 			Tree parse = lp.apply(sentence);
@@ -80,7 +82,7 @@ public class Article {
 				}
 			}
 		}
-
+		System.out.println("There're " + sentenceCounter + " number of sentences in article " + url);
 		return relations;
 	}
 	
