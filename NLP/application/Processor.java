@@ -210,10 +210,10 @@ public class Processor {
 			}
 			sb.insert(0, relations.size() + " " + maxColIndex + "\n");
 			sb.insert(0, "FEATURE_TRAIN_MATRIX\n");
-			
 			writer.write(sb.toString());
 			System.out.println("num of positive relations: " + numPositive);
 			System.out.println("num of negative relations: " + numNegative);
+			writer.close();
 		} catch (IOException e1) {
 				e1.printStackTrace();
 		}
