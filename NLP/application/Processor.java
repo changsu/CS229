@@ -39,6 +39,9 @@ public class Processor {
 	/* statistic used, get number of pos and neg samples seperately */
 	private int numPositive, numNegative;
 	
+	/* store the max column index in the traning matrix */
+	private int maxColIndex = 0;
+	
 	/* store word dictionary */
 	public static HashMap<String, Integer> dictionary;
 	/* store stop word dictionary */
@@ -190,25 +193,53 @@ public class Processor {
 		try {
 			Writer writer = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(outf), "UTF-8"));
+			StringBuffer sb = new StringBuffer();
 			for (Relation relation : relations) {
-				StringBuffer sb = new StringBuffer();
 				// append label
 				if (relation.getLabel()) {
 					numPositive++;
 					sb.append("1 ");
 				} else {
 					numNegative++;
-					sb.append("-1 ");
+					sb.append("0 ");
 				}
 				// append features
-				sb.append(relation.getFeaturesVector());
-				writer.write(sb.toString());
+				sb.append(transformFeatureVector(relation.getFeaturesVector()));
+				// append end flag -1
+				sb.append("-1\n");
 			}
+			sb.insert(0, relations.size() + " " + maxColIndex + "\n");
+			sb.insert(0, "FEATURE_TRAIN_MATRIX\n");
+			
+			writer.write(sb.toString());
 			System.out.println("num of positive relations: " + numPositive);
 			System.out.println("num of negative relations: " + numNegative);
 		} catch (IOException e1) {
 				e1.printStackTrace();
 		}
+	}
+	
+	/**
+	 * This function is used to change format of feature vectors in format
+	 * that is convenient for ML module. Can be customized to any format.
+	 * @param rawFeatureVector
+	 * @return
+	 */
+	private String transformFeatureVector(String rawFeatureVector) {
+		StringBuffer sb = new StringBuffer();
+		Integer prevIndex = 0;
+		String[] pairs = rawFeatureVector.split(" ");
+		for (int i = 0; i < pairs.length; i++) {
+			String[] tokens = pairs[i].split(":");
+			Integer featureIndex = Integer.parseInt(tokens[0]);
+			Integer frequency = Integer.parseInt(tokens[1]);
+			sb.append((featureIndex - prevIndex) + " " + frequency + " ");
+			prevIndex = featureIndex;
+			// dynamically change the max column based on feature index of pos sequence
+			if ((i == pairs.length - 1) && featureIndex > maxColIndex)
+				maxColIndex = featureIndex;
+		}
+		return sb.toString();
 	}
 	
 	public static void main(String[] args) {

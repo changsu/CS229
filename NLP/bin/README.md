@@ -13,14 +13,17 @@ Jar Files needed to be added into Referenced Libraries:
 1) [Parser JAR files] (http://nlp.stanford.edu/software/lex-parser.shtml#Download)
 used to parse the sentence, get penn Treebank structure and also dependencies, and finally 
 used for labelling each relation based on several rules depending on the parsed result
+You need to add external JAR files `stanford-parser.jar` and `stanford-parser-2012-07-09-models.jar` here
 
 2)  [POS JAR files] (http://nlp.stanford.edu/software/tagger.shtml#Download)
 used to extract part-of-speech tag for each word in a sentence, and finally used in pos feature
 extraction of a relation
+You need to add external JAR file `stanford-postagger.jar`
 
 3) [NER JAR files] (http://nlp.stanford.edu/software/CRF-NER.shtml#Download)
 used to generate the entity of each word in a sentence if applicable, and finally used in entity
 type feature extraction of a relation
+You need to add external JAR file `stanford-ner-2012-11-11.jar`
 
 ### How to Run
 After setting up the environment, we're ready to go!
@@ -65,18 +68,54 @@ Concrete example:
 ### Dictionary Used in Building Features
 In files folder:
 <ul>
-<li>3esl.txt Common English words dictionary</li>
-<li>stopword.txt Common English stop words dictionary</li>
-<li>pos.txt Common part-of-speech tags</li>
-<li>ner.txt Common Name Entities</li>
+<li>3esl.txt: Common English words dictionary</li>
+<li>stopword.txt: Common English stop words dictionary</li>
+<li>pos.txt: Common part-of-speech tags</li>
+<li>ner.tx: Coommon Name Entities</li>
 </ul>
 <b>It should also be noted that, we do not build "pos sequence dictionary" as above three in ahead. Instead, we build the dictionary along with each time we see a new pos sequence while extracting features for each relation</b>
 ### Logging
+
+#### Labeling Logging
+
+<b>You can enable this logging by uncomment `System.out.println(this)` in `generateLable()` function
+in class `Relation.java`</b>
+
+In label logging, we output e1, e2, token list in betweem, common ancestor and result of each rule that
+determines final label. Example log:
+<pre>
+original sentence: Only a few months ago, it was front-page news. 
+e1: (NP (PRP it))
+e2: (NP (JJ front-page) (NN news))
+Rlist: [it, was]
+Common Ancestor: (S (ADVP (NP (RB Only) (DT a) (JJ few) (NNS months)) (RB ago)) (, ,) (NP (PRP it)) (VP (VBD was) (NP (JJ front-page) (NN news))) (. .))
+List of typed dependencies: [advmod(months-4, Only-1), det(months-4, a-2), amod(months-4, few-3), npadvmod(ago-5, months-4), advmod(news-10, ago-5), nsubj(news-10, it-7), cop(news-10, was-8), amod(news-10, front-page-9), root(ROOT-0, news-10)]
+Too much tokens in between: false
+Tokens btw e1 and e2 contains Verb: true
+e1 is parent of e2: false
+A is labelled as a sentence or clause: true
+     e1 is subject of A: true
+     e1 is head of A: not applicable now 
+     e1 and e2 cross sentence boundary: false
+     e2 is object of PP: false
+      	  e2 is valid semantic role: not applicable now 
+label: true
+</pre>
+
+<b>It should also be noted that in log above, if you find certain rule has determined true/false 
+of the relation, there is no need continuing examing rules below, because they are all set false
+by default</b>
+
+#### Feature Logging
+
+<b>You can enable this logging by uncomment `System.out.println(this)` in `buildFeatures()` function
+in class `Feature.java`</b>
+
 For debugging, I also output some log in Java console so that we can manually test the correctness of the feature extraction. For each relation being processed, it will log some key info like this:
 <pre>
-Europe_NNP was_VBD mentioned_VBN once_RB ,_, but_CC the_DT reference_NN had_VBD nothing_NN to_TO do_VB with_IN economics_NNS ._. 
-Europe/LOCATION was/O mentioned/O once/O,/O but/O the/O reference/O had/O nothing/O to/O do/O with/O economics/O./O 
 original sentence: Europe was mentioned once, but the reference had nothing to do with economics. 
+tagged sentence: Europe_NNP was_VBD mentioned_VBN once_RB ,_, but_CC the_DT reference_NN had_VBD nothing_NN to_TO do_VB with_IN economics_NNS ._. 
+ner sentence: Europe/LOCATION was/O mentioned/O once/O,/O but/O the/O reference/O had/O nothing/O to/O do/O with/O economics/O./O 
 e1: (NP (DT the) (NN reference))
 e2: (NP (NNS economics))
 words between: {5455=1, 21594=1, 5872=1, 19800=1, 12996=1, 15873=1, 8568=1}
@@ -89,16 +128,10 @@ Entity type e1: 0
 Entity type e2: 0
 POS left e1: 1
 POS right e2: 0
+POS sequence content: VBD-NN-TO-VB-IN-
 POS sequence: 17
 </pre>
 
-Partial Illustration:
-<ul>
-<li>line 1: tagged sentence</li>
-<li>line 2: sentence after name entity recognition, for above, Europe is entity "LOCATION"</li>
-<li>line 4 & 5: e1 and e2 we are using to build the relation</li>
-<li>Remaining lines: features (explained above)</li>
-</ul>
 ### FAQ
 <ul>
 <li>What if Eclipse throws "Java Out of Memory" Execption</li>

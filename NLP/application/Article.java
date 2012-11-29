@@ -59,9 +59,8 @@ public class Article {
 			int e1Index, e2Index;
 			
 			// parse sentence
-//			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair";
-//			String sentence = "Would most of southern Europe go broke, unable to borrow money at any reasonable rate? ";
-			String sentence = body.substring(start,end);
+			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair";
+//			String sentence = body.substring(start,end);
 			String nerSentence = Processor.ner.runNER(sentence);
 			String taggedSentence = Processor.tagger.tagSentence(sentence);
 			Tree parse = lp.apply(sentence);

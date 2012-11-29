@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import edu.stanford.nlp.trees.*;
 
@@ -56,7 +57,7 @@ public class Feature {
 	private String rightWordE2;
 	
 	/* words and its frequency between(include) two NP */
-	private HashMap<Integer, Integer> words;
+	private TreeMap<Integer, Integer> words;
 	
 	/* pos dictionary, key: word value: POS tag */
 	private HashMap<String, String> posDic;
@@ -105,7 +106,7 @@ public class Feature {
 		this.nerSentence = nerSentence;
 		e1leaves = (ArrayList<Tree>) e1.getLeaves();
 		e2leaves = (ArrayList<Tree>) e2.getLeaves();
-		words = new HashMap<Integer, Integer>();
+		words = new TreeMap<Integer, Integer>();
 		posDic = new HashMap<String, String>();
 		nerLocalDic = new HashMap<String, String>();
 		buildFeatures();
@@ -120,7 +121,7 @@ public class Feature {
 		setWords();
 		setEntityTypes();
 		// control whether to print feature log
-//		System.out.println(this);
+		System.out.println(this);
 	}
 	
 	/**
@@ -409,11 +410,11 @@ public class Feature {
 	    
 	    // compose pos sequence
 	    if (POSSequence != 0) 
-	    	featureVector.append((POS_SEQUENCE_INDEX + POSSequence - 1) + ":1\n");
+	    	featureVector.append((POS_SEQUENCE_INDEX + POSSequence - 1) + ":1 ");
 	    else
-	    	featureVector.append("\n");
+	    	featureVector.append("");
 	    
-//	    System.out.println(featureVector);
+	    System.out.println(featureVector);
 	    return featureVector.toString();
 	}
 	
