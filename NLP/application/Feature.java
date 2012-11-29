@@ -324,10 +324,13 @@ public class Feature {
 		StringTokenizer st = new StringTokenizer(nerSentence);
 		// walk through each token(words with ner), and find the name entity of heade1 and heade2
 		while (st.hasMoreTokens()) {
+			
 			String currWord = st.nextToken();
 			StringTokenizer subSt = new StringTokenizer(currWord, "/");
 			String word = subSt.nextToken();
+			
 			// remove last ","
+			if (!subSt.hasMoreTokens()) continue; 
 			String ner = removeLastPunc(subSt.nextToken());
 			// construct ner local dic
 			// test
