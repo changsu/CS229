@@ -111,7 +111,7 @@ public class Relation {
 		A = LowestCommonAncestor();
 		/*apply rules on the relation and label it */
 		label = returnLabelC();
-		System.out.println(this);
+//		System.out.println(this);
 	}
 
 	/**
