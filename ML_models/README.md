@@ -12,5 +12,5 @@ To fully recover the non-compressed dataset.
 
 `dataset_compressed.txt` store the samples in compressed format same as used in 
 CS229 problem set 2 Q2
-<b>The dataset has been pre-precossed in Java that #pos ~= #neg, so it's 
-unbiased itself</b>
+<b>The dataset has been pre-precossed in Java that num pos is equal to num neg approximately, 
+so it's unbiased itself</b>
