@@ -22,9 +22,7 @@ public class Article {
 	
 	public Article(String url, String body) {
 		this.url = url;
-		System.out.println(url);
 		this.body = body;
-		System.out.println(body);
 		relations = new ArrayList<Relation>();
 	}
 

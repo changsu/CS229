@@ -235,6 +235,7 @@ public class Feature {
 		
 		// we build POS sequence dictionary
 		Integer lastIndex = Processor.POSSequenceDictonary.size();
+		
 		if (!posSequenceContent.equals("")) {
 			if (!Processor.POSSequenceDictonary.containsKey(posSequenceContent)) {
 				Processor.POSSequenceDictonary.put(posSequenceContent, lastIndex + 1);
