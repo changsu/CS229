@@ -1,0 +1,6 @@
+Implements ML models
+
+`readMatrix.m` has been tailored for our us by simple revision
+
+'dataset_compressed.txt' store the samples in compressed format same as used in 
+CS229 problem set 2 Q2
