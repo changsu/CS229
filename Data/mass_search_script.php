@@ -11,6 +11,7 @@ function get_opts() {
 	$opts .= "k:"; // keywords (required)
 	$opts .= "s:"; // startdate (optional)
 	$opts .= "e:"; // enddate (optional)
+	$opts .= "i:"; // initial offset(optional)
 	$opts .= "o:"; // offset limit (optional)
 	$options = getopt($opts);
 	return $options;
