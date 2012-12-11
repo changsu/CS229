@@ -8,7 +8,7 @@ require_once('simple_html_dom.php');
 // TODO: Interface for the UI client, response to HTTP GET request
 
 function run_mass_search($keywords, $start_date, $end_date,
-	$offset_limit, $write_to_file = false) {
+	$offset_initial, $offset_limit, $write_to_file = false) {
 	$meta_f = NULL;
 	$body_f = NULL;
 	
@@ -18,7 +18,7 @@ function run_mass_search($keywords, $start_date, $end_date,
 		$body_f = fopen(BODY_FILE_NAME, "w");
 	}
 	
-	for ($offset = 0; $offset < $offset_limit; ++$offset) {
+	for ($offset = $offset_initial; $offset < $offset_limit; ++$offset) {
 		// Assume right usage and do not check sanity of search data
 		$request = 
 			compose_request($keywords, $start_date, $end_date, $offset);

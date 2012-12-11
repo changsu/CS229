@@ -10,8 +10,15 @@ define ("API_KEY",
 	
 define ("REQ_PREFIX", 
 	"http://api.nytimes.com/svc/search/v1/article");
+
+/* OFFSET_INITIAL and OFFSET_LIMIT control # of buckets (10 articles/bucket)
+* Bucket used for crawling articles with start from OFFSET_INITAL
+* And end with OFFSET_LIMIT */
+
+// initial offset
+define ("OFFSET_INITIAL", "0");
 	
-// control number of result pages = OFFSET_LIMIT * 10;
+// limit offset
 define ("OFFSET_LIMIT", "5");
 
 // output file ID and body 
