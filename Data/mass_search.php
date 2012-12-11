@@ -79,10 +79,10 @@ function write_to_file($raw_result, $meta_f, $body_f) {
 		foreach ($response->results as $result) {
 			$record = array();
 			$record['url'] = $result->url;
-			$record['body'] = get_body($result->url);
+			$body = get_body($result->url);
+			$record['body'] = $body;
 			array_push($hashmap, $record);
 		}
-		
 		fwrite($body_f, json_encode($hashmap));
 	} catch (Exception $e){
 		echo "Fail!!";

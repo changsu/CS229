@@ -22,7 +22,9 @@ public class Article {
 	
 	public Article(String url, String body) {
 		this.url = url;
+		System.out.println(url);
 		this.body = body;
+		System.out.println(body);
 		relations = new ArrayList<Relation>();
 	}
 
@@ -46,8 +48,6 @@ public class Article {
 	 * label their relationship and populate the relations list
 	 */
 	public ArrayList<Relation> extractRelations(LexicalizedParser lp) {
-		System.out.println(url);
-		System.out.println(body);
 		BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
 		iterator.setText(body);
 		int start = iterator.first();

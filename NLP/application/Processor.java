@@ -1,6 +1,5 @@
 package application;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,6 +26,7 @@ import org.json.JSONObject;
 
 public class Processor {
 	 
+	private static final String POS_SEQUENCE_FILE_NAME = "pos_sequence.txt";
 	private String inputFileName;
 	private String outputFileName;
 	
@@ -94,7 +94,6 @@ public class Processor {
 			
 			// Parse the JSON string to JSON array
 			JSONArray records = new JSONArray(stringBuilder.toString());
-			
 			// construct one article object for each JSON object in JSON array
 			for (int i = 0; i < records.length(); ++i) {
 				JSONObject record = records.getJSONObject(i);
@@ -122,6 +121,7 @@ public class Processor {
 		this.readDictionary(stopWordDictionary, "stopword.txt");
 		this.readDictionary(POSDictionary, "pos.txt");
 		this.readDictionary(nerDictionary, "ner.txt");
+		this.readDictionary(POSSequenceDictonary, "pos_sequence.txt");
 	}
 	
 	/**
@@ -179,8 +179,8 @@ public class Processor {
 				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
 		relations.addAll(articles.get(9).extractRelations(lp));
 		// run [start_article, end_article)
-		int start_article = 0;
-		int end_article = 8;
+		int start_article = 1;
+		int end_article = 2;
 		for (int i = start_article; i < end_article; i++) {
 			relations.addAll(articles.get(i).extractRelations(lp));
 		}
@@ -216,8 +216,32 @@ public class Processor {
 			sb.insert(0, relations.size() + " " + maxColIndex + "\n");
 			sb.insert(0, "FEATURE_TRAIN_MATRIX\n");
 			writer.write(sb.toString());
+			System.out.println("max index: " + maxColIndex);
 			System.out.println("num of positive relations: " + numPositive);
 			System.out.println("num of negative relations: " + numNegative);
+			writer.close();
+			/* write pos sequence dictionary to file */
+			writePOSSequenceToFile();
+		} catch (IOException e1) {
+				e1.printStackTrace();
+		}
+	}
+	
+	/* A little bit hack here, output updated POSSequenceDictionary here,
+	 * construct pos sequence dictionary along the way of building maps 
+	 * sort pos sequence dictionary first, then output to file for use in next round*/
+	@SuppressWarnings("unchecked")
+	private void writePOSSequenceToFile() {
+		File outf = new File("files/" + POS_SEQUENCE_FILE_NAME);
+		try {
+			Writer writer = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(outf), "UTF-8"));
+			StringBuffer sb = new StringBuffer();
+			POSSequenceDictonary = (HashMap<String, Integer>)sortByComparator(POSSequenceDictonary);
+			for (String key : POSSequenceDictonary.keySet()) {
+				sb.append(key + "\n");
+			}
+			writer.write(sb.toString());
 			writer.close();
 		} catch (IOException e1) {
 				e1.printStackTrace();
@@ -264,6 +288,28 @@ public class Processor {
 	/**
 	 * Set of utility print functions for debugging
 	 */
+	private static Map sortByComparator(Map unsortMap) {
+		 
+		List list = new LinkedList(unsortMap.entrySet());
+ 
+		// sort list based on comparator
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o1)).getValue())
+                                       .compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
+ 
+		// put sorted list into map again
+                //LinkedHashMap make sure order in which keys were inserted
+		Map sortedMap = new LinkedHashMap();
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		return sortedMap;
+	}
+	
 	private void printArticles() {
 		for (Article article : articles) {
 			System.out.println(article.toString());
