@@ -121,7 +121,27 @@ public class Processor {
 		this.readDictionary(stopWordDictionary, "stopword.txt");
 		this.readDictionary(POSDictionary, "pos.txt");
 		this.readDictionary(nerDictionary, "ner.txt");
-		this.readDictionary(POSSequenceDictonary, "pos_sequence.txt");
+//		this.readDictionary(POSSequenceDictonary, "pos_sequence.txt");
+	}
+	
+	/**
+	 * After map construction, we will prinf feature index that
+	 * denotes the start index of each feature.
+	 */
+	private String printFeatureIndex() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("\tword index: " + Feature.WORD_INDEX + "\n");
+		sb.append("\tnum words index: " + Feature.NUM_WORDS_INDEX + "\n");
+		sb.append("\tnum stop words index: " + Feature.NUM_STOP_WORDS_INDEX + "\n");
+		sb.append("\tnum cap words index: " + Feature.NUM_CAP_WORDS_INDEX + "\n");
+		sb.append("\tnum punc index: " + Feature.NUM_PUNC_INDEX + "\n");
+		sb.append("\tnum nps btw: " + Feature.NUM_NPS_BTW + "\n");
+		sb.append("\tentity e1 index: " + Feature.ENTITY_E1_INDEX + "\n");
+		sb.append("\tentity e2 index: " + Feature.ENTITY_E2_INDEX + "\n");
+		sb.append("\tPOS left e1 index: " + Feature.POS_LEFT_E1_INDEX + "\n");
+		sb.append("\tPOS right e2 index: " + Feature.POS_RIGHT_E2_INDEX + "\n");
+		sb.append("\tlast column (max dimension): " + (Feature.POS_SEQUENCE_INDEX - 1)+ "\n");
+		return sb.toString();
 	}
 	
 	/**
@@ -177,10 +197,9 @@ public class Processor {
 	private void extractRelations() {
 		LexicalizedParser lp = 
 				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
-		relations.addAll(articles.get(9).extractRelations(lp));
 		// run [start_article, end_article)
 		int start_article = 0;
-		int end_article = 5;
+		int end_article = 1;
 		for (int i = start_article; i < end_article; i++) {
 			relations.addAll(articles.get(i).extractRelations(lp));
 		}
@@ -216,12 +235,13 @@ public class Processor {
 			sb.insert(0, relations.size() + " " + maxColIndex + "\n");
 			sb.insert(0, "FEATURE_TRAIN_MATRIX\n");
 			writer.write(sb.toString());
-			System.out.println("max index: " + maxColIndex);
 			System.out.println("num of positive relations: " + numPositive);
 			System.out.println("num of negative relations: " + numNegative);
+			System.out.println("feature index table: ");
+			System.out.print(printFeatureIndex());
 			writer.close();
 			/* write pos sequence dictionary to file */
-			writePOSSequenceToFile();
+//			writePOSSequenceToFile();
 		} catch (IOException e1) {
 				e1.printStackTrace();
 		}

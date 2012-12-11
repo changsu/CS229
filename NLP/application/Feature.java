@@ -20,20 +20,20 @@ import edu.stanford.nlp.trees.*;
 public class Feature {
 	
 	/* constants for the start index of each feature */
-	private final static int WORD_INDEX = 1;
+	public final static int WORD_INDEX = 1;
 	private final static int SIZE_WORD_DIC = Processor.dictionary.size();
-	private final static int NUM_WORDS_INDEX = WORD_INDEX + SIZE_WORD_DIC;
-	private final static int NUM_STOP_WORDS_INDEX = NUM_WORDS_INDEX + 1;
-	private final static int NUM_CAP_WORDS_INDEX = NUM_STOP_WORDS_INDEX + 1;
-	private final static int NUM_PUNC_INDEX = NUM_CAP_WORDS_INDEX + 1;
-	private final static int NUM_NPS_BTW = NUM_PUNC_INDEX + 1;
-	private final static int ENTITY_E1_INDEX = NUM_NPS_BTW + 1;
+	public final static int NUM_WORDS_INDEX = WORD_INDEX + SIZE_WORD_DIC;
+	public final static int NUM_STOP_WORDS_INDEX = NUM_WORDS_INDEX + 1;
+	public final static int NUM_CAP_WORDS_INDEX = NUM_STOP_WORDS_INDEX + 1;
+	public final static int NUM_PUNC_INDEX = NUM_CAP_WORDS_INDEX + 1;
+	public final static int NUM_NPS_BTW = NUM_PUNC_INDEX + 1;
+	public final static int ENTITY_E1_INDEX = NUM_NPS_BTW + 1;
 	private final static int SIZE_NER_DIC = Processor.nerDictionary.size();
-	private final static int ENTITY_E2_INDEX = ENTITY_E1_INDEX + SIZE_NER_DIC;
-	private final static int POS_LEFT_E1_INDEX = ENTITY_E2_INDEX + SIZE_NER_DIC;
+	public final static int ENTITY_E2_INDEX = ENTITY_E1_INDEX + SIZE_NER_DIC;
+	public final static int POS_LEFT_E1_INDEX = ENTITY_E2_INDEX + SIZE_NER_DIC;
 	private final static int SIZE_POS_DIC = Processor.POSDictionary.size();
-	private final static int POS_RIGHT_E2_INDEX = POS_LEFT_E1_INDEX + SIZE_POS_DIC;
-	private final static int POS_SEQUENCE_INDEX = POS_RIGHT_E2_INDEX + SIZE_POS_DIC;
+	public final static int POS_RIGHT_E2_INDEX = POS_LEFT_E1_INDEX + SIZE_POS_DIC;
+	public final static int POS_SEQUENCE_INDEX = POS_RIGHT_E2_INDEX + SIZE_POS_DIC;
 	
 	
 	private Tree e1;
@@ -149,7 +149,7 @@ public class Feature {
 		 * we avoid doing that for simplicity and readability of the code 
 		 */
 		setPOSEdgeWords();
-		setPOSSequence();
+//		setPOSSequence();
 	}
 
 	/**
@@ -414,10 +414,10 @@ public class Feature {
 	    	featureVector.append((POS_RIGHT_E2_INDEX + POSrighte2 - 1) + ":1 ");
 	    
 	    // compose pos sequence
-	    if (POSSequence != 0) 
-	    	featureVector.append((POS_SEQUENCE_INDEX + POSSequence - 1) + ":1 ");
-	    else
-	    	featureVector.append("");
+//	    if (POSSequence != 0) 
+//	    	featureVector.append((POS_SEQUENCE_INDEX + POSSequence - 1) + ":1 ");
+//	    else
+//	    	featureVector.append("");
 	    
 //	    System.out.println(featureVector);
 	    return featureVector.toString();
@@ -440,8 +440,8 @@ public class Feature {
 		sb.append("Entity type e2: " + entityType2 + "\n");
 		sb.append("POS left e1: " + POSlefte1 + "\n");
 		sb.append("POS right e2: " + POSrighte2 + "\n");
-		sb.append("POS sequence content: " + posSequenceContent + "\n");
-		sb.append("POS sequence: " + POSSequence + "\n");
+//		sb.append("POS sequence content: " + posSequenceContent + "\n");
+//		sb.append("POS sequence: " + POSSequence + "\n");
 		return sb.toString();
 	}
 	
