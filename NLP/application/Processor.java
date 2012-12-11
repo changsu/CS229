@@ -198,8 +198,8 @@ public class Processor {
 		LexicalizedParser lp = 
 				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
 		// run [start_article, end_article)
-		int start_article = 0;
-		int end_article = 1;
+		int start_article = 98;
+		int end_article = 100;
 		for (int i = start_article; i < end_article; i++) {
 			relations.addAll(articles.get(i).extractRelations(lp));
 		}
@@ -235,6 +235,7 @@ public class Processor {
 			sb.insert(0, relations.size() + " " + maxColIndex + "\n");
 			sb.insert(0, "FEATURE_TRAIN_MATRIX\n");
 			writer.write(sb.toString());
+			System.out.println("max column index: " + maxColIndex);
 			System.out.println("num of positive relations: " + numPositive);
 			System.out.println("num of negative relations: " + numNegative);
 			System.out.println("feature index table: ");
