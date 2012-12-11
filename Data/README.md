@@ -20,8 +20,14 @@ s: start date (optional) 2011.09.24 by default
 
 e: end date (optional) current time when you run the script
 
-o: offset (optional) max offset of fetching data from API, it controls
-   total number of articles fetched = o * 10, 5 by default
+i: initial offset of bucket
+
+o: offset (optional) max offset of bucket
+
+<b>i and o together controls total number of articles fetched.
+     Since there're 10 articles per bucket, there're total
+     (o - i)* 10 articles fetched. By default, i = 0, o = 5. 
+</b>
 
 Example Code:
 <pre>

@@ -46,6 +46,7 @@ public class Article {
 	 * label their relationship and populate the relations list
 	 */
 	public ArrayList<Relation> extractRelations(LexicalizedParser lp) {
+		System.out.println(url);
 		System.out.println(body);
 		BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
 		iterator.setText(body);

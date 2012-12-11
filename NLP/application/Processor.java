@@ -178,6 +178,12 @@ public class Processor {
 		LexicalizedParser lp = 
 				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
 		relations.addAll(articles.get(9).extractRelations(lp));
+		// run [start_article, end_article)
+		int start_article = 0;
+		int end_article = 8;
+		for (int i = start_article; i < end_article; i++) {
+			relations.addAll(articles.get(i).extractRelations(lp));
+		}
 //		for (Article article : articles) {
 //			relations.addAll(article.extractRelations(lp));
 //		}
@@ -185,8 +191,7 @@ public class Processor {
 	
 	/**
 	 * Output samples, output each relation extracted from all articles as a sample
-	 * in format of into output file 
-	 * label f1:v1 f2:v2 f3:v3, ... (same format used in libsvm)
+	 * in format of into output file, save as format in Problem Set 2 CS229
 	 */
 	private void outputSamples(){
 		File outf = new File("files/" + outputFileName);
