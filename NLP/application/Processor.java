@@ -232,6 +232,7 @@ public class Processor {
 				// append end flag -1
 				sb.append("-1\n");
 			}
+			sb.insert(0, printTokenList());
 			sb.insert(0, relations.size() + " " + maxColIndex + "\n");
 			sb.insert(0, "FEATURE_TRAIN_MATRIX\n");
 			writer.write(sb.toString());
@@ -246,6 +247,29 @@ public class Processor {
 		} catch (IOException e1) {
 				e1.printStackTrace();
 		}
+	}
+	
+	private String printTokenList() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("NumWords ");
+		sb.append("NumStopWords ");
+		sb.append("NumCapWords ");
+		sb.append("NumPuncs ");
+		sb.append("NumNPsBtw ");
+		for(String ner : nerDictionary.keySet()) {
+			sb.append("NERE1" + ner + " ");
+		}
+		for(String ner : nerDictionary.keySet()) {
+			sb.append("NERE2" + ner + " ");
+		}
+		for(String ner : POSDictionary.keySet()) {
+			sb.append("POSE1" + ner + " ");
+		}
+		for(String ner : POSDictionary.keySet()) {
+			sb.append("POSE2" + ner + " ");
+		}
+		sb.append("\n");
+		return sb.toString();
 	}
 	
 	/* A little bit hack here, output updated POSSequenceDictionary here,
