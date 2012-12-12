@@ -29,7 +29,7 @@ NUM_BOOSTING_ITR = 3;
 % decide which method to use 'decision tree'
 methods = {'naive bayes' 'svm' 'decision tree' ...
     'logistic regression' 'boosting'};
-method = methods{1};
+method = methods{4};
 % control whether to do feature selection
 % enableFeatureSelection = true;
 enableFeatureSelection = false;
@@ -60,31 +60,26 @@ for f = 1 : endIndex
     
     
     if (strcmp(method, 'decision tree'))
-        display('Running decision tree...');
         [predicates,~] = runDecisionTree(featureMatrixTrain, ...
             labelTrain, featureMatrixTest);
         display('Finish decision tree building!');
         [precision recall accuracy F1] = evaluate(predicates, labelTest);
     elseif (strcmp(method, 'logistic regression'))
-        display('Running logistic regression...');
         predicates = runLogisticRegression(featureMatrixTrain, ...
             labelTrain, featureMatrixTest);
         display('Finish logistic regression!');
         [precision recall accuracy F1] = evaluate(predicates, labelTest);
     elseif (strcmp(method, 'naive bayes'))
-        display('Runing naive bayes...');
         [predicates,~] = runNaiveBayes(featureMatrixTrain, ...
             labelTrain, featureMatrixTest);
         display('Finish naive bayes!');
         [precision recall accuracy F1] = evaluate(predicates, labelTest);
     elseif (strcmp(method, 'svm'))
-        display('Running svm...');
         predicates = runSVM(featureMatrixTrain, ...
             labelTrain, featureMatrixTest);
         display('Finish svm!');
         [precision recall accuracy F1] = evaluate(predicates, labelTest);
     elseif (strcmp(method, 'boosting'))
-        display('Running boosting...');
         predicates = runAdaBoosting(featureMatrixTrain, ...
             labelTrain, featureMatrixTest);
         display('Finish boosting!');

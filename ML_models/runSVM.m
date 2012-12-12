@@ -6,6 +6,7 @@
 
 function predicates = runSVM(featureMatrixTrain, ...
         labelTrain, featureMatrixTest)
+    display('Running svm...');
     svmStruct = svmtrain(featureMatrixTrain,labelTrain,'kernel_function','rbf');%  ,'method','SMO'      not sure about method
     % model 'quadratic' 'polynomial' 'rbf'(work) 'mlp'
     predicates = svmclassify(svmStruct,featureMatrixTest);

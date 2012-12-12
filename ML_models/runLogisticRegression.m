@@ -2,9 +2,9 @@
 % Implement logistic regression algorithm
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function predicates = runDecisionTree(featureMatrixTrain, ...
+function predicates = runLogisticRegression(featureMatrixTrain, ...
         labelTrain, featureMatrixTest)
-   
+   display('Running logistic regression...');
    % generate lr coefficients
    coefficients = getCoefficients(featureMatrixTrain, labelTrain);
    

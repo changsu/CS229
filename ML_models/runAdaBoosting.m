@@ -4,7 +4,7 @@
 
 function predicates = runAdaBoosting(featureMatrixTrain, ...
         labelTrain, featureMatrixTest)
-    
+    display('Running Adaboosting...');
     global NUM_BOOSTING_ITR;
     % firstly, define uniform distribution over all samples, equal weights
     numTrain = size(featureMatrixTrain, 1);

@@ -6,7 +6,7 @@
 
 function [predicates finalCtree] = runDecisionTree(featureMatrixTrain, ...
         labelTrain, featureMatrixTest)
-    
+    display('Running decision tree...');
     SplitCriterion = {'gdi' 'twoing' 'deviance'};
     minkvLoss = Inf;
     %% run three splitCriterions;
