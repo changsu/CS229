@@ -27,11 +27,11 @@ NUM_BOOSTING_ITR = 5;
 
 %% apply differenct classifiers on the data
 % decide which method to use 'decision tree'
-method = 'decision tree'; 
+% method = 'decision tree'; 
 % method = 'svm'; 
 % method = 'naive bayes'; 
 % method = 'logistic regression';
-% method = 'boosting';
+method = 'boosting';
 
 % TODO: used for feature selection
 feature_eliminated = '';
@@ -64,6 +64,8 @@ elseif (strcmp(method, 'boosting'))
     display('Running boosting...');
     predicates = runAdaBoosting(featureMatrixTrain, ...
         labelTrain, featureMatrixTest);
+    display('Finishing boosting!');
+    [precision recall accuracy F1] = evaluate(predicates, labelTest);
 end
 
 %% plot results

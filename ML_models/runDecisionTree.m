@@ -10,7 +10,7 @@ function [predicates finalCtree] = runDecisionTree(featureMatrixTrain, ...
     SplitCriterion = {'gdi' 'twoing' 'deviance'};
     minkvLoss = Inf;
     %% run three splitCriterions;
-    for i = 1 : 3
+    for i = 2 : 2
         display(['>>Running ', SplitCriterion{i} ,' splitter...']);
         ctree = ClassificationTree.fit(featureMatrixTrain,labelTrain, ...
             'SplitCriterion', SplitCriterion{i});
@@ -23,8 +23,7 @@ function [predicates finalCtree] = runDecisionTree(featureMatrixTrain, ...
     end
     
     %% display final ctree and it's cross validation error
-    result = ['min cross validation loss ', num2str(minkvLoss)];
-    display(result);
+    display(['min cross validation loss ', num2str(minkvLoss)]);
     
     %% predict on the test data
     predicates = predict(finalCtree, featureMatrixTest);

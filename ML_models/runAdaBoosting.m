@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Implement Adaboosting based on previous four classifiers
+% Implement Boosted decision tree using Adaboosting with beta = 0.5
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function predicates = runAdaBoosting(featureMatrixTrain, ...
@@ -37,16 +37,16 @@ function predicates = runAdaBoosting(featureMatrixTrain, ...
         
         %% updated distribution for next iteration
         distribution(indices) = distribution(indices) .* ...
-            exp(-alpha * sign(labelTrain .* predicates));
+            exp(-alpha * sign(double(labelTrain == predicates) - 0.5));
         
         distribution = distribution ./ sum(distribution);
     end
-    
+    predicates = zeros(size(featureMatrixTest, 1), 1);
     for t = 1 : NUM_BOOSTING_ITR
         predicates = predicates + weights(t) * ...
             predict(Ctrees{t}, featureMatrixTest);
     end
     
-    predicates = (1/2) * sign(predicates) + 0.5;
+    predicates = (1/2) * sign(predicates - 0.5) + 0.5;
     
 end
