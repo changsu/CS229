@@ -20,8 +20,8 @@ public class Relation {
 	private HeadFinder hf;
 	private static final List<String> clauseType = 
 			Arrays.asList("S", "SINV", "SBAR", "RRC", "SBARQ", "SQ", "S-CLF", "FRAG");
-	// max number of tokens between e1 and e2
-	// adjust this parameter to change the propotion of true/false saamples
+	// max number of tokens between e1 and e2  (not number of words)
+	// adjust this parameter to change the propotion of true/false samples
 	private static final int M = 15;
 	
 	private static int counter= 0;
