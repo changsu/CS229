@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Implement Boosted decision tree using Adaboosting with beta = 0.5
+% Implement Adaboosting with beta 0.5
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function predicates = runAdaBoosting(featureMatrixTrain, ...
@@ -10,7 +10,7 @@ function predicates = runAdaBoosting(featureMatrixTrain, ...
     numTrain = size(featureMatrixTrain, 1);
     distribution = ones(numTrain, 1) ./ numTrain;
     weights = zeros(1, NUM_BOOSTING_ITR);
-    Ctrees = {};
+    models = {};
     % generate samples based on the distribution
     for t = 1 : NUM_BOOSTING_ITR
         display(['Boosting Iteration: ', num2str(t)]);
@@ -19,8 +19,8 @@ function predicates = runAdaBoosting(featureMatrixTrain, ...
         featureMatrixTrain = featureMatrixTrain(indices,:);
         labelTrain = labelTrain(indices);
         
-        %% generate decision tree
-        [predicates finalCtree] = runDecisionTree(featureMatrixTrain, ...
+        %% generate model . you can change the method here
+        [predicates model] = runNaiveBayes(featureMatrixTrain, ...
             labelTrain, featureMatrixTrain);
         
         %% calculate alph and error
@@ -30,10 +30,10 @@ function predicates = runAdaBoosting(featureMatrixTrain, ...
         
         error = sum(distribution(false_indices));
         
-        %% update weights for current tree and store current tree
+        %% update weights for current model and store current model
         alpha = 0.5 * log((1 - error) / error);
         weights(t) = alpha;
-        Ctrees{t} = finalCtree;
+        models{t} = model;
         
         %% updated distribution for next iteration
         distribution(indices) = distribution(indices) .* ...
@@ -43,8 +43,10 @@ function predicates = runAdaBoosting(featureMatrixTrain, ...
     end
     predicates = zeros(size(featureMatrixTest, 1), 1);
     for t = 1 : NUM_BOOSTING_ITR
+        % for different models, the predict function may be
+        % written in different ways, you may change accordingly
         predicates = predicates + weights(t) * ...
-            predict(Ctrees{t}, featureMatrixTest);
+            models{t}.predict(featureMatrixTest);
     end
     
     predicates = (1/2) * sign(predicates - 0.5) + 0.5;

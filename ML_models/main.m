@@ -29,9 +29,10 @@ NUM_BOOSTING_ITR = 3;
 % decide which method to use 'decision tree'
 methods = {'naive bayes' 'svm' 'decision tree' ...
     'logistic regression' 'boosting'};
-method = methods{3};
+method = methods{1};
 % control whether to do feature selection
-enableFeatureSelection = true;
+% enableFeatureSelection = true;
+enableFeatureSelection = false;
 
 % prepare data for feature selection if enabled, otherwise do nothing
 if enableFeatureSelection
@@ -72,7 +73,7 @@ for f = 1 : endIndex
         [precision recall accuracy F1] = evaluate(predicates, labelTest);
     elseif (strcmp(method, 'naive bayes'))
         display('Runing naive bayes...');
-        predicates = runNaiveBayes(featureMatrixTrain, ...
+        [predicates,~] = runNaiveBayes(featureMatrixTrain, ...
             labelTrain, featureMatrixTest);
         display('Finish naive bayes!');
         [precision recall accuracy F1] = evaluate(predicates, labelTest);
