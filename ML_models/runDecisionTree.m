@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Apply Decision Tree to the data set and generate prediction.
-% There're some plotting along the way.
+% we will use three split criterions and choose the one with
+% min cross validation error as the final predictor tree
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function predicates = runDecisionTree(featureMatrixTrain, ...
@@ -8,7 +9,9 @@ function predicates = runDecisionTree(featureMatrixTrain, ...
 
     minkvLoss = Inf;
     %% run three splitCriterions;
-    display('Running gdi splitter...');
+    % The implementation looks stupid, but I don't know how to iteratively
+    % passed in string value to funcion options :(
+    display('>>Running gdi splitter...');
     ctree = ClassificationTree.fit(featureMatrixTrain,labelTrain, ...
             'SplitCriterion', 'gdi');
     % get cross validation error
@@ -18,7 +21,7 @@ function predicates = runDecisionTree(featureMatrixTrain, ...
         finalCtree = ctree;
     end
     
-    display('Running twoing splitter...');
+    display('>>Running twoing splitter...');
     ctree = ClassificationTree.fit(featureMatrixTrain,labelTrain, ...
         'SplitCriterion', 'twoing');
     cvLoss = kfoldLoss(crossval(ctree));
@@ -27,7 +30,7 @@ function predicates = runDecisionTree(featureMatrixTrain, ...
         finalCtree = ctree;
     end
     
-    display('Running deviance splitter...');
+    display('>>Running deviance splitter...');
     ctree = ClassificationTree.fit(featureMatrixTrain,labelTrain, ...
         'SplitCriterion', 'deviance');
     cvLoss = kfoldLoss(crossval(ctree));

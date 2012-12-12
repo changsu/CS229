@@ -6,16 +6,16 @@
 
 function [featureMatrixTrain labelTrain featureMatrixTest labelTest] = ...
     preprocess(matrix, category)
-
+    global RATIO;
     % seperate pos and neg samples and divide into train and test each
     pos = matrix(find(category == 1), :);
     neg = matrix(find(category == 0), :);
     neg = neg(1:size(pos,1),:);
 
-    pos_train = pos(1:round(0.7 * size(pos,1)), :);
+    pos_train = pos(1:round(RATIO * size(pos,1)), :);
     pos_test = pos(size(pos_train,1) + 1:end, :);
 
-    neg_train = neg(1:round(0.7 * size(neg,1)), :);
+    neg_train = neg(1:round(RATIO * size(neg,1)), :);
     neg_test = neg(size(neg_train,1) + 1:end, :);
 
     % combine into train and test matrix and shuffle

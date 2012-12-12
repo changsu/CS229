@@ -12,6 +12,7 @@ function evaluate(predicates, labelTest)
     %% compute accuracy
     
     %% compute F1 score
-
+    
+    %% compute ROC
     
 end
