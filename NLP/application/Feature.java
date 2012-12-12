@@ -419,7 +419,7 @@ public class Feature {
 //	    else
 //	    	featureVector.append("");
 	    
-//	    System.out.println(featureVector);
+	    System.out.println(featureVector);
 	    return featureVector.toString();
 	}
 	

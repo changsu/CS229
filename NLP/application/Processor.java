@@ -198,8 +198,8 @@ public class Processor {
 		LexicalizedParser lp = 
 				LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
 		// run [start_article, end_article)
-		int start_article = 98;
-		int end_article = 100;
+		int start_article = 0;
+		int end_article = 1;
 		for (int i = start_article; i < end_article; i++) {
 			relations.addAll(articles.get(i).extractRelations(lp));
 		}

@@ -5,6 +5,7 @@ You can directly use cmd in MATLAB interactive interface
 <pre>
 [matrix, category] = readMatrix('dataset_compressed.txt');
 matrix = full(matrix);
+matrix = matrix(:,21879:end); % eliminate words feature, too big to compute in limit time
 category = full(category);
 </pre>
 
