@@ -3,7 +3,6 @@
 %seperate positive and negative samples, reshuffle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 function [featureMatrixTrain labelTrain featureMatrixTest labelTest] = ...
     preprocess(matrix, category)
     global RATIO;

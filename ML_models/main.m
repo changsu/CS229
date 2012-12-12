@@ -37,6 +37,7 @@ if (strcmp(method, 'decision tree'))
     predicates = runDecisionTree(featureMatrixTrain, ...
         labelTrain, featureMatrixTest);
     display('Finishing decision tree building!');
+    [precision recall accuracy F1] = evaluate(predicates, labelTest);
 elseif (strcmp(method, 'logistic regression'))
     % TODO
     display('Running logistic regression...');
@@ -55,16 +56,6 @@ elseif (strcmp(method, 'boosting'))
     display('Running boosting...');
 end
 
-
-%% result evaluation
-evaluate(predicates, labelTest);
-
-
-
-
-
-
-
-
+%% plot results
 
 
