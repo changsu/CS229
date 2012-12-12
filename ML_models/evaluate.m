@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Evaluate result returned by any model
-% calculate precision, recall, F1 score, ROC graph, etc
+% calculate precision, recall, F1 score
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [precision recall accuracy F1] = evaluate(predicates, labelTest)
     display('Evaluating results...');
