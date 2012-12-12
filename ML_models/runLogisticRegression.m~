@@ -1,0 +1,9 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Implement logistic regression algorithm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function predicates = runDecisionTree(featureMatrixTrain, ...
+        labelTrain, featureMatrixTest)
+   coefficients = getCoefficients(featureMatrixTrain, labelTrain);
+   predicates = 1 ./ (1+exp(-featureMatrixTest*coefficients));
+end

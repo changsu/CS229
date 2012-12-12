@@ -31,7 +31,6 @@ NUM_TEST_DATA = size(featureMatrixTest, 1);
 % method = 'svm'; 
 % method = 'naive bayes'; 
 method = 'logistic regression';
-% method = 'boosting';
 
 % TODO: used for feature selection
 feature_eliminated = '';
@@ -43,18 +42,18 @@ if (strcmp(method, 'decision tree'))
     display('Finishing decision tree building!');
     [precision recall accuracy F1] = evaluate(predicates, labelTest);
 elseif (strcmp(method, 'logistic regression'))
+    % TODO
     display('Running logistic regression...');
-    predicates = runLogisticRegression(featureMatrixTrain, ...
-        labelTrain, featureMatrixTest);
-    display('Finishing logistic regression!');
-    [precision recall accuracy F1] = evaluate(predicates, labelTest);
+    
 elseif (strcmp(method, 'naive bayes'))
+    % TODO Wenjia's code goes here
     display('Runing naive bayes...');
     predicates = runNaiveBayes(featureMatrixTrain, ...
         labelTrain, featureMatrixTest);
     display('Finishing naive bayes!');
     [precision recall accuracy F1] = evaluate(predicates, labelTest);
 elseif (strcmp(method, 'svm'))
+    % TODO Wenjia's code goes here
     display('Running svm...');
     predicates = runSVM(featureMatrixTrain, ...
         labelTrain, featureMatrixTest);
