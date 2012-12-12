@@ -31,7 +31,10 @@ feature_eliminated = '';
     
 if (strcmp(method, 'decision tree'))
     display('Running decision tree...');
-elseif (strcmp(method, 'logistic regression')
+    predicates = runDecisionTree(featureMatrixTrain, ...
+        labelTrain, featureMatrixTest);
+    display('Finishing decision tree building!');
+elseif (strcmp(method, 'logistic regression'))
     % TODO
     display('Running logistic regression...');
 elseif (strcmp(method, 'naive bayes'))
@@ -47,7 +50,7 @@ end
 
 
 %% result evaluation
-
+evaluate(predicates, labelTest);
 
 
 
