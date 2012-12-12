@@ -8,6 +8,11 @@ function [featureMatrixTrain labelTrain featureMatrixTest labelTest] = ...
     global RATIO;
     % seperate pos and neg samples and divide into train and test each
     pos = matrix(find(category == 1), :);
+    
+    % shrink whole data set by 0.6 you can change this if the
+    % algorithm is too slow
+%     pos = pos(1:round(0.6 * size(pos,1)), :);
+    
     neg = matrix(find(category == 0), :);
     neg = neg(1:size(pos,1),:);
 
@@ -17,12 +22,13 @@ function [featureMatrixTrain labelTrain featureMatrixTest labelTest] = ...
     neg_train = neg(1:round(RATIO * size(neg,1)), :);
     neg_test = neg(size(neg_train,1) + 1:end, :);
 
-    % combine into train and test matrix and shuffle
+    % combine into train and test matrix
     trainMatrix = [pos_train ones(size(pos_train,1),1); ...
         neg_train zeros(size(neg_train,1),1)];
     testMatrix = [pos_test ones(size(pos_test,1),1); ...
         neg_test zeros(size(neg_test,1),1)];
 
+    % shuffle
     shuffleMatrix = [trainMatrix; testMatrix];
     shuffleMatrix = shuffleMatrix(randperm(size(shuffleMatrix,1)),:);
     trainMatrix = shuffleMatrix(1:size(trainMatrix,1),:);
