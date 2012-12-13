@@ -29,10 +29,10 @@ NUM_BOOSTING_ITR = 5;
 % decide which method to use 'decision tree'
 methods = {'naive bayes' 'svm' 'decision tree' ...
     'logistic regression' 'boosting'};
-method = methods{5};
+method = methods{4};
 % control whether to do feature selection
 % enableFeatureSelection = true;
-enableFeatureSelection = false;
+enableFeatureSelection = true;
 
 % prepare data for feature selection if enabled, otherwise do nothing
 if enableFeatureSelection
@@ -94,4 +94,22 @@ end
 
 %% plot results
 
+% plot feature selection result
+if enableFeatureSelection
+    figure(1);
+    lineFormats = {'-ro' '-bo' '-go' '-mo'};
+    legends = {'precision' 'recall' 'accuracy' 'F1 score'};
+    X = 1 : size(selectionResult,1);
+    ylabel('Metrics (%)');
+    for i = 1 : 4
+        plot(X, selectionResult(:,i)' * 100, lineFormats{i});
+        hold on;
+    end
+    title('Feature Selection Result ','FontWeight','bold');
+    ylabel('Metrics (%)');
+    set(gca,'XTickLabel', features);
+    legend(legends);
+    ylim([0 100]);
+    grid on;
+end
 
