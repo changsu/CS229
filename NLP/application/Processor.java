@@ -30,11 +30,11 @@ import org.json.JSONObject;
 public class Processor {
 	 
 	private static final String POS_SEQUENCE_FILE_NAME = "pos_sequence.txt";
-	private static final String PREDICTED_LABEL_FILE_NAME_PREFIX = "label";
+	private static final String PREDICTED_LABEL_FILE_NAME_PREFIX = "corpus_label/label";
 	private String inputFileName;
 	private String outputFileName;
 
-	public static boolean enableExport = false;
+	public static boolean enableExport = true;
 	
 	/* construct list of sentence object after parsing the JSON file */
 	private ArrayList<Article> articles;
@@ -68,7 +68,7 @@ public class Processor {
 	public static NER ner;
 	
 	/* used in exporting mode */
-	public static ArrayList<Integer> predictedLabels;
+	public static ArrayList<Integer> predictedLabels = new ArrayList<Integer>();
 
 	
 	public Processor(String inputFileName, String outputFileName){
@@ -361,6 +361,7 @@ public class Processor {
 		}
 	}
 	
+	/* construct predicated label data structure */
 	private ArrayList<Integer> constructPredictedLabel(String fileName) {
 		ArrayList<Integer> predicatedLabels = new ArrayList<Integer>();
 		File inf = Processor.readFile(fileName);
@@ -369,7 +370,10 @@ public class Processor {
 			reader = new BufferedReader(new FileReader(inf));
 			String line = null;
 			while((line = reader.readLine()) != null ) {
-				predicatedLabels.add(Integer.parseInt(line));
+				if (line.equals("   1.0000000e+00"))
+					predicatedLabels.add(1);
+				else
+					predicatedLabels.add(0);
 			}
 			reader.close();
 			return predicatedLabels;
