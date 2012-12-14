@@ -1,9 +1,29 @@
 Implements ML models
 
+### How to Run
+<pre>
+run main
+</pre>
+
+### How to change paramteters
+We put the control inside code rather than exporting as arguments passed in
+
+Here you can change the models
+<pre>
+methods = {'naive bayes' 'svm' 'decision tree' ...
+    'logistic regression' 'boosting'};
+method = methods{4};
+</pre>
+
+Here you can enable feature selection mode
+<pre>
+enableFeatureSelection = false;
+</pre>
+
 ### Functionalities
 
 #### Main Functions
-`main.m` - main function that read in, pre-preprocess data, apply different models and trigger result evaluation.
+`main.m` - main function that reads in, pre-preprocesses data, applies different models and trigger result evaluation.
 
 `runSVM.m` - run SVM classifier
 
