@@ -454,7 +454,7 @@ public class Feature {
 	 * @param str 
 	 * @return the non-plural form of a plural noun
 	 */  
-	private String fromPlural(String str)  
+	public static String fromPlural(String str)  
 	{  
 		if(str.toLowerCase().endsWith("es") && ! shouldEndWithE(str)) 
 			return str.substring(0, str.toLowerCase().lastIndexOf("es"));  
@@ -487,7 +487,7 @@ public class Feature {
 	 * @param str 
 	 * @return true is the singular form of a word should end with the letter "e" 
 	 */  
-	private boolean shouldEndWithE(String str)  
+	private static boolean shouldEndWithE(String str)  
 	{  
 		return str.toLowerCase().endsWith("iece")  
 				|| str.toLowerCase().endsWith("ice")  

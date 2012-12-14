@@ -17,6 +17,7 @@ public class Relation {
 	private Tree e1, e2, A;
 	private Tree headE1, headE2, headParse;
 	private String taggedSentence, nerSentence;
+	private String verb;
 	private HeadFinder hf;
 	private static final List<String> clauseType = 
 			Arrays.asList("S", "SINV", "SBAR", "RRC", "SBARQ", "SQ", "S-CLF", "FRAG");
@@ -209,6 +210,7 @@ public class Relation {
 	private boolean IsVerb(Tree leafNode){
 		Tree parent = leafNode.parent(parse);
 		if (parent.label().value().matches("VB.*")) {
+			verb = leafNode.label().value();
 			return true;
 		}
 		return false;
@@ -374,6 +376,35 @@ public class Relation {
 	 */
 	public String getURL() {
 		return url;
+	}
+	
+	/**
+	 * @return sentence where the relation is being extracted
+	 */
+	public String getSentence() {
+		return sentence;
+	}
+	
+	/**
+	 * @return verb between e1 and e2, keep original format of verb
+	 */
+	public String getVerb() {
+		return verb;
+	}
+	
+	/**
+	 * return header of e1, recover to origin if is plural
+	 * @return
+	 */
+	public String getHeaderE1() {
+		return Feature.fromPlural(headE1.label().value());
+	}
+	
+	/**
+	 * @return return header of e2, recover to origin if is plural
+	 */
+	public String getHeaderE2() {
+		return Feature.fromPlural(headE2.label().value());
 	}
 	
 	public String toString() {

@@ -68,7 +68,8 @@ public class Processor {
 	public static NER ner;
 	
 	/* used in exporting mode */
-	public static ArrayList<Integer> predictedLabels = new ArrayList<Integer>();
+	public static ArrayList<Integer> predictedLabels;
+	public static DBHandler dbHdl;
 
 	
 	public Processor(String inputFileName, String outputFileName){
@@ -85,6 +86,11 @@ public class Processor {
 		nerDictionary = new HashMap<String, Integer>();
 		tagger = new Tagger();
 		ner = new NER();
+		
+		// initialize db handler in export mode
+		if (enableExport) {
+			dbHdl = new DBHandler();
+		}
 	}
 
 	/**
@@ -221,13 +227,13 @@ public class Processor {
 	
 	/**
 	 * Used in export to db mode, 
+	 * export all relations predicated as truth into corresponding tables in db
 	 */
-	private void readPredictedLabels() {
+	private void exportToDB () {
 		// read in predicted label file
 		String fileName = PREDICTED_LABEL_FILE_NAME_PREFIX + startArticle + "_" + endArticle + ".txt";
 		predictedLabels = constructPredictedLabel(fileName);
-		System.out.println(predictedLabels.size());
-		System.out.println(predictedLabels.toString());
+		
 	}
 	
 	/**
@@ -305,7 +311,7 @@ public class Processor {
 			processor.parseJSONFile(inf);
 			processor.readDictionaries();
 			if (enableExport) {
-				processor.readPredictedLabels();
+				processor.exportToDB();
 			}
 			processor.extractRelations();
 			if (!enableExport) 
