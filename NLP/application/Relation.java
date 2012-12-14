@@ -99,6 +99,10 @@ public class Relation {
 			generateFeatures();
 			// genearte label
 			generateLabel();
+		} else {
+			// hacky, we need to generate verb to export to db
+			generateRList();
+			ContainsVerb();
 		}
 	}
 

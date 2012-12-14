@@ -51,8 +51,8 @@ public class Processor {
 	private int maxColIndex = 0;
 	
 	/* hacky code, used in chunk running */
-	private int startArticle = 0;
-	private int endArticle = 5;
+	private int startArticle = 5;
+	private int endArticle = 10;
 	
 	/* store word dictionary */
 	public static HashMap<String, Integer> dictionary;
@@ -236,27 +236,56 @@ public class Processor {
 		String fileName = PREDICTED_LABEL_FILE_NAME_PREFIX + startArticle + "_" + endArticle + ".txt";
 		predictedLabels = constructPredictedLabel(fileName);
 		// walk through all relations and save to db
-		String url = "";
+		String url = "", sentence = "";
+		int urlid, sentenceid;
+		Relation relation;
+		ResultSet rs = null;
 		for (int i = 0; i < relations.size(); ++i) {
-			// throw away sample that predicated as non-relation
+			// throw away sample that predicted as non-relation
 			if (predictedLabels.get(i) == 0) 
 				continue;
 			// insert url
-			url = relations.get(i).getURL();
-			ResultSet rs = dbHdl.executeQueryCmd("select id from 229url where url = '" + url + "';");
+			relation = relations.get(i);
+			url = relation.getURL();
+			sentence = relation.getSentence();
 			try {
+				// insert url into table '229url'
+				rs = dbHdl.executeQueryCmd("select id from 229url where url = '" + url + "';");
 				if (!rs.next()){
-					System.out.println("insert!!");
 					dbHdl.executeUpdateCmd("insert 229url (url) values ('" + relations.get(i).getURL() + "');");
+					rs = dbHdl.executeQueryCmd("select id from 229url where url = '" + url + "';");
+					rs.next(); urlid = rs.getInt("id");
+				} else {
+					urlid = rs.getInt("id");
+				}
+
+				// insert original sentence where the relation comes from into table '229sentence'
+				rs = dbHdl.executeQueryCmd("select id from 229sentence where sentence = '" + sentence + "';");
+				if (!rs.next()) {
+					dbHdl.executeUpdateCmd("insert 229sentence (sentence, urlid) values ('" + sentence + "'," 
+											+ urlid + ");");
+					rs = dbHdl.executeQueryCmd("select id from 229sentence where sentence = '" + sentence + "';");
+					rs.next(); sentenceid = rs.getInt("id");
+				} else {
+					sentenceid = rs.getInt("id");
+				}
+				
+				// insert relation (head of e1, verb, head of e2, sentenceid) into table '229corpus'
+				// db complains about puns, therefore, we eliminate relation that has verb with puncs in it
+				if (relation.getVerb() == null || relation.getHeaderE1() == null || relation.getHeaderE2() == null) 
+					continue;
+				String query = "select id from 229corpus where e1 = '" + relation.getHeaderE1() + 
+						"' and R = '" + relation.getVerb().replaceAll("'", "") + "' and e2 = '" + relation.getHeaderE2() + "';";
+				rs = dbHdl.executeQueryCmd(query);
+				if (!rs.next()) {
+					String update = "insert 229corpus (e1, R, e2, sentenceid) values ('" + relation.getHeaderE1() +
+							"','" + relation.getVerb().replace("'", "") + "','" + relation.getHeaderE2() + "'," + sentenceid + ");";
+					dbHdl.executeUpdateCmd(update);
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}		
-			
-			// insert original sentence where the relation comes from 
-			
-			// insert relation (head of e1, verb, head of e2, sentenceid)
+			}	
+
 		}
 	}
 	
