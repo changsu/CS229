@@ -29,10 +29,10 @@ function [featureMatrixTrain labelTrain featureMatrixTest labelTest] = ...
         neg_test zeros(size(neg_test,1),1)];
 
     % shuffle
-    shuffleMatrix = [trainMatrix; testMatrix];
-    shuffleMatrix = shuffleMatrix(randperm(size(shuffleMatrix,1)),:);
-    trainMatrix = shuffleMatrix(1:size(trainMatrix,1),:);
-    testMatrix = shuffleMatrix(1:size(testMatrix,1),:);
+%     shuffleMatrix = [trainMatrix; testMatrix];
+%     shuffleMatrix = shuffleMatrix(randperm(size(shuffleMatrix,1)),:);
+%     trainMatrix = shuffleMatrix(1:size(trainMatrix,1),:);
+%     testMatrix = shuffleMatrix(1:size(testMatrix,1),:);
     
     % seperate into feature matrix and label
     featureMatrixTrain = trainMatrix(:, 1:end-1);

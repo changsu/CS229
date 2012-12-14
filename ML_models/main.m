@@ -23,7 +23,7 @@ RATIO = 0.7; % percentage of data used for training
 NUM_FEATURES = size(featureMatrixTrain, 2);
 NUM_TRAIN_DATA = size(featureMatrixTrain, 1);
 NUM_TEST_DATA = size(featureMatrixTest, 1);
-NUM_BOOSTING_ITR = 5;
+NUM_BOOSTING_ITR = 3;
 
 %% apply differenct classifiers on the data
 % decide which method to use 'decision tree'
@@ -32,7 +32,7 @@ methods = {'naive bayes' 'svm' 'decision tree' ...
 method = methods{4};
 % control whether to do feature selection
 % enableFeatureSelection = true;
-enableFeatureSelection = true;
+enableFeatureSelection = false;
 
 % prepare data for feature selection if enabled, otherwise do nothing
 if enableFeatureSelection

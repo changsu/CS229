@@ -1,17 +1,29 @@
 Implements ML models
 
-`readMatrix.m` has been tailored for our us by simple revision
-You can directly use cmd in MATLAB interactive interface
-<pre>
-[matrix, category] = readMatrix('dataset_compressed.txt');
-matrix = full(matrix);
-matrix = matrix(:,21879:end); % eliminate words feature, too big to compute in limit time
-category = full(category);
-</pre>
+### Functionalities
 
-To fully recover the non-compressed dataset.
+#### Main Functions
+`main.m` - main function that read in, pre-preprocess data, apply different models and trigger result evaluation.
 
-`dataset_compressed.txt` store the samples in compressed format same as used in 
-CS229 problem set 2 Q2
-<b>The dataset has been pre-precossed in Java that num pos is equal to num neg approximately, 
-so it's unbiased itself</b>
+`runSVM.m` - run SVM classifier
+
+`runNaiveBayes.m` - run Naive Bayes classifier
+
+`runDecisionTree.m` - run Decision Tree classifier
+
+`runAdaBoosting.m` - run adaboosting on Naive Bayes week classifier
+
+`runLogisticRegress.m` - run logistic regression
+
+`getCoefficients.m` - actual implementation of logistic regression gradient descend and return coefficient
+
+`evaluate.m` - evaluate results in metrics of precision, recall, accuracy and F1 score
+
+`eliminateFeature.m` - run feature selection based on certain classifier
+
+#### Utility Functions
+`preprocess.m` - preprocess of the data, generate unbiased training and dataset
+
+`readMatrix.m` - read in compressed feature vectors and labels, compose into full matrix
+
+`discretesample.m` - help function of sampling based on certain distribution, used in Adaboosting

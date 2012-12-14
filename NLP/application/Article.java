@@ -62,10 +62,12 @@ public class Article {
 			
 			// parse sentence
 //			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair";
+//			String sentence = "Morgan Stanley bought Saxon in 2006 for more than $700 million when the mortgage boom was in the full force.";
 			String sentence = body.substring(start,end);
 			String nerSentence = Processor.ner.runNER(sentence);
 			String taggedSentence = Processor.tagger.tagSentence(sentence);
 			Tree parse = lp.apply(sentence);
+			parse.pennPrint();
 			
 			// generateNPList
 			NPList = generateNPList(parse);
