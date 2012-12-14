@@ -29,7 +29,7 @@ NUM_BOOSTING_ITR = 3;
 % decide which method to use 'decision tree'
 methods = {'naive bayes' 'svm' 'decision tree' ...
     'logistic regression' 'boosting'};
-method = methods{4};
+method = methods{3};
 % control whether to do feature selection
 % enableFeatureSelection = true;
 enableFeatureSelection = false;
@@ -60,7 +60,7 @@ for f = 1 : endIndex
     
     
     if (strcmp(method, 'decision tree'))
-        [predicates,~] = runDecisionTree(featureMatrixTrain, ...
+        [predicates, model] = runDecisionTree(featureMatrixTrain, ...
             labelTrain, featureMatrixTest);
         display('Finish decision tree building!');
         [precision recall accuracy F1] = evaluate(predicates, labelTest);

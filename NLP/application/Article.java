@@ -61,13 +61,10 @@ public class Article {
 			int e1Index, e2Index;
 			
 			// parse sentence
-//			String sentence = "Jaguar, the luxury auto maker sold 1,214 cars in the U.S.A. when Tom sat on the chair";
-//			String sentence = "Morgan Stanley bought Saxon in 2006 for more than $700 million when the mortgage boom was in the full force.";
 			String sentence = body.substring(start,end);
 			String nerSentence = Processor.ner.runNER(sentence);
 			String taggedSentence = Processor.tagger.tagSentence(sentence);
 			Tree parse = lp.apply(sentence);
-			parse.pennPrint();
 			
 			// generateNPList
 			NPList = generateNPList(parse);
@@ -79,8 +76,14 @@ public class Article {
 				for (e2Index = e1Index + 1; e2Index < NPList.size(); ++e2Index) {
 					Tree NP1 = NPList.get(e1Index);
 					Tree NP2 = NPList.get(e2Index);
+					/* If enable export flag is set, then processor is in mode of
+					 * reading in predicated labeling file and export records into DB
+					 * Otherwise, processor is in mode of labeling itself using set of
+					 * rules and output the result to file for training.
+					 */
+					boolean mode = !Processor.enableExport;
 					relations.add(new Relation(url, NP1, NP2, sentence, taggedSentence, nerSentence, 
-							parse, (e2Index - e1Index), true));
+							parse, (e2Index - e1Index), mode));
 				}
 			}
 		}

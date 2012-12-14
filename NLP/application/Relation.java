@@ -91,13 +91,12 @@ public class Relation {
 		isObjectOfPPFlag = false;
 		isValidSemanticFlag = false;
 						
-		// generate features of the relation
-		generateFeatures();
-		
-		/* If caller want to label the relation, we will label it
-		 * by calling generateLabel() method
-		 */
+		// if the processor is in labeling mode, we need to generate features and label 
+		// for a particular relation
 		if (labelFlag) {
+			// generate features of the relation
+			generateFeatures();
+			// genearte label
 			generateLabel();
 		}
 	}
@@ -111,7 +110,7 @@ public class Relation {
 		A = LowestCommonAncestor();
 		/*apply rules on the relation and label it */
 		label = returnLabelC();
-		System.out.println(this);
+//		System.out.println(this);
 	}
 
 	/**

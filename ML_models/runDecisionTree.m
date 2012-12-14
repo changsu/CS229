@@ -10,7 +10,7 @@ function [predicates finalCtree] = runDecisionTree(featureMatrixTrain, ...
     SplitCriterion = {'gdi' 'twoing' 'deviance'};
     minkvLoss = Inf;
     %% run three splitCriterions;
-    for i = 1 : 1
+    for i = 1 : 3
         display(['>>Running ', SplitCriterion{i} ,' splitter...']);
         ctree = ClassificationTree.fit(featureMatrixTrain,labelTrain, ...
             'SplitCriterion', SplitCriterion{i});

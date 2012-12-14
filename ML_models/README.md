@@ -17,7 +17,7 @@ method = methods{4};
 
 Here you can enable feature selection mode
 <pre>
-enableFeatureSelection = false;
+enableFeatureSelection = true;
 </pre>
 
 ### Functionalities
