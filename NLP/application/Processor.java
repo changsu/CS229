@@ -1,4 +1,6 @@
 package application;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -233,7 +235,29 @@ public class Processor {
 		// read in predicted label file
 		String fileName = PREDICTED_LABEL_FILE_NAME_PREFIX + startArticle + "_" + endArticle + ".txt";
 		predictedLabels = constructPredictedLabel(fileName);
-		
+		// walk through all relations and save to db
+		String url = "";
+		for (int i = 0; i < relations.size(); ++i) {
+			// throw away sample that predicated as non-relation
+			if (predictedLabels.get(i) == 0) 
+				continue;
+			// insert url
+			url = relations.get(i).getURL();
+			ResultSet rs = dbHdl.executeQueryCmd("select id from 229url where url = '" + url + "';");
+			try {
+				if (!rs.next()){
+					System.out.println("insert!!");
+					dbHdl.executeUpdateCmd("insert 229url (url) values ('" + relations.get(i).getURL() + "');");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+			
+			// insert original sentence where the relation comes from 
+			
+			// insert relation (head of e1, verb, head of e2, sentenceid)
+		}
 	}
 	
 	/**
@@ -310,13 +334,12 @@ public class Processor {
 			File inf = processor.readFile(processor.inputFileName);
 			processor.parseJSONFile(inf);
 			processor.readDictionaries();
+			processor.extractRelations();
 			if (enableExport) {
 				processor.exportToDB();
-			}
-			processor.extractRelations();
-			if (!enableExport) 
+			} else {
 				processor.outputSamples();
-				
+			}				
 		}
 	}
 	

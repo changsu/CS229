@@ -32,16 +32,32 @@ public class DBHandler {
 		}
 	}
 
+	
 	/**
 	 * Takes sql query and execute
-	 * @param cmd
+	 * @param sql query
 	 */
-	public void executeSQLCmd(String query) {
+	public ResultSet executeQueryCmd(String sql) {
 		try {
-			stmt.executeQuery(query);
+			return stmt.executeQuery(sql);
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
+		} 
+	}
+	
+	/**
+	 * Take sql update and execute
+	 * @param sql update
+	 * @return
+	 */
+	public int executeUpdateCmd(String sql) {
+		try {
+			return stmt.executeUpdate(sql);			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
 		} 
 	}
 }
