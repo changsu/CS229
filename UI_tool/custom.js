@@ -1,16 +1,15 @@
 function highlightWord(root,word, colorType){
   if (word == null || word == undefined || word == "")
 	return;
-	
-  alert(colorType);
+
   var highlightClass = 'highlighted_e1'; // by default
-	if (colorType == 'e1') {
-		highlightClass = 'highlighted_e1';
-	} else if (colorType == 'e2') {
-		highlightClass = 'highlighted_e2';
-	} else if (colorTye == 'R') {
-	    highlightClass = 'highlighted_R';
-    }
+  if (colorType == 'e1') {
+	highlightClass = 'highlighted_e1';
+  } else if (colorType == 'e2') {
+	highlightClass = 'highlighted_e2';
+  } else if (colorType == 'R') {
+    highlightClass = 'highlighted_R';
+  }
   textNodesUnder(root).forEach(highlightWords);
   function textNodesUnder(root){
     var walk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null,false),
@@ -27,7 +26,6 @@ function highlightWord(root,word, colorType){
       span.className = highlightClass;
       span.appendChild(highlighted);
       after.parentNode.insertBefore(span,after);
-	  alert("come to this");
     }
   }
 }
