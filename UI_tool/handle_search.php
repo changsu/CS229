@@ -58,10 +58,15 @@
 			highlightWord(document.body,"<?php echo $e1 ?>", 'e1');
 			highlightWord(document.body,"<?php echo $R ?>", 'R');
 			highlightWord(document.body,"<?php echo $e2 ?>", 'e2');
+			<?php
+				$e1 = ucwords($e1); $e2 = ucwords($e2);
+			?>
+			highlightWord(document.body,"<?php echo $e1 ?>", 'e1');
+			highlightWord(document.body,"<?php echo $e2 ?>", 'e2');
 		</script>
 	</div>
 	<div class = "indirect result">
-		<h2>Indirect Result</h2>
+		<h2>Indirect Result(Under Construction)</h2>
 	</div>
 </div>
 

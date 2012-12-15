@@ -1,4 +1,4 @@
-function highlightWord(root,word, colorType){
+function highlightWord(root, word , colorType){
   if (word == null || word == undefined || word == "")
 	return;
 
