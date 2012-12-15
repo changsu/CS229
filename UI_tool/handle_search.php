@@ -47,15 +47,24 @@
 				foreach ($records as $url_tuple) {
 					$url = $url_tuple['url'];
 				}
-				echo "<tr><td><a href=" . $url. " target = '_blank'>". $sentence ."</a></td></tr>";
+				echo "<tr><td><a href=" . $url. " target = '_blank'>". 
+					htmlentities($sentence, ENT_QUOTES | ENT_IGNORE, "UTF-8") ."</a></td></tr>";
 			}
 						
 		?>
 		</table>
+		<!-- Highlight e1 | e2 | R -->
+		<script>
+			highlightWord(document.body,"<?php echo $e1 ?>", 'e1');
+			highlightWord(document.body,"<?php echo $R ?>", 'R');
+			highlightWord(document.body,"<?php echo $e2 ?>", 'e2');
+		</script>
 	</div>
 	<div class = "indirect result">
 		<h2>Indirect Result</h2>
 	</div>
 </div>
+
+</body>
 
 

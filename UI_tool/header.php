@@ -9,6 +9,8 @@ $conn = connect();
 <head>
 <title>CS229 Project Search Tool Demo</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="custom.js"></script>
+<link rel="stylesheet" type="text/css" href="custom.css" />
 </head>
 
 <body>

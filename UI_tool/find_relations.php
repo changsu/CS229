@@ -19,7 +19,6 @@
 		}
 		
 		$sql = "SELECT * FROM 229corpus where " . $conditions;
-		var_dump($sql);
 		$result = mysql_query($sql,$conn);
 		$records = convert_array($result);
 		return $records;
